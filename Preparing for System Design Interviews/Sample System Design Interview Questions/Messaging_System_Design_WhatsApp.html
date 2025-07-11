@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طراحی سیستم پیام‌رسان مشابه واتس‌اپ برای مصاحبه‌های طراحی سیستم</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="طراحی سیستم پیام‌رسان مشابه واتس‌اپ برای مصاحبه‌های طراحی سیستم">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>طراحی سیستم پیام‌رسان مشابه واتس‌اپ برای مصاحبه‌های طراحی سیستم</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Preparing for System Design Interviews</span>
+<span>/</span>
+<span>Sample System Design Interview Questions</span>
+<span>/</span>
+<span>Messaging_System_Design_WhatsApp.html</span>
+                </div>
+
+                <h1>طراحی سیستم پیام‌رسان مشابه واتس‌اپ برای مصاحبه‌های طراحی سیستم</h1>
+
+<h2>مقدمه</h2>
+طراحی یک سیستم پیام‌رسان مشابه واتس‌اپ یکی از سوالات محبوب در مصاحبه‌های طراحی سیستم است که توانایی کاندیدا در مدیریت سیستم‌های توزیع‌شده، مقیاس‌پذیر و امن را ارزیابی می‌کند. این سیستم باید پیام‌رسانی بلادرنگ، تحمل خطا، امنیت بالا و تجربه کاربری یکپارچه‌ای ارائه دهد. این سند به بررسی نیازمندی‌ها، معماری، اجزای سیستم، مدل‌سازی داده‌ها، مدیریت پیام‌ها، مقیاس‌پذیری، امنیت، و نکات مصاحبه برای مهندسان نرم‌افزار فارسی‌زبان می‌پردازد.
+
+<p>---</p>
+
+<h2>نیازمندی‌های سیستم</h2>
+
+<h3>نیازمندی‌های کارکردی (Functional Requirements)</h3>
+<ul><li><strong>پیام‌رسانی یک‌به‌یک:</strong> کاربران می‌توانند پیام‌های متنی، تصویری یا صوتی را به یکدیگر ارسال کنند.</li></ul>
+<ul><li><strong>پیام‌رسانی گروهی:</strong> پشتیبانی از چت‌های گروهی با تعداد زیادی کاربر.</li></ul>
+<ul><li><strong>نوتیفیکیشن‌ها:</strong> ارسال اعلان‌های فوری (Push Notifications) برای پیام‌های جدید.</li></ul>
+<ul><li><strong>وضعیت تحویل:</strong> نمایش وضعیت پیام (ارسال‌شده، تحویل‌شده، خوانده‌شده).</li></ul>
+<ul><li><strong>مدیریت مخاطبان:</strong> امکان افزودن، حذف و مدیریت لیست مخاطبان.</li></ul>
+<ul><li><strong>پیام‌های آفلاین:</strong> ذخیره و تحویل پیام‌ها به کاربران آفلاین.</li></ul>
+
+<h3>نیازمندی‌های غیرکارکردی (Non-Functional Requirements)</h3>
+<ul><li><strong>مقیاس‌پذیری:</strong> پشتیبانی از میلیاردها کاربر و تریلیون‌ها پیام در روز.</li></ul>
+<ul><li><strong>قابلیت اطمینان:</strong> آپ‌تایم 99.99% برای جلوگیری از قطعی سرویس.</li></ul>
+<ul><li><strong>عملکرد:</strong> تحویل پیام در کمتر از 100 میلی‌ثانیه برای تجربه بلادرنگ.</li></ul>
+<ul><li><strong>امنیت و حریم خصوصی:</strong> رمزنگاری سرتاسری (End-to-End Encryption) برای حفاظت از پیام‌ها.</li></ul>
+<ul><li><strong>قابلیت نگهداری:</strong> طراحی ماژولار برای سهولت توسعه و عیب‌یابی.</li></ul>
+<ul><li><strong>همگام‌سازی:</strong> پشتیبانی از چندین دستگاه با همگام‌سازی پیام‌ها.</li></ul>
+
+<p>---</p>
+
+<h2>معماری سطح بالا</h2>
+
+<h3>اجزای سیستم</h3>
+<ul><li><strong>کلاینت:</strong> اپلیکیشن‌های موبایل و وب برای تعامل کاربران.</li></ul>
+<ul><li><strong>Load Balancer:</strong> توزیع ترافیک بین سرورهای پیام‌رسان.</li></ul>
+<ul><li><strong>سرورهای پیام‌رسان:</strong> مدیریت ارسال، دریافت و همگام‌سازی پیام‌ها.</li></ul>
+<ul><li><strong>سرویس نوتیفیکیشن:</strong> ارسال اعلان‌های فوری با استفاده از APNs (اپل) و FCM (گوگل).</li></ul>
+<ul><li><strong>پایگاه داده:</strong> ذخیره‌سازی پیام‌ها، اطلاعات کاربران و گروه‌ها.</li></ul>
+<ul><li><strong>کش:</strong> ذخیره‌سازی داده‌های پراستفاده برای دسترسی سریع.</li></ul>
+<ul><li><strong>سیستم پیام‌رسانی (Message Queue):</strong> مدیریت پیام‌های آفلاین و پردازش غیرهمزمان.</li></ul>
+<ul><li><strong>لایه امنیتی:</strong> رمزنگاری پیام‌ها و احراز هویت کاربران.</li></ul>
+
+<h3>دیاگرام معماری</h3>
+<pre><code>
+[کلاینت: وب/موبایل] <--> [Load Balancer]
+                             |
+                      [سرورهای پیام‌رسان]
+                             |
+                    ----------------------
+                    <td>                    </td>
+               [کش: Redis]         [پایگاه داده: Cassandra]
+                    <td>                    </td>
+                [سرویس نوتیفیکیشن]   [صف پیام: Kafka]
+                    <td>                    </td>
+                  [لایه امنیتی: E2E Encryption]
+</code></pre>
+
+<p>---</p>
+
+<h2>مدل‌سازی داده‌ها</h2>
+
+<h3>ساختار داده‌ها</h3>
+<ul><li><strong>جدول کاربران (Users):</strong></li></ul>
+   - <strong>کلیدها:</strong> <code>user_id</code> (کلید اصلی)، <code>username</code>، <code>phone_number</code>، <code>public_key</code> (برای رمزنگاری)، <code>last_seen</code>
+   - <strong>مثال:</strong>
+     <pre><code>json
+     {
+       "user_id": "u123",
+       "username": "ali_rezaei",
+       "phone_number": "+989123456789",
+       "public_key": "RSA_public_key",
+       "last_seen": "2025-07-12T12:00:00Z"
+     }
+     </code></pre>
+<ul><li><strong>جدول مخاطبان (Contacts):</strong></li></ul>
+   - <strong>کلیدها:</strong> <code>user_id</code>، <code>contact_id</code>
+   - <strong>مثال:</strong>
+     <pre><code>json
+     {
+       "user_id": "u123",
+       "contact_id": "u456"
+     }
+     </code></pre>
+<ul><li><strong>جدول پیام‌ها (Messages):</strong></li></ul>
+   - <strong>کلیدها:</strong> <code>message_id</code> (کلید اصلی)، <code>sender_id</code>، <code>receiver_id</code> (یا <code>group_id</code>)، <code>content</code> (رمزنگاری‌شده)، <code>timestamp</code>، <code>status</code> (ارسال‌شده/تحویل‌شده/خوانده‌شده)
+   - <strong>مثال:</strong>
+     <pre><code>json
+     {
+       "message_id": "m789",
+       "sender_id": "u123",
+       "receiver_id": "u456",
+       "content": "encrypted_message",
+       "timestamp": "2025-07-12T12:01:00Z",
+       "status": "delivered"
+     }
+     </code></pre>
+<ul><li><strong>جدول گروه‌ها (Groups):</strong></li></ul>
+   - <strong>کلیدها:</strong> <code>group_id</code> (کلید اصلی)، <code>group_name</code>، <code>members</code> (لیست <code>user_id</code>ها)، <code>created_at</code>
+   - <strong>مثال:</strong>
+     <pre><code>json
+     {
+       "group_id": "g101",
+       "group_name": "کارگروه پروژه",
+       "members": ["u123", "u456", "u789"],
+       "created_at": "2025-07-12T12:00:00Z"
+     }
+     </code></pre>
+
+<h3>انتخاب پایگاه داده</h3>
+<ul><li><strong>NoSQL (مانند Cassandra یا DynamoDB):</strong></li></ul>
+  - مناسب برای مقیاس‌پذیری افقی و نوشتن/خواندن سریع پیام‌ها.
+  - پشتیبانی از داده‌های توزیع‌شده برای چت‌های گروهی.
+<ul><li><strong>کش (Redis):</strong></li></ul>
+  - ذخیره‌سازی وضعیت آنلاین کاربران و پیام‌های اخیر.
+<ul><li><strong>SQL (اختیاری):</strong></li></ul>
+  - برای داده‌های رابطه‌ای مانند مدیریت کاربران و گروه‌ها.
+
+<p>---</p>
+
+<h2>طراحی API و جریان تعامل</h2>
+
+<h3>APIهای اصلی</h3>
+<ul><li><strong>ارسال پیام:</strong></li></ul>
+   - <strong>درخواست:</strong> <code>POST /api/messages</code>
+   - <strong>بدنه درخواست:</strong>
+     <pre><code>json
+     {
+       "sender_id": "u123",
+       "receiver_id": "u456",
+       "content": "سلام، چطور می‌توانم به شما کمک کنم؟",
+       "timestamp": "2025-07-12T12:01:00Z"
+     }
+     </code></pre>
+   - <strong>پاسخ:</strong>
+     <pre><code>json
+     {
+       "message_id": "m789",
+       "status": "sent"
+     }
+     </code></pre>
+<ul><li><strong>دریافت پیام‌ها:</strong></li></ul>
+   - <strong>درخواست:</strong> <code>GET /api/messages?user_id=u123&receiver_id=u456</code>
+   - <strong>پاسخ:</strong>
+     <pre><code>json
+     [
+       {
+         "message_id": "m789",
+         "sender_id": "u123",
+         "receiver_id": "u456",
+         "content": "encrypted_message",
+         "timestamp": "2025-07-12T12:01:00Z",
+         "status": "delivered"
+       }
+     ]
+     </code></pre>
+<ul><li><strong>ایجاد گروه:</strong></li></ul>
+   - <strong>درخواست:</strong> <code>POST /api/groups</code>
+   - <strong>بدنه درخواست:</strong>
+     <pre><code>json
+     {
+       "group_name": "کارگروه پروژه",
+       "members": ["u123", "u456", "u789"]
+     }
+     </code></pre>
+   - <strong>پاسخ:</strong>
+     <pre><code>json
+     {
+       "group_id": "g101",
+       "group_name": "کارگروه پروژه"
+     }
+     </code></pre>
+
+<h3>جریان تعامل</h3>
+<ul><li><strong>ارسال پیام:</strong></li></ul>
+   - کلاینت پیام را با رمزنگاری سرتاسری به سرور ارسال می‌کند.
+   - سرور پیام را در صف (Kafka) و پایگاه داده ذخیره می‌کند.
+   - اگر گیرنده آنلاین است، پیام از طریق WebSocket تحویل می‌شود.
+   - نوتیفیکیشن از طریق APNs/FCM ارسال می‌شود.
+<ul><li><strong>دریافت پیام‌ها:</strong></li></ul>
+   - کلاینت درخواست پیام‌های جدید را از سرور می‌گیرد.
+   - سرور پیام‌ها را از پایگاه داده یا کش بازیابی کرده و به کلاینت بازمی‌گرداند.
+<ul><li><strong>همگام‌سازی:</strong></li></ul>
+   - پیام‌ها با استفاده از <code>timestamp</code> یا <code>message_id</code> مرتب شده و بین دستگاه‌ها همگام‌سازی می‌شوند.
+
+<p>---</p>
+
+<h2>مدیریت تحویل پیام، ترتیب و همگام‌سازی</h2>
+
+<h3>تحویل پیام</h3>
+<ul><li><strong>بلادرنگ:</strong> استفاده از WebSocket برای تحویل پیام به کاربران آنلاین.</li></ul>
+<ul><li><strong>آفلاین:</strong> ذخیره پیام‌ها در صف (Kafka) و تحویل پس از آنلاین شدن کاربر.</li></ul>
+<ul><li><strong>تضمین تحویل:</strong> استفاده از تأییدیه‌های (Acknowledgements) برای به‌روزرسانی وضعیت پیام (ارسال‌شده، تحویل‌شده، خوانده‌شده).</li></ul>
+
+<h3>ترتیب پیام‌ها</h3>
+<ul><li><strong>چالش:</strong> اطمینان از ترتیب صحیح پیام‌ها در چت‌های گروهی یا چنددستگاهی.</li></ul>
+<ul><li><strong>راه‌حل:</strong></li></ul>
+  - افزودن <code>timestamp</code> و <code>message_id</code> به هر پیام.
+  - مرتب‌سازی پیام‌ها در کلاینت بر اساس <code>timestamp</code>.
+
+<h3>همگام‌سازی بین دستگاه‌ها</h3>
+<ul><li><strong>چالش:</strong> نمایش پیام‌های یکسان در چندین دستگاه کاربر.</li></ul>
+<ul><li><strong>راه‌حل:</strong></li></ul>
+  - ذخیره پیام‌ها در پایگاه داده با <code>user_id</code> و <code>device_id</code>.
+  - استفاده از WebSocket یا Polling برای به‌روزرسانی بلادرنگ.
+  - کش کردن پیام‌های اخیر در Redis برای دسترسی سریع.
+
+<p>---</p>
+
+<h2>مقیاس‌پذیری و قابلیت اطمینان</h2>
+
+<h3>مقیاس‌پذیری</h3>
+<ul><li><strong>چالش:</strong> مدیریت میلیاردها کاربر و تریلیون‌ها پیام.</li></ul>
+<ul><li><strong>راه‌حل‌ها:</strong></li></ul>
+  - <strong>Load Balancer:</strong> توزیع ترافیک با AWS ALB یا Nginx.
+  - <strong>مقیاس‌بندی افقی:</strong> استفاده از Kubernetes برای سرورهای پیام‌رسان.
+  - <strong>پایگاه داده توزیع‌شده:</strong> Cassandra با پارتیشن‌بندی برای ذخیره پیام‌ها.
+  - <strong>صف پیام:</strong> Apache Kafka برای پردازش غیرهمزمان پیام‌ها و آنالیتیکس.
+
+<h3>قابلیت اطمینان</h3>
+<ul><li><strong>چالش:</strong> جلوگیری از قطعی سرویس و از دست رفتن پیام‌ها.</li></ul>
+<ul><li><strong>راه‌حل‌ها:</strong></li></ul>
+  - <strong>افزونگی:</strong> استفاده از چندین منطقه (Multi-Region) در AWS.
+  - <strong>پشتیبان‌گیری:</strong> ذخیره پیام‌ها در Replicaهای متعدد.
+  - <strong>Failover:</strong> جابجایی خودکار به سرورهای سالم با Route 53.
+
+<p>---</p>
+
+<h2>امنیت و حریم خصوصی</h2>
+
+<h3>رمزنگاری سرتاسری (End-to-End Encryption)</h3>
+<ul><li><strong>روش:</strong> استفاده از پروتکل Signal یا مشابه برای رمزنگاری پیام‌ها.</li></ul>
+  - هر کاربر یک جفت کلید عمومی/خصوصی (RSA یا ECC) دارد.
+  - پیام‌ها با کلید عمومی گیرنده رمزنگاری شده و فقط با کلید خصوصی رمزگشایی می‌شوند.
+<ul><li><strong>مزایا:</strong> حتی سرورها نمی‌توانند محتوای پیام‌ها را بخوانند.</li></ul>
+
+<h3>احراز هویت</h3>
+<ul><li><strong>روش:</strong> استفاده از OAuth 2.0 یا OTP (رمز یک‌بارمصرف) برای ورود کاربران.</li></ul>
+<ul><li><strong>محدودیت نرخ:</strong> جلوگیری از حملات Brute Force با Rate Limiting.</li></ul>
+
+<h3>حفاظت در برابر سوءاستفاده</h3>
+<ul><li><strong>فیلتر محتوا:</strong> بررسی پیام‌ها برای شناسایی محتوای مخرب یا اسپم.</li></ul>
+<ul><li><strong>گزارش کاربران:</strong> امکان گزارش پیام‌های غیرمجاز توسط کاربران.</li></ul>
+
+<p>---</p>
+
+<h2>مدیریت پیام‌های آفلاین و صف‌بندی</h2>
+
+<h3>پیام‌های آفلاین</h3>
+<ul><li><strong>چالش:</strong> تحویل پیام به کاربران آفلاین.</li></ul>
+<ul><li><strong>راه‌حل:</strong></li></ul>
+  - ذخیره پیام‌ها در Apache Kafka تا زمانی که کاربر آنلاین شود.
+  - ارسال نوتیفیکیشن برای اطلاع‌رسانی به کاربر.
+  - همگام‌سازی پیام‌ها پس از اتصال با استفاده از <code>message_id</code>.
+
+<h3>صف‌بندی پیام‌ها</h3>
+<ul><li><strong>روش:</strong> استفاده از Kafka یا RabbitMQ برای مدیریت پیام‌های غیرهمزمان.</li></ul>
+<ul><li><strong>مزایا:</strong> مقیاس‌پذیری بالا و تحمل خطا در برابر حجم زیاد پیام‌ها.</li></ul>
+
+<p>---</p>
+
+<h2>تریدآف‌های طراحی</h2>
+
+<ul><li><strong>عملکرد در مقابل امنیت:</strong></li></ul>
+   - رمزنگاری سرتاسری تأخیر را افزایش می‌دهد.
+   - <strong>تصمیم:</strong> استفاده از ECC به‌جای RSA برای رمزنگاری سریع‌تر.
+<ul><li><strong>ذخیره‌سازی پیام‌ها در مقابل حریم خصوصی:</strong></li></ul>
+   - ذخیره پیام‌ها در سرور برای همگام‌سازی آسان‌تر است اما حریم خصوصی را کاهش می‌دهد.
+   - <strong>تصمیم:</strong> ذخیره پیام‌های رمزنگاری‌شده و حذف پس از مدت مشخص.
+<ul><li><strong>بلادرنگ در مقابل مقیاس‌پذیری:</strong></li></ul>
+   - WebSocket برای پیام‌رسانی بلادرنگ منابع زیادی مصرف می‌کند.
+   - <strong>تصمیم:</strong> ترکیب WebSocket برای کاربران فعال و Polling برای کاربران با اتصال ضعیف.
+
+<p>---</p>
+
+<h2>نکات برای ارائه طراحی در مصاحبه</h2>
+
+<ul><li><strong>شروع با نیازمندی‌ها:</strong></li></ul>
+   - نیازمندی‌های کارکردی (مانند پیام‌رسانی گروهی) و غیرکارکردی (مانند مقیاس‌پذیری) را با مصاحبه‌کننده تأیید کنید.
+<ul><li><strong>ارائه دیاگرام معماری:</strong></li></ul>
+   - دیاگرام ساده‌ای رسم کنید که اجزا (مانند Load Balancer، Kafka، Cassandra) را نشان دهد.
+<ul><li><strong>توضیح NFRها:</strong></li></ul>
+   - برای هر NFR (مانند امنیت یا مقیاس‌پذیری)، راه‌حل‌های پیشنهادی را توضیح دهید.
+   - مثال: استفاده از Kafka برای پیام‌های آفلاین.
+<ul><li><strong>بحث درباره تریدآف‌ها:</strong></li></ul>
+   - نشان دهید که تعادل بین عملکرد، امنیت و هزینه را درک می‌کنید.
+<ul><li><strong>جزئیات فنی:</strong></li></ul>
+   - جزئیات مانند رمزنگاری، مدل داده، و انتخاب فناوری‌ها را شرح دهید.
+<ul><li><strong>ارتباط شفاف:</strong></li></ul>
+   - طراحی را به‌صورت ساختاریافته (نیازمندی‌ها → معماری → چالش‌ها) ارائه دهید.
+   - به سوالات مصاحبه‌کننده پاسخ دهید و انعطاف‌پذیری نشان دهید.
+
+<p>---</p>
+
+<h2>خلاصه</h2>
+طراحی یک سیستم پیام‌رسان مشابه واتس‌اپ نیازمند توجه به نیازمندی‌های کارکردی (مانند پیام‌رسانی بلادرنگ و گروهی) و غیرکارکردی (مانند مقیاس‌پذیری و امنیت) است. معماری شامل Load Balancer، سرورهای پیام‌رسان، کش، پایگاه داده توزیع‌شده، و صف پیام است. رمزنگاری سرتاسری و مدیریت پیام‌های آفلاین برای امنیت و تجربه کاربری ضروری هستند. در مصاحبه، توانایی توضیح نیازمندی‌ها، ارائه دیاگرام واضح، بحث درباره تریدآف‌ها و تمرکز بر جزئیات فنی کلیدی است. با این رویکرد، می‌توانید یک سیستم مقیاس‌پذیر، امن و کاربرپسند طراحی کنید که برای مصاحبه‌های طراحی سیستم مناسب باشد.
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

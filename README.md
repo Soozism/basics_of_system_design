@@ -1,291 +1,142 @@
-# 🏗️ System Design Tutorial - راهنمای جامع طراحی سیستم
+# System Design Tutorial Website
 
-[![Persian](https://img.shields.io/badge/Language-Persian-blue.svg)](README.md)
-[![System Design](https://img.shields.io/badge/Topic-System%20Design-orange.svg)](README.md)
-[![Tutorial](https://img.shields.io/badge/Type-Tutorial-green.svg)](README.md)
+A comprehensive HTML website for learning system design concepts, converted from Markdown files.
 
-## 📋 فهرست مطالب
-- [درباره این پروژه](#-درباره-این-پروژه)
-- [ساختار پروژه](#-ساختار-پروژه)
-- [مقدمه](#-مقدمه)
-- [پیش‌نیازها](#-پیشنیازها)
-- [نحوه استفاده](#-نحوه-استفاده)
-- [محتوای آموزشی](#-محتوای-آموزشی)
-- [مثال‌های عملی](#-مثالهای-عملی)
-- [منابع پیشنهادی](#-منابع-پیشنهادی)
-- [مشارکت](#-مشارکت)
-- [تماس](#-تماس)
+## Features
 
-## 🎯 درباره این پروژه
+- 📚 **67 Pages** of system design content
+- 🎨 **Modern Design** with responsive layout
+- 🔍 **Easy Navigation** with sidebar and breadcrumbs
+- 📱 **Mobile-Friendly** design
+- 🎯 **Persian/Farsi** language support
+- 🔗 **Cross-referenced** content with internal links
 
-این مخزن حاوی **راهنمای جامع و ساختاریافته طراحی سیستم** است که به زبان فارسی تهیه شده است. هدف این پروژه ارائه یک منبع کامل و عملی برای یادگیری طراحی سیستم‌های مقیاس‌پذیر و قابل اعتماد است.
-
-### 🎯 اهداف کلیدی:
-- 📚 آموزش مفاهیم پایه‌ای تا پیشرفته طراحی سیستم
-- 🔧 ارائه مثال‌های عملی و واقعی
-- 📊 آمادگی برای مصاحبه‌های طراحی سیستم
-- 🏢 درک معماری سیستم‌های شرکت‌های بزرگ
-- 💡 بهترین روش‌ها (Best Practices) در طراحی سیستم
-
-## 🗂️ ساختار پروژه
+## Structure
 
 ```
-basics_of_system_design/
-├── 📋 System_Design_Course_Outline.markdown
-├── 📚 Basic concepts of system design/
-│   ├── 🎯 Introduction to system design/
-│   ├── 🔑 Key concepts in system design/
-│   └── 🏗️ The main components of software architecture/
-├── 🛠️ Main components of scalable systems/
-│   ├── 🗄️ Databases and storage/
-│   ├── ⚡ Caching/
-│   ├── 📨 Messaging and Queues/
-│   └── 🔄 Microservices Architecture/
-├── 📈 Designing scalable and reliable systems/
-│   ├── ⚖️ Load Balancing/
-│   ├── 📊 Horizontal and Vertical Scalability/
-│   └── 🛡️ Failure Management and Fault Tolerance/
-├── 🚀 Advanced Topics in System Design/
-│   ├── 🌐 Distributed Systems/
-│   ├── 📊 Big Data Processing/
-│   ├── 📊 Monitoring and Observability/
-│   └── 🔒 Security in System Design/
-└── 🎯 Preparing for System Design Interviews/
-    ├── 🧠 Problem-Solving Approach in System Design Interviews/
-    └── ❓ Sample System Design Interview Questions/
+html_website/
+├── index.html                 # Main homepage
+├── sitemap.html              # Complete page listing
+├── css/
+│   └── style.css             # Main stylesheet
+├── js/
+│   └── script.js             # Interactive features
+├── convert_md_to_html.py     # Conversion script
+└── [Content Pages]/          # All converted HTML pages
+    ├── Basic concepts of system design/
+    ├── Main components of scalable systems/
+    ├── Designing scalable and reliable systems/
+    ├── Advanced Topics in System Design/
+    └── Preparing for System Design Interviews/
 ```
 
-## 🚀 مقدمه
+## How to Use
 
-طراحی سیستم یکی از مهارت‌های کلیدی مهندسان نرم‌افزار است که در دنیای امروز با رشد روزافزون داده‌ها و کاربران، اهمیت بیشتری پیدا کرده است. این آموزش شامل:
+1. **Open the Website**
+   - Open `index.html` in your web browser
+   - Or start with `sitemap.html` to see all available pages
 
-- 🎯 **مفاهیم پایه‌ای**: از تعریف طراحی سیستم تا اصول اولیه
-- 🔧 **اجزای کلیدی**: پایگاه داده، کش، پیام‌رسانی، میکروسرویس‌ها
-- 📈 **مقیاس‌پذیری**: تکنیک‌های افقی و عمودی
-- 🛡️ **قابلیت اطمینان**: مدیریت خطا و تحمل خرابی
-- 🚀 **موضوعات پیشرفته**: سیستم‌های توزیع‌شده، Big Data، امنیت
-- 🎯 **آمادگی مصاحبه**: رویکرد حل مسئله و نمونه سوالات
+2. **Navigate the Content**
+   - Use the main navigation menu at the top
+   - Use the sidebar for section-specific navigation
+   - Follow the breadcrumb trail to track your location
 
-## 📋 پیش‌نیازها
+3. **Study Path**
+   - Start with "Basic Concepts" for fundamentals
+   - Progress through "Main Components" for building blocks
+   - Learn "Scalable Systems" for practical applications
+   - Explore "Advanced Topics" for deeper understanding
+   - Practice with "Interview Questions" for preparation
 
-برای استفاده بهینه از این منبع، آشنایی با موارد زیر توصیه می‌شود:
+## Content Sections
 
-### 🔰 پیش‌نیازهای ضروری:
-- 💻 آشنایی با مفاهیم پایه‌ای برنامه‌نویسی
-- 🌐 درک اولیه از شبکه‌های کامپیوتری
-- 🗄️ آشنایی با مفاهیم پایگاه داده
+### 1. Basic Concepts (مفاهیم پایه‌ای)
+- Introduction to System Design
+- Software Architecture Components
+- Key Concepts in System Design
 
-### 🔧 پیش‌نیازهای مفید:
-- 📊 تجربه کار با سیستم‌های توزیع‌شده
-- ☁️ آشنایی با سرویس‌های ابری (AWS، Azure، GCP)
-- 🐳 درک از کانتینرها و Docker
+### 2. Main Components (اجزای اصلی)
+- Databases and Storage
+- Caching
+- Microservices Architecture
+- Messaging and Queues
 
-## 🎯 نحوه استفاده
+### 3. Scalable Systems (سیستم‌های مقیاس‌پذیر)
+- Load Balancing
+- Horizontal and Vertical Scalability
+- Failure Management and Fault Tolerance
 
-### 🚀 شروع سریع:
-1. 📖 با خواندن `System_Design_Course_Outline.markdown` شروع کنید
-2. 📚 مطالب را به ترتیب مطالعه کنید
-3. 🛠️ مثال‌های عملی را پیاده‌سازی کنید
-4. 📝 با حل مسائل نمونه تمرین کنید
+### 4. Advanced Topics (موضوعات پیشرفته)
+- Distributed Systems
+- Big Data Processing
+- Security in System Design
+- Monitoring and Observability
 
-### 📚 مسیر یادگیری پیشنهادی:
-```
-مرحله 1: مفاهیم پایه‌ای (1-2 هفته)
-    ├── تعریف و اهمیت طراحی سیستم
-    ├── اجزای اصلی معماری
-    └── مفاهیم کلیدی (Scalability, Reliability, etc.)
+### 5. Interview Preparation (آمادگی مصاحبه)
+- Problem-Solving Approach
+- Sample Interview Questions
 
-مرحله 2: اجزای اصلی (2-3 هفته)
-    ├── پایگاه‌های داده
-    ├── کشینگ (Caching)
-    ├── میکروسرویس‌ها
-    └── پیام‌رسانی
+## Technical Features
 
-مرحله 3: مقیاس‌پذیری (2-3 هفته)
-    ├── Load Balancing
-    ├── Horizontal vs Vertical Scaling
-    └── Fault Tolerance
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Modern CSS**: Uses CSS Grid and Flexbox for layout
+- **Interactive JavaScript**: Smooth scrolling, mobile menu, search
+- **Print-Friendly**: Optimized for printing
+- **Accessibility**: Proper heading structure and keyboard navigation
 
-مرحله 4: موضوعات پیشرفته (3-4 هفته)
-    ├── سیستم‌های توزیع‌شده
-    ├── Big Data Processing
-    ├── امنیت
-    └── نظارت و مانیتورینگ
+## Browser Support
 
-مرحله 5: آمادگی مصاحبه (1-2 هفته)
-    ├── رویکرد حل مسئله
-    ├── نمونه سوالات
-    └── تمرین عملی
-```
+- Chrome 60+
+- Firefox 60+
+- Safari 12+
+- Edge 79+
 
-## 📖 محتوای آموزشی
+## File Organization
 
-### 🎯 بخش اول: مفاهیم پایه‌ای
-- **فصل 1:** مقدمه‌ای بر طراحی سیستم
-- **فصل 2:** اجزای اصلی معماری نرم‌افزار  
-- **فصل 3:** مفاهیم کلیدی (Scalability, Reliability, Performance)
+All original Markdown files have been converted to HTML while maintaining the same directory structure. Each HTML file includes:
 
-### 🛠️ بخش دوم: اجزای اصلی
-- **فصل 4:** پایگاه‌های داده و ذخیره‌سازی
-- **فصل 5:** کشینگ (Caching)
-- **فصل 6:** میکروسرویس‌ها
-- **فصل 7:** پیام‌رسانی و صف‌ها
+- Proper page title and metadata
+- Responsive navigation
+- Breadcrumb navigation
+- Styled content with proper typography
+- Links to related topics
 
-### 📈 بخش سوم: مقیاس‌پذیری
-- **فصل 8:** تعادل بار (Load Balancing)
-- **فصل 9:** مقیاس‌پذیری افقی و عمودی
-- **فصل 10:** مدیریت خرابی‌ها و تحمل خطا
+## Customization
 
-### 🚀 بخش چهارم: موضوعات پیشرفته
-- **فصل 11:** سیستم‌های توزیع‌شده
-- **فصل 12:** پردازش داده‌های بزرگ
-- **فصل 13:** امنیت در طراحی سیستم
-- **فصل 14:** نظارت و مانیتورینگ
+### Colors
+The website uses CSS custom properties (variables) for easy theming:
+- `--primary-color`: Main brand color
+- `--secondary-color`: Secondary brand color
+- `--accent-color`: Accent color for highlights
+- `--text-primary`: Main text color
+- `--text-secondary`: Secondary text color
 
-### 🎯 بخش پنجم: آمادگی مصاحبه
-- **فصل 15:** رویکرد حل مسئله
-- **فصل 16:** نمونه سؤالات مصاحبه
-- **فصل 17:** نکات و ترفندهای مصاحبه
+### Fonts
+The website uses system fonts for better performance:
+- Primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
+- Code: 'Consolas', 'Monaco', 'Courier New', monospace
 
-## 🛠️ مثال‌های عملی
+## Performance
 
-### 🌟 پروژه‌های پیشنهادی:
-1. **🔗 کوتاه‌کننده URL** (مانند bit.ly)
-2. **💬 سیستم پیام‌رسان** (مانند WhatsApp)
-3. **📱 شبکه اجتماعی** (مانند Twitter)
-4. **🎥 پلتفرم ویدئو** (مانند YouTube)
-5. **🛒 سیستم تجارت الکترونیک** (مانند Amazon)
+- Lightweight CSS and JavaScript
+- Optimized images (when added)
+- Minimal external dependencies
+- Fast loading times
 
-### 🏢 مطالعات موردی:
-- 📘 **فیسبوک**: معماری مقیاس‌پذیری
-- 🐦 **توییتر**: سیستم تایم‌لاین
-- 🔍 **گوگل**: موتور جستجو
-- 📺 **نتفلیکس**: سیستم توصیه‌گر
-- 🚗 **اوبر**: سیستم موقعیت‌یابی
+## Contributing
 
-## 📚 منابع پیشنهادی
+To add new content:
+1. Create new Markdown files in appropriate directories
+2. Run the conversion script: `python convert_md_to_html.py`
+3. Update navigation links if needed
 
-### 📖 کتاب‌های معتبر:
-- **"Designing Data-Intensive Applications"** - Martin Kleppmann
-- **"System Design Interview"** - Alex Xu
-- **"Building Microservices"** - Sam Newman
-- **"High Performance MySQL"** - Baron Schwartz
+## License
 
-### 🌐 منابع آنلاین:
-- [The System Design Primer](https://github.com/donnemartin/system-design-primer)
-- [High Scalability](http://highscalability.com/)
-- [AWS Architecture Center](https://aws.amazon.com/architecture/)
-- [Google Cloud Architecture Framework](https://cloud.google.com/architecture/framework)
-
-### 🎥 دوره‌های آموزشی:
-- **Coursera**: Cloud Computing Specialization
-- **Udemy**: System Design Interview Prep
-- **Educative.io**: Grokking the System Design Interview
-- **Pluralsight**: Distributed Systems Design
-
-### 📰 وبلاگ‌های مهندسی:
-- [Netflix Tech Blog](https://netflixtechblog.com/)
-- [Uber Engineering](https://eng.uber.com/)
-- [Airbnb Engineering](https://medium.com/airbnb-engineering)
-- [Facebook Engineering](https://engineering.fb.com/)
-
-## 🤝 مشارکت
-
-مشارکت شما در بهبود این منبع بسیار ارزشمند است!
-
-### 🛠️ نحوه مشارکت:
-1. **Fork** کردن پروژه
-2. ایجاد **Branch** جدید برای تغییرات
-3. **Commit** کردن تغییرات
-4. **Push** کردن به Branch
-5. ایجاد **Pull Request**
-
-### 📝 راهنمای مشارکت:
-- ✅ محتوای جدید با منابع معتبر
-- ✅ مثال‌های عملی و واقعی
-- ✅ ترجمه مفاهیم تخصصی
-- ✅ بهبود ساختار و خوانایی
-- ✅ تصحیح اشکالات املایی
-
-### 🎯 زمینه‌های مشارکت:
-- 📝 تولید محتوای جدید
-- 🔧 بهبود مثال‌های موجود
-- 🌐 ترجمه بهتر مفاهیم
-- 📊 اضافه کردن دیاگرام‌ها
-- 🛠️ پیاده‌سازی پروژه‌های نمونه
-
-## 🏆 مزایای استفاده از این منبع
-
-### 🎯 برای دانشجویان:
-- 📚 منبع جامع و ساختاریافته
-- 🇮🇷 محتوای فارسی با کیفیت
-- 💡 مثال‌های عملی و کاربردی
-- 🔄 به‌روزرسانی مداوم
-
-### 🏢 برای متخصصان:
-- 📈 آمادگی برای مصاحبه‌های شغلی
-- 🛠️ بهترین روش‌ها (Best Practices)
-- 🔍 مطالعات موردی شرکت‌های بزرگ
-- 🚀 موضوعات پیشرفته و به‌روز
-
-### 👥 برای تیم‌های توسعه:
-- 📋 راهنمای طراحی سیستم
-- 🤝 منبع مشترک برای تیم
-- 📊 الگوها و معماری‌های استاندارد
-- 🔄 پیاده‌سازی سیستم‌های مقیاس‌پذیر
-
-## 📊 آمار و وضعیت پروژه
-
-- 📚 **بیش از 19 فصل** محتوای آموزشی
-- 🗂️ **5 بخش اصلی** ساختاریافته
-- 🛠️ **پروژه‌های عملی** متنوع
-- 🏢 **مطالعات موردی** شرکت‌های بزرگ
-- 🎯 **آمادگی مصاحبه** تخصصی
-
-## 🔄 به‌روزرسانی‌ها
-
-این منبع به‌صورت مداوم به‌روزرسانی می‌شود:
-
-- ✅ اضافه کردن مفاهیم جدید
-- ✅ بهبود مثال‌های موجود
-- ✅ اصلاح اشکالات
-- ✅ افزودن پروژه‌های جدید
-- ✅ به‌روزرسانی منابع
-
-## 📞 تماس
-
-برای پیشنهادات، انتقادات یا سوالات:
-
-- 📧 **ایمیل**: [آدرس ایمیل]
-- 💬 **تلگرام**: [@username]
-- 🐙 **GitHub Issues**: [لینک Issues]
-- 💼 **LinkedIn**: [لینک LinkedIn]
+This educational content is provided for learning purposes.
 
 ---
 
-<div align="center">
-
-### 🌟 اگر این پروژه برای شما مفید بود، لطفاً ستاره بدهید! 🌟
-
-[![GitHub stars](https://img.shields.io/github/stars/username/repo.svg?style=social&label=Star)](https://github.com/username/repo)
-[![GitHub forks](https://img.shields.io/github/forks/username/repo.svg?style=social&label=Fork)](https://github.com/username/repo)
-
-**با تشکر از همه کسانی که در بهبود این منبع مشارکت کرده‌اند! 🙏**
-
-</div>
-
----
-
-## 📜 مجوز
-
-این پروژه تحت مجوز [MIT License](LICENSE) منتشر شده است.
-
----
-
-<div align="center">
-
-**💡 یادآوری: طراحی سیستم هنری است که با تمرین و تجربه کامل می‌شود!**
-
-**📚 مطالعه کنید، تمرین کنید، و سیستم‌های فوق‌العاده بسازید! 🚀**
-
-</div>
+**Last Updated**: December 2024
+**Total Pages**: 67
+**Languages**: Persian/Farsi
+**Status**: Complete conversion from Markdown to HTML

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استراتژی‌های حذف کش: LRU و LFU</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="استراتژی‌های حذف کش: LRU و LFU">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>استراتژی‌های حذف کش: LRU و LFU</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Main components of scalable systems</span>
+<span>/</span>
+<span>Caching</span>
+<span>/</span>
+<span>Cache_Eviction_Strategies_LRU_LFU.html</span>
+                </div>
+
+                <h1>استراتژی‌های حذف کش: LRU و LFU</h1>
+
+<p>این سند به بررسی مفهوم <strong>حذف کش (Cache Eviction)</strong> و دو استراتژی پرکاربرد آن، یعنی <strong>LRU (Least Recently Used)</strong> و <strong>LFU (Least Frequently Used)</strong>، در طراحی سیستم‌های مقیاس‌پذیر می‌پردازد. هدف این است که با ارائه تعاریف، نحوه عملکرد، موارد استفاده، مزایا و معایب، مقایسه‌ها، مثال‌های واقعی و دیاگرام‌ها، یک راهنمای جامع و آموزشی برای یادگیری طراحی سیستم فراهم شود. این محتوا به زبان فارسی و با فرمت مارک‌داون ارائه شده است تا برای مستندسازی آموزشی و یادگیری اصول طراحی سیستم مناسب باشد.</p>
+
+<p>---</p>
+
+<h2>مقدمه: چرا حذف کش در سیستم‌های با محدودیت حافظه ضروری است؟</h2>
+
+<strong>کشینگ</strong> تکنیکی است که داده‌های پراستفاده را در حافظه سریع (مانند RAM) ذخیره می‌کند تا دسترسی به آن‌ها سریع‌تر و کم‌هزینه‌تر باشد. با این حال، حافظه کش معمولاً ظرفیت محدودی دارد و نمی‌تواند تمام داده‌ها را ذخیره کند. در چنین شرایطی، <strong>حذف کش (Cache Eviction)</strong> برای آزادسازی فضا و ذخیره داده‌های جدید ضروری است.
+
+<strong>چرا حذف کش مهم است؟</strong>
+<ul><li><strong>محدودیت حافظه:</strong> حافظه کش (مانند Redis یا Memcached) ظرفیت محدودی دارد و نمی‌تواند همه داده‌ها را نگه دارد.</li></ul>
+<ul><li><strong>بهینه‌سازی عملکرد:</strong> حذف داده‌های کم‌استفاده به سیستم اجازه می‌دهد تا داده‌های پراستفاده را در دسترس نگه دارد و نرخ موفقیت کش (Cache Hit Rate) را افزایش دهد.</li></ul>
+<ul><li><strong>مدیریت منابع:</strong> حذف هوشمند داده‌ها از مصرف بیش‌ازحد حافظه جلوگیری می‌کند و عملکرد سیستم را بهبود می‌بخشد.</li></ul>
+<ul><li><strong>مقیاس‌پذیری:</strong> استراتژی‌های حذف کش به سیستم‌های مقیاس‌پذیر کمک می‌کنند تا با بارهای کاری سنگین کنار بیایند.</li></ul>
+
+<p>این سند دو استراتژی محبوب حذف کش، یعنی LRU و LFU، را بررسی کرده و راهنمایی برای انتخاب استراتژی مناسب ارائه می‌دهد.</p>
+
+<p>---</p>
+
+<h2>حذف کش چیست؟</h2>
+
+<h3>تعریف و زمان وقوع</h3>
+<strong>حذف کش</strong> فرآیندی است که در آن داده‌های قدیمی یا کم‌استفاده از حافظه کش حذف می‌شوند تا فضا برای داده‌های جدید آزاد شود. این فرآیند زمانی رخ می‌دهد که:
+<ul><li>حافظه کش به ظرفیت کامل خود می‌رسد.</li></ul>
+<ul><li>داده‌های جدید باید به کش اضافه شوند، اما فضای کافی وجود ندارد.</li></ul>
+<ul><li>سیستم نیاز به بهینه‌سازی نرخ موفقیت کش (Cache Hit Rate) دارد.</li></ul>
+
+<h3>چرا حذف کش لازم است؟</h3>
+<ul><li><strong>محدودیت‌های فیزیکی:</strong> حافظه RAM یا SSD ظرفیت محدودی دارد و نمی‌تواند تمام داده‌ها را ذخیره کند.</li></ul>
+<ul><li><strong>بهینه‌سازی عملکرد:</strong> حذف داده‌های کم‌اهمیت به سیستم اجازه می‌دهد تا داده‌های پراستفاده را سریع‌تر در دسترس قرار دهد.</li></ul>
+<ul><li><strong>جلوگیری از خرابی:</strong> بدون حذف کش، سیستم ممکن است با خطای کمبود حافظه مواجه شود یا عملکرد آن کاهش یابد.</li></ul>
+
+<strong>مثال:</strong> در یک وب‌سایت تجارت الکترونیک، اگر نتایج جستجوی محصولات پرطرفدار در Redis ذخیره شوند و حافظه پر شود، داده‌های قدیمی یا کم‌استفاده باید حذف شوند تا جا برای نتایج جدید باز شود.
+
+<p>---</p>
+
+<h2>مروری بر استراتژی‌های رایج حذف کش</h2>
+
+<h3>LRU (Least Recently Used - کم‌اخیراً استفاده‌شده)</h3>
+<h4>نحوه عملکرد</h4>
+<ul><li><strong>ایده اصلی:</strong> داده‌هایی که اخیراً کمترین دسترسی را داشته‌اند (کمتر استفاده شده‌اند) ابتدا حذف می‌شوند.</li></ul>
+<ul><li><strong>پیاده‌سازی:</strong></li></ul>
+  - داده‌ها در یک ساختار داده مانند لیست دوطرفه (Doubly Linked List) یا صف ذخیره می‌شوند.
+  - هر زمان که به یک داده دسترسی می‌شود (Cache Hit)، به ابتدای لیست منتقل می‌شود.
+  - وقتی فضا پر می‌شود، داده‌ای که در انتهای لیست قرار دارد (کم‌اخیراً استفاده‌شده) حذف می‌شود.
+<ul><li><strong>پیاده‌سازی نمونه (شبه‌کد):</strong></li></ul>
+  <pre><code>python
+  class LRUCache:
+      def __init__(self, capacity):
+          self.capacity = capacity
+          self.cache = {}  # Dictionary for O(1) lookup
+          self.list = DoublyLinkedList()  # To track order
+
+<p>def get(self, key):
+          if key in self.cache:
+              self.list.move_to_front(key)  # Update recency
+              return self.cache[key]
+          return None</p>
+
+<p>def put(self, key, value):
+          if key in self.cache:
+              self.list.move_to_front(key)
+              self.cache[key] = value
+          else:
+              if len(self.cache) >= self.capacity:
+                  lru_key = self.list.remove_tail()  # Remove least recent
+                  del self.cache[lru_key]
+              self.cache[key] = value
+              self.list.add_to_front(key)
+  </code></pre></p>
+
+<h4>موارد استفاده و مزایا</h4>
+<ul><li><strong>موارد استفاده:</strong></li></ul>
+  - برنامه‌هایی که داده‌های اخیراً استفاده‌شده احتمالاً دوباره استفاده می‌شوند (مانند فیدهای خبری در شبکه‌های اجتماعی).
+  - کشینگ نتایج پرس‌وجوهای پایگاه داده یا صفحات وب.
+<ul><li><strong>مزایا:</strong></li></ul>
+  - ساده برای پیاده‌سازی و درک.
+  - عملکرد خوب برای الگوهای دسترسی که داده‌های اخیراً استفاده‌شده پراستفاده هستند.
+  - نرخ موفقیت کش بالا در سناریوهای با دسترسی زمانی (Temporal Locality).
+
+<h4>مزایا و معایب</h4>
+<ul><li><strong>مزایا:</strong></li></ul>
+  - مناسب برای داده‌هایی با الگوهای دسترسی اخیر (مانند جلسات کاربر).
+  - پیچیدگی زمانی O(1) با استفاده از لیست دوطرفه و جدول هش.
+<ul><li><strong>معایب:</strong></li></ul>
+  - در سناریوهای با دسترسی‌های پراکنده (مانند اسکن‌های بزرگ) ممکن است داده‌های پراستفاده را به اشتباه حذف کند.
+  - به فرکانس دسترسی داده‌ها توجه نمی‌کند، فقط به زمان دسترسی اهمیت می‌دهد.
+
+<h3>LFU (Least Frequently Used - کم‌تکرار استفاده‌شده)</h3>
+<h4>نحوه عملکرد</h4>
+<ul><li><strong>ایده اصلی:</strong> داده‌هایی که کمترین تعداد دسترسی را داشته‌اند ابتدا حذف می‌شوند.</li></ul>
+<ul><li><strong>پیاده‌سازی:</strong></li></ul>
+  - تعداد دفعات دسترسی (Frequency) برای هر داده ثبت می‌شود.
+  - داده‌ها در یک ساختار داده مانند Heap یا لیست‌های مرتب‌شده بر اساس فرکانس ذخیره می‌شوند.
+  - وقتی فضا پر می‌شود، داده‌ای با کمترین فرکانس دسترسی حذف می‌شود. در صورت تساوی فرکانس، ممکن است از معیارهای اضافی (مانند LRU) استفاده شود.
+<ul><li><strong>پیاده‌سازی نمونه (شبه‌کد):</strong></li></ul>
+  <pre><code>python
+  class LFUCache:
+      def __init__(self, capacity):
+          self.capacity = capacity
+          self.cache = {}  # Dictionary for O(1) lookup
+          self.freq_map = {}  # Map frequency to list of keys
+          self.min_freq = 0  # Track minimum frequency
+
+<p>def get(self, key):
+          if key in self.cache:
+              value, freq = self.cache[key]
+              self.freq_map[freq].remove(key)
+              if not self.freq_map[freq]:
+                  del self.freq_map[freq]
+                  if self.min_freq == freq:
+                      self.min_freq += 1
+              self.freq_map.setdefault(freq + 1, []).append(key)
+              self.cache[key] = (value, freq + 1)
+              return value
+          return None</p>
+
+<p>def put(self, key, value):
+          if key in self.cache:
+              self.get(key)  # Update frequency
+              self.cache[key] = (value, self.cache[key][1])
+          else:
+              if len(self.cache) >= self.capacity:
+                  lfu_key = self.freq_map[self.min_freq].pop(0)
+                  del self.cache[lfu_key]
+                  if not self.freq_map[self.min_freq]:
+                      del self.freq_map[self.min_freq]
+              self.cache[key] = (value, 1)
+              self.freq_map.setdefault(1, []).append(key)
+              self.min_freq = 1
+  </code></pre></p>
+
+<h4>موارد استفاده و سناریوهای ایده‌آل</h4>
+<ul><li><strong>موارد استفاده:</strong></li></ul>
+  - برنامه‌هایی که داده‌های پرتکرار احتمالاً دوباره استفاده می‌شوند (مانند لیدربوردها یا محصولات پرطرفدار).
+  - سناریوهایی با الگوهای دسترسی پایدار (Stable Access Patterns).
+<ul><li><strong>سناریوهای ایده‌آل:</strong></li></ul>
+  - سیستم‌های توصیه (مانند محصولات پرطرفدار در آمازون).
+  - کشینگ داده‌هایی که تعداد محدودی آیتم پراستفاده دارند.
+
+<h4>مزایا و معایب</h4>
+<ul><li><strong>مزایا:</strong></li></ul>
+  - مناسب برای داده‌هایی که تعداد دسترسی‌های بالا اهمیت دارد.
+  - نرخ موفقیت کش بالا در سناریوهای با دسترسی‌های مکرر (Frequency Locality).
+<ul><li><strong>معایب:</strong></li></ul>
+  - پیچیدگی پیاده‌سازی بیشتر نسبت به LRU (نیاز به ردیابی فرکانس).
+  - مصرف حافظه بیشتر به دلیل ذخیره فرکانس هر داده.
+  - ممکن است داده‌های جدید اما پراستفاده را به دلیل فرکانس پایین حذف کند.
+
+<p>---</p>
+
+<h2>مقایسه: LRU در مقابل LFU</h2>
+
+<p><td> <strong>معیار</strong>               </td> <strong>LRU</strong>                                           <td> <strong>LFU</strong>                                           </td>
+<td>-------------------------</td>--------------------------------------------------<td>--------------------------------------------------</td>
+<td> <strong>معیار حذف</strong>          </td> کم‌اخیراً استفاده‌شده (زمان آخرین دسترسی)       <td> کم‌تکرار استفاده‌شده (تعداد دفعات دسترسی)       </td>
+<td> <strong>پیچیدگی زمانی</strong>      </td> O(1) با لیست دوطرفه و جدول هش                   <td> O(1) یا O(log n) بسته به پیاده‌سازی (Heap)       </td>
+<td> <strong>مصرف حافظه</strong>         </td> کمتر (فقط ترتیب دسترسی ذخیره می‌شود)             <td> بیشتر (نیاز به ذخیره فرکانس و مرتب‌سازی)        </td>
+<td> <strong>عملکرد</strong>             </td> خوب برای الگوهای دسترسی اخیر                    <td> خوب برای الگوهای دسترسی مکرر                    </td>
+<td> <strong>پیچیدگی پیاده‌سازی</strong> </td> ساده‌تر                                         <td> پیچیده‌تر                                        </td>
+<td> <strong>موارد استفاده</strong>      </td> جلسات کاربر، فیدهای خبری، صفحات وب            <td> لیدربوردها، محصولات پرطرفدار، توصیه‌ها         </td></p>
+
+<p>---</p>
+
+<h2>چه زمانی از کدام استراتژی استفاده کنیم؟</h2>
+
+<h3>استفاده از LRU</h3>
+<ul><li><strong>سناریوها:</strong></li></ul>
+  - وقتی داده‌های اخیراً استفاده‌شده احتمالاً دوباره استفاده می‌شوند (مانند جلسات کاربر در یک وب‌سایت).
+  - برنامه‌هایی با الگوهای دسترسی زمانی (Temporal Locality)، مانند فیدهای خبری یا صفحات وب.
+  - زمانی که سادگی و مصرف حافظه کم اهمیت است.
+<ul><li><strong>مثال:</strong> کش کردن نتایج جستجوی کاربران در یک وب‌سایت تجارت الکترونیک که معمولاً به محصولات اخیراً مشاهده‌شده دسترسی دارند.</li></ul>
+
+<h3>استفاده از LFU</h3>
+<ul><li><strong>سناریوها:</strong></li></ul>
+  - وقتی داده‌های پرتکرار احتمالاً دوباره استفاده می‌شوند (مانند محصولات پرطرفدار یا لیدربوردها).
+  - برنامه‌هایی با الگوهای دسترسی پایدار که تعداد محدودی آیتم پراستفاده دارند.
+  - زمانی که نرخ موفقیت کش (Cache Hit Rate) اهمیت بیشتری نسبت به سادگی دارد.
+<ul><li><strong>مثال:</strong> کش کردن محصولات پرطرفدار در آمازون که بارها توسط کاربران مختلف مشاهده می‌شوند.</li></ul>
+
+<strong>ملاحظات انتخاب:</strong>
+<ul><li><strong>الگوی دسترسی داده‌ها:</strong> اگر دسترسی‌ها به‌تازگی وابسته است، LRU بهتر است؛ اگر به فرکانس وابسته است، LFU مناسب‌تر است.</li></ul>
+<ul><li><strong>منابع سیستم:</strong> LRU حافظه کمتری مصرف می‌کند و پیاده‌سازی ساده‌تری دارد.</li></ul>
+<ul><li><strong>نیازهای عملکرد:</strong> LFU ممکن است نرخ موفقیت کش بالاتری داشته باشد، اما پیچیدگی بیشتری دارد.</li></ul>
+
+<p>---</p>
+
+<h2>مثال‌های واقعی و ابزارهای پیاده‌سازی</h2>
+
+<ul><li><strong>Redis:</strong></li></ul>
+   - <strong>پشتیبانی از LRU:</strong> Redis از استراتژی LRU برای حذف داده‌ها در حالت حافظه محدود استفاده می‌کند (تنظیم <code>maxmemory-policy</code> به <code>volatile-lru</code> یا <code>allkeys-lru</code>).
+   - <strong>مثال:</strong> اینستاگرام از Redis با LRU برای کش کردن فیدهای کاربران استفاده می‌کند، که داده‌های اخیراً مشاهده‌شده را در اولویت نگه می‌دارد.
+   - <strong>ویژگی‌ها:</strong> Redis از LRU تقریبی (Approximate LRU) استفاده می‌کند که با نمونه‌برداری تصادفی، مصرف حافظه را کاهش می‌دهد.
+
+<ul><li><strong>Memcached:</strong></li></ul>
+   - <strong>پشتیبانی از LRU:</strong> Memcached به‌صورت پیش‌فرض از LRU برای حذف داده‌ها استفاده می‌کند.
+   - <strong>مثال:</strong> فیسبوک از Memcached با LRU برای کش کردن پروفایل‌های کاربران و فیدهای خبری استفاده می‌کند، که داده‌های اخیراً دسترسی‌شده را در دسترس نگه می‌دارد.
+
+<ul><li><strong>Varnish (پراکسی معکوس):</strong></li></ul>
+   - Varnish از LRU برای مدیریت کش صفحات وب استفاده می‌کند.
+   - <strong>مثال:</strong> وب‌سایت‌های خبری از Varnish با LRU برای کش کردن صفحات پربازدید استفاده می‌کنند.
+
+<ul><li><strong>DynamoDB Accelerator (DAX):</strong></li></ul>
+   - <strong>پشتیبانی از LRU:</strong> DAX از LRU برای کش کردن نتایج پرس‌وجوهای DynamoDB استفاده می‌کند.
+   - <strong>مثال:</strong> آمازون از DAX با LRU برای کش کردن داده‌های سبد خرید استفاده می‌کند، که تأخیر را به میکروثانیه کاهش می‌دهد.
+
+<p>---</p>
+
+<h2>خلاصه و نکات کلیدی</h2>
+
+<ul><li><strong>حذف کش</strong> برای مدیریت حافظه محدود در سیستم‌های کشینگ ضروری است تا داده‌های کم‌استفاده حذف شده و جا برای داده‌های جدید باز شود.</li></ul>
+<ul><li><strong>LRU (Least Recently Used):</strong></li></ul>
+  - داده‌های کم‌اخیراً استفاده‌شده را حذف می‌کند.
+  - مناسب برای برنامه‌هایی با الگوهای دسترسی اخیر (مانند جلسات کاربر).
+  - ساده و کم‌مصرف از نظر حافظه.
+<ul><li><strong>LFU (Least Frequently Used):</strong></li></ul>
+  - داده‌های کم‌تکرار استفاده‌شده را حذف می‌کند.
+  - مناسب برای برنامه‌هایی با داده‌های پرتکرار (مانند لیدربوردها).
+  - پیچیده‌تر و مصرف حافظه بیشتر.
+<ul><li><strong>انتخاب استراتژی:</strong> LRU برای سادگی و الگوهای دسترسی اخیر مناسب است، در حالی که LFU برای داده‌های پرتکرار و الگوهای پایدار بهتر عمل می‌کند.</li></ul>
+<ul><li><strong>ابزارها:</strong> Redis و Memcached از LRU پشتیبانی می‌کنند، و Redis همچنین می‌تواند از LFU با تنظیمات خاص استفاده کند.</li></ul>
+
+<h3>دیاگرام LRU</h3>
+
+<pre><code>
+[Cache]
+Head (Most Recent) --> [Key1] --> [Key2] --> [Key3] --> Tail (Least Recent)
+</code></pre>
+<strong>توضیح:</strong> در LRU، داده‌های جدید یا دسترسی‌شده به سر لیست منتقل می‌شوند، و داده در انتهای لیست (کم‌اخیراً استفاده‌شده) حذف می‌شود.
+
+<h3>دیاگرام LFU</h3>
+
+<pre><code>
+[Cache]
+Freq=3: [Key1]
+Freq=2: [Key2, Key3]
+Freq=1: [Key4]
+</code></pre>
+<strong>توضیح:</strong> در LFU، داده‌ها بر اساس فرکانس دسترسی مرتب می‌شوند، و داده با کمترین فرکانس (مانند Key4) حذف می‌شود.
+
+<p>---</p>
+
+<h2>منابع پیشنهادی برای مطالعه بیشتر</h2>
+
+<ul><li><em>Designing Data-Intensive Applications</em> نوشته مارتین کلپمن: کتابی جامع برای یادگیری کشینگ و استراتژی‌های حذف.</li></ul>
+<ul><li><em>The System Design Primer</em> (منبع متن‌باز در GitHub): راهنمایی برای کشینگ و بهینه‌سازی عملکرد.</li></ul>
+<ul><li>وبلاگ‌های مهندسی:</li></ul>
+   - <em>Redis Blog</em>: مقالات در مورد تنظیمات <code>maxmemory-policy</code> و LRU/LFU.
+   - <em>Facebook Engineering Blog</em>: توضیحات در مورد استفاده از Memcached با LRU.
+   - <em>AWS Database Blog</em>: مقالات در مورد DynamoDB DAX و کشینگ.
+<ul><li>دوره‌های آنلاین:</li></ul>
+   - <em>Grokking the System Design Interview</em> در DesignGuru.io
+   - <em>System Design Course</em> در Educative.io
+<ul><li>مستندات رسمی:</li></ul>
+   - <a href="https://redis.io/docs/management/optimization/memory-optimization/">Redis Memory Optimization</a>
+   - <a href="https://github.com/memcached/memcached/wiki">Memcached Wiki</a>
+   - <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html">Amazon DAX Documentation</a>
+
+<p>---</p>
+
+<p>این سند مفهوم استراتژی‌های حذف کش LRU و LFU را به‌صورت جامع توضیح داده و برای مستندسازی آموزشی و یادگیری طراحی سیستم مناسب است. در صورت نیاز به توضیحات عمیق‌تر یا مثال‌های بیشتر، لطفاً اطلاع دهید!</p>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

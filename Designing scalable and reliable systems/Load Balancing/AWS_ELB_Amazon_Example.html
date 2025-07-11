@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مثال واقعی: استفاده از متعادل‌ساز بار الاستیک AWS در آمازون</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="مثال واقعی: استفاده از متعادل‌ساز بار الاستیک AWS در آمازون">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>مثال واقعی: استفاده از متعادل‌ساز بار الاستیک AWS در آمازون</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Designing scalable and reliable systems</span>
+<span>/</span>
+<span>Load Balancing</span>
+<span>/</span>
+<span>AWS_ELB_Amazon_Example.html</span>
+                </div>
+
+                <h1>مثال واقعی: استفاده از متعادل‌ساز بار الاستیک AWS در آمازون</h1>
+
+<p>این سند به بررسی استفاده آمازون از <strong>متعادل‌ساز بار الاستیک AWS (Elastic Load Balancer - ELB)</strong> به‌عنوان یک ابزار کلیدی در طراحی سیستم‌های مقیاس‌پذیر، قابل‌اعتماد و با دسترس‌پذیری بالا می‌پردازد. هدف این است که با ارائه توضیحات در مورد نقش ELB، انواع آن، معماری‌های استفاده‌شده، مزایا، ادغام با سایر سرویس‌های AWS و بهترین روش‌ها، یک راهنمای جامع و آموزشی برای مهندسان سیستم طراحی فراهم شود. این محتوا به زبان فارسی و با فرمت مارک‌داون ارائه شده است تا برای مستندسازی آموزشی مناسب باشد.</p>
+
+<p>---</p>
+
+<h2>مقدمه: چرا آمازون از متعادل‌سازی بار استفاده می‌کند و نقش AWS ELB چیست؟</h2>
+
+<p>آمازون به‌عنوان یکی از بزرگ‌ترین پلتفرم‌های تجارت الکترونیک و ارائه‌دهنده خدمات ابری در جهان، روزانه با حجم عظیمی از ترافیک کاربران (مانند میلیون‌ها درخواست در ثانیه) مواجه است. برای مدیریت این ترافیک، <strong>متعادل‌سازی بار</strong> حیاتی است، زیرا:
+<ul><li><strong>مقیاس‌پذیری:</strong> امکان توزیع ترافیک بین سرورهای متعدد برای پاسخگویی به افزایش تقاضا.</li></ul>
+<ul><li><strong>دسترس‌پذیری بالا:</strong> تضمین دسترسی مداوم به خدمات حتی در صورت خرابی سرورها.</li></ul>
+<ul><li><strong>تحمل‌پذیری خطا:</strong> هدایت ترافیک به سرورهای سالم برای جلوگیری از قطعی سرویس.</li></ul>
+<ul><li><strong>بهبود تجربه کاربری:</strong> کاهش تأخیر و ارائه پاسخ‌های سریع به کاربران.</li></ul></p>
+
+<strong>AWS Elastic Load Balancer (ELB)</strong> یک سرویس مدیریت‌شده است که ترافیک ورودی را به‌طور خودکار بین چندین هدف (مانند نمونه‌های EC2، کانتینرها یا آدرس‌های IP) در یک یا چند منطقه دسترسی (Availability Zone) توزیع می‌کند. آمازون از ELB برای مدیریت ترافیک وب‌سایت خود، خدمات ابری AWS و برنامه‌های داخلی استفاده می‌کند تا عملکرد، مقیاس‌پذیری و قابلیت اطمینان را تضمین کند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"></a>
+
+<p>---</p>
+
+<h2>مروری بر انواع AWS ELB</h2>
+
+<p>AWS ELB در سه نوع اصلی ارائه می‌شود که هر کدام برای سناریوهای خاص طراحی شده‌اند:</p>
+
+<ul><li><strong>Classic Load Balancer (CLB):</strong></li></ul>
+   - <strong>توضیح:</strong> نسخه قدیمی‌تر ELB که در لایه‌های ۴ (انتقال) و ۷ (برنامه) عمل می‌کند.
+   - <strong>ویژگی‌ها:</strong> مناسب برای برنامه‌های ساده، پشتیبانی از پروتکل‌های HTTP، HTTPS، TCP و SSL.
+   - <strong>موارد استفاده:</strong> برنامه‌های سنتی که نیاز به تنظیمات پیچیده ندارند.
+   - <strong>محدودیت‌ها:</strong> امکانات محدودتر نسبت به ALB و NLB، مناسب برای سیستم‌های قدیمی.
+
+<ul><li><strong>Application Load Balancer (ALB):</strong></li></ul>
+   - <strong>توضیح:</strong> در لایه ۷ (برنامه) عمل می‌کند و برای برنامه‌های وب مدرن با پروتکل‌های HTTP/HTTPS مناسب است.
+   - <strong>ویژگی‌ها:</strong> پشتیبانی از مسیریابی مبتنی بر محتوا (مانند URL یا هدرها)، WebSocket، و ادغام با AWS WAF.
+   - <strong>موارد استفاده:</strong> معماری‌های میکروسرویس، برنامه‌های وب پیشرفته و کانتینرها.
+
+<ul><li><strong>Network Load Balancer (NLB):</strong></li></ul>
+   - <strong>توضیح:</strong> در لایه ۴ (انتقال) عمل می‌کند و برای ترافیک TCP/UDP با تأخیر کم و حجم بالا مناسب است.
+   - <strong>ویژگی‌ها:</strong> پشتیبانی از میلیون‌ها درخواست در ثانیه، حفظ آدرس IP منبع و آدرس‌های IP ثابت.
+   - <strong>موارد استفاده:</strong> برنامه‌های بلادرنگ مانند بازی‌های آنلاین یا استریمینگ.
+
+<strong>Gateway Load Balancer (GLB):</strong> نوع جدیدتری است که برای مدیریت دستگاه‌های مجازی (مانند فایروال‌ها) استفاده می‌شود، اما در این سند به دلیل تمرکز آمازون بر ALB و NLB کمتر بررسی می‌شود.<a href="https://www.prosperops.com/blog/aws-load-balancer/"></a>
+
+<p>---</p>
+
+<h2>چگونه آمازون از ELB برای مقیاس‌پذیری، تحمل‌پذیری خطا و دسترس‌پذیری بالا استفاده می‌کند؟</h2>
+
+<p>آمازون از ELB برای مدیریت ترافیک عظیم پلتفرم تجارت الکترونیک، خدمات AWS و برنامه‌های داخلی خود استفاده می‌کند. در ادامه، چگونگی استفاده آمازون از ELB توضیح داده می‌شود:</p>
+
+<ul><li><strong>مقیاس‌پذیری:</strong></li></ul>
+  - ELB به‌طور خودکار با افزایش یا کاهش ترافیک مقیاس‌پذیری می‌کند. برای مثال، در رویدادهای فروش بزرگ مانند <strong>Black Friday</strong>، آمازون از ALB برای توزیع ترافیک بین صدها نمونه EC2 در چندین منطقه دسترسی استفاده می‌کند.
+  - با ادغام ELB با <strong>Auto Scaling</strong>، آمازون تعداد نمونه‌های EC2 را به‌صورت پویا بر اساس تقاضا تنظیم می‌کند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"></a>
+
+<ul><li><strong>تحمل‌پذیری خطا:</strong></li></ul>
+  - ELB از بررسی‌های سلامت (Health Checks) برای شناسایی نمونه‌های معیوب استفاده می‌کند و ترافیک را تنها به نمونه‌های سالم هدایت می‌کند.
+  - در صورت خرابی یک منطقه دسترسی (AZ)، ELB ترافیک را به نمونه‌های سالم در سایر AZها هدایت می‌کند، که باعث کاهش قطعی سرویس می‌شود.<a href="https://www.prosperops.com/blog/aws-load-balancer/"></a>
+
+<ul><li><strong>دسترس‌پذیری بالا:</strong></li></ul>
+  - آمازون ELB را در چندین منطقه دسترسی (Multi-AZ) مستقر می‌کند تا از دسترس‌پذیری بالا اطمینان حاصل کند. این کار خطر نقاط شکست تک (Single Points of Failure) را کاهش می‌دهد.
+  - برای مثال، در وب‌سایت آمازون، ALB ترافیک را بین سرورهای وب در AZهای مختلف توزیع می‌کند تا قطعی در یک AZ تأثیری بر تجربه کاربران نداشته باشد.<a href="https://www.stormit.cloud/blog/aws-high-availability-architecture/"></a>
+
+<strong>مثال واقعی:</strong> در پلتفرم تجارت الکترونیک آمازون، ALB برای مسیریابی درخواست‌های کاربران به سرویس‌های مختلف (مانند کاتالوگ محصولات، سبد خرید یا پردازش پرداخت) استفاده می‌شود. این کار با استفاده از قوانین مسیریابی مبتنی بر URL (مانند <code>/cart</code> یا <code>/payment</code>) انجام می‌شود.
+
+<p>---</p>
+
+<h2>معماری و سناریوهای استقرار در آمازون با استفاده از ELB</h2>
+
+<p>آمازون از معماری‌های پیچیده و چندلایه برای استقرار ELB استفاده می‌کند. در ادامه، یک سناریوی نمونه از معماری آمازون ارائه می‌شود:</p>
+
+<h3>معماری نمونه:</h3>
+<ul><li><strong>لایه وب:</strong> نمونه‌های EC2 که برنامه‌های وب را میزبانی می‌کنند، پشت یک ALB قرار دارند. ALB درخواست‌های HTTP/HTTPS را بر اساس قوانین مسیریابی (مانند مسیر URL) توزیع می‌کند.</li></ul>
+<ul><li><strong>لایه برنامه:</strong> سرویس‌های میکروسرویس (مانند سرویس پرداخت یا کاتالوگ) روی کانتینرهای ECS یا نمونه‌های EC2 اجرا می‌شوند و از ALB یا NLB برای توزیع ترافیک استفاده می‌کنند.</li></ul>
+<ul><li><strong>لایه پایگاه داده:</strong> پایگاه داده‌هایی مانند Amazon RDS یا Aurora در حالت Multi-AZ برای دسترس‌پذیری بالا پیکربندی شده‌اند.</li></ul>
+<ul><li><strong>DNS:</strong> Amazon Route 53 برای هدایت ترافیک کاربران به ALB یا NLB استفاده می‌شود و از سیاست‌های مسیریابی مبتنی بر تأخیر (Latency-Based Routing) بهره می‌برد.</li></ul>
+
+<h3>سناریوی استقرار:</h3>
+<ul><li><strong>سناریو:</strong> توزیع ترافیک وب‌سایت آمازون در رویداد فروش Black Friday.</li></ul>
+  - <strong>مرحله ۱:</strong> کاربران از طریق Route 53 به آدرس وب‌سایت (مانند <code>www.amazon.com</code>) هدایت می‌شوند.
+  - <strong>مرحله ۲:</strong> Route 53 ترافیک را به یک ALB در منطقه‌ای نزدیک (مانند us-east-1) هدایت می‌کند.
+  - <strong>مرحله ۳:</strong> ALB درخواست‌ها را بر اساس مسیر URL (مانند <code>/products</code> یا <code>/checkout</code>) به گروه‌های هدف (Target Groups) شامل نمونه‌های EC2 یا کانتینرهای ECS توزیع می‌کند.
+  - <strong>مرحله ۴:</strong> Auto Scaling تعداد نمونه‌های EC2 را بر اساس معیارهای CloudWatch (مانند استفاده از CPU یا تعداد درخواست‌ها) تنظیم می‌کند.
+  - <strong>مرحله ۵:</strong> در صورت خرابی یک AZ، ELB ترافیک را به نمونه‌های سالم در AZهای دیگر هدایت می‌کند.
+
+<strong>نمودار معماری:</strong>
+<pre><code>
+[کاربران] --> [Route 53] --> [ALB/NLB] --> [EC2 Instances / ECS Containers in Multiple AZs]
+                                         --> [RDS/Aurora Multi-AZ]
+</code></pre>
+
+<p>این معماری مقیاس‌پذیری، تحمل‌پذیری خطا و دسترس‌پذیری بالا را تضمین می‌کند.<a href="https://jayendrapatil.com/aws-high-availability-fault-tolerance-architecture-certification/"></a><a href="https://www.stormit.cloud/blog/aws-high-availability-architecture/"></a></p>
+
+<p>---</p>
+
+<h2>مزایای کلیدی و درس‌های آموخته‌شده از استفاده ELB در مقیاس بزرگ</h2>
+
+<h3>مزایا:</h3>
+<ul><li><strong>مقیاس‌پذیری خودکار:</strong> ELB به‌طور خودکار با افزایش ترافیک مقیاس‌پذیر می‌شود، که برای رویدادهای پرترافیک مانند فروش‌های فصلی حیاتی است.</li></ul>
+<ul><li><strong>تحمل‌پذیری خطا:</strong> بررسی‌های سلامت و توزیع ترافیک بین AZها خطر قطعی را کاهش می‌دهد.</li></ul>
+<ul><li><strong>انعطاف‌پذیری:</strong> ALB از مسیریابی مبتنی بر محتوا پشتیبانی می‌کند، که برای معماری‌های میکروسرویس آمازون ایده‌آل است.</li></ul>
+<ul><li><strong>امنیت پیشرفته:</strong> ادغام با AWS WAF و AWS Shield برای محافظت در برابر حملات DDoS و بهره‌جویی‌های وب.<a href="https://www.prosperops.com/blog/aws-load-balancer/"></a></li></ul>
+<ul><li><strong>هزینه بهینه:</strong> مدل پرداخت به ازای استفاده (Pay-as-you-go) هزینه‌ها را برای آمازون بهینه می‌کند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"></a></li></ul>
+
+<h3>درس‌های آموخته‌شده:</h3>
+<ul><li><strong>بررسی‌های سلامت دقیق:</strong> تنظیم نادرست بررسی‌های سلامت می‌تواند باعث هدایت ترافیک به نمونه‌های ناسالم شود.</li></ul>
+<ul><li><strong>مانیتورینگ جامع:</strong> استفاده از CloudWatch برای رصد معیارهای کلیدی (مانند تأخیر و نرخ خطا) برای بهینه‌سازی عملکرد ضروری است.</li></ul>
+<ul><li><strong>مقیاس‌پذیری پیش‌بینی‌شده:</strong> پیش‌بینی افزایش ترافیک (مانند Black Friday) و تنظیم سیاست‌های Auto Scaling از قبل، از گلوگاه‌ها جلوگیری می‌کند.</li></ul>
+<ul><li><strong>مدیریت پیچیدگی:</strong> در معماری‌های میکروسرویس، استفاده از چندین ALB برای سرویس‌های مختلف می‌تواند مدیریت را پیچیده کند، بنابراین استفاده از ابزارهای IaC (مانند CloudFormation) توصیه می‌شود.</li></ul>
+
+<p>---</p>
+
+<h2>ادغام ELB با سایر سرویس‌های AWS</h2>
+
+<p>ELB با سرویس‌های دیگر AWS ادغام می‌شود تا عملکرد و قابلیت اطمینان سیستم را بهبود بخشد:</p>
+
+<ul><li><strong>Amazon EC2 Auto Scaling:</strong></li></ul>
+   - ELB با Auto Scaling ادغام می‌شود تا نمونه‌های EC2 به‌طور خودکار بر اساس تقاضا اضافه یا حذف شوند.
+   - نمونه‌های جدید به‌طور خودکار در گروه‌های هدف ELB ثبت می‌شوند و نمونه‌های پایان‌یافته حذف می‌شوند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"></a>
+
+<ul><li><strong>Amazon Route 53:</strong></li></ul>
+   - Route 53 برای هدایت ترافیک به ELB استفاده می‌شود و از سیاست‌های مسیریابی مانند Latency-Based یا Weighted Routing پشتیبانی می‌کند.
+   - برای مثال، آمازون از Route 53 برای هدایت کاربران به ALB در نزدیک‌ترین منطقه جغرافیایی استفاده می‌کند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"></a>
+
+<ul><li><strong>Amazon CloudWatch:</strong></li></ul>
+   - برای مانیتورینگ معیارهای ELB (مانند تعداد درخواست‌ها، تأخیر و نرخ خطا) استفاده می‌شود.
+   - هشدارهای CloudWatch می‌توانند سیاست‌های Auto Scaling را فعال کنند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"></a>
+
+<ul><li><strong>AWS WAF:</strong></li></ul>
+   - برای محافظت از ALB در برابر حملات مانند SQL Injection یا XSS استفاده می‌شود.
+   - آمازون از WAF برای فیلتر کردن ترافیک مخرب به وب‌سایت خود استفاده می‌کند.<a href="https://www.prosperops.com/blog/aws-load-balancer/"></a>
+
+<ul><li><strong>Amazon ECS و EKS:</strong></li></ul>
+   - ELB برای توزیع ترافیک بین کانتینرهای ECS یا EKS استفاده می‌شود.
+   - آمازون از ALB برای مسیریابی ترافیک به سرویس‌های میکروسرویس در ECS استفاده می‌کند.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"></a>
+
+<ul><li><strong>AWS Certificate Manager (ACM):</strong></li></ul>
+   - برای مدیریت گواهینامه‌های SSL/TLS در ALB استفاده می‌شود تا ارتباطات امن HTTPS فراهم شود.<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"></a>
+
+<p>---</p>
+
+<h2>بهترین روش‌ها برای استفاده از ELB در معماری‌های ابری</h2>
+
+<ul><li><strong>استفاده از Multi-AZ:</strong></li></ul>
+   - ELB را در چندین منطقه دسترسی مستقر کنید تا دسترس‌پذیری بالا تضمین شود.<a href="https://www.stormit.cloud/blog/aws-high-availability-architecture/"></a>
+
+<ul><li><strong>تنظیم بررسی‌های سلامت دقیق:</strong></li></ul>
+   - بررسی‌های سلامت را برای شناسایی سریع نمونه‌های ناسالم تنظیم کنید (مانند بررسی وضعیت HTTP 200 در بازه‌های 10 ثانیه‌ای).
+
+<ul><li><strong>استفاده از مسیریابی پیشرفته:</strong></li></ul>
+   - در ALB، از قوانین مسیریابی مبتنی بر URL یا هدر برای هدایت ترافیک به سرویس‌های خاص استفاده کنید.
+
+<ul><li><strong>ادغام با Auto Scaling:</strong></li></ul>
+   - سیاست‌های مقیاس‌پذیری را بر اساس معیارهای CloudWatch (مانند استفاده از CPU یا تعداد درخواست‌ها) تنظیم کنید.<a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-ec2-auto-scaling-load-balancer.html"></a>
+
+<ul><li><strong>امنیت:</strong></li></ul>
+   - از AWS WAF برای محافظت در برابر حملات و AWS Shield برای دفاع در برابر DDoS استفاده کنید.
+   - از گواهینامه‌های SSL/TLS از طریق ACM برای رمزنگاری ترافیک استفاده کنید.<a href="https://www.prosperops.com/blog/aws-load-balancer/"></a>
+
+<ul><li><strong>مانیتورینگ و لاگ‌گیری:</strong></li></ul>
+   - از CloudWatch برای رصد معیارهای ELB و فعال کردن لاگ‌های دسترسی (Access Logs) برای تحلیل ترافیک استفاده کنید.<a href="https://aws.amazon.com/elasticloadbalancing/features/"></a>
+
+<ul><li><strong>استفاده از ابزارهای IaC:</strong></li></ul>
+   - از AWS CloudFormation برای خودکارسازی استقرار ELB و مدیریت تنظیمات استفاده کنید.<a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-ec2-auto-scaling-load-balancer.html"></a>
+
+<ul><li><strong>بهینه‌سازی هزینه:</strong></li></ul>
+   - معیارهای استفاده ELB را رصد کنید و از مدل پرداخت به ازای استفاده برای کاهش هزینه‌ها بهره ببرید.
+
+<p>---</p>
+
+<h2>خلاصه و نکات عملی برای مهندسان</h2>
+
+<h3>خلاصه</h3>
+<ul><li><strong>چرا ELB؟</strong> آمازون از ELB برای مدیریت ترافیک عظیم، تضمین مقیاس‌پذیری، تحمل‌پذیری خطا و دسترس‌پذیری بالا در پلتفرم تجارت الکترونیک و خدمات AWS استفاده می‌کند.</li></ul>
+<ul><li><strong>انواع ELB:</strong> Classic Load Balancer (برای برنامه‌های قدیمی)، Application Load Balancer (برای برنامه‌های وب مدرن) و Network Load Balancer (برای ترافیک با تأخیر کم).</li></ul>
+<ul><li><strong>مزایا:</strong> مقیاس‌پذیری خودکار، تحمل‌پذیری خطا، امنیت پیشرفته و ادغام با سرویس‌های AWS.</li></ul>
+<ul><li><strong>معماری:</strong> آمازون از ELB در معماری‌های چندلایه با Multi-AZ، Route 53 و Auto Scaling استفاده می‌کند.</li></ul>
+<ul><li><strong>درس‌ها:</strong> تنظیم دقیق بررسی‌های سلامت، مانیتورینگ جامع و پیش‌بینی افزایش ترافیک برای موفقیت حیاتی است.</li></ul>
+
+<h3>نکات عملی</h3>
+<ul><li><strong>انتخاب نوع مناسب ELB:</strong></li></ul>
+   - برای برنامه‌های وب مدرن و میکروسرویس‌ها از ALB استفاده کنید.
+   - برای ترافیک TCP/UDP با حجم بالا از NLB استفاده کنید.
+<ul><li><strong>پیکربندی Multi-AZ:</strong> همیشه ELB را در چندین AZ مستقر کنید تا از دسترس‌پذیری بالا اطمینان حاصل شود.</li></ul>
+<ul><li><strong>مانیتورینگ با CloudWatch:</strong> معیارهای کلیدی مانند تأخیر، نرخ خطا و تعداد درخواست‌ها را رصد کنید.</li></ul>
+<ul><li><strong>ادغام با Auto Scaling:</strong> برای مدیریت پویا منابع و کاهش هزینه‌ها، ELB را با Auto Scaling ترکیب کنید.</li></ul>
+<ul><li><strong>امنیت:</strong> از WAF، Shield و ACM برای حفاظت از ترافیک و داده‌ها استفاده کنید.</li></ul>
+<ul><li><strong>آزمایش و بهینه‌سازی:</strong> معماری را در محیط‌های آزمایشی تست کنید و سیاست‌های مقیاس‌پذیری را بر اساس الگوهای ترافیک تنظیم کنید.</li></ul>
+
+<p>---</p>
+
+<h2>منابع پیشنهادی برای مطالعه بیشتر</h2>
+<ul><li><em>Designing Data-Intensive Applications</em> نوشته مارتین کلپمن: کتابی جامع برای یادگیری طراحی سیستم‌های مقیاس‌پذیر.</li></ul>
+<ul><li><em>AWS Well-Architected Framework</em>: راهنمای رسمی AWS برای طراحی معماری‌های ابری.</li></ul>
+<ul><li>وبلاگ‌های مهندسی:</li></ul>
+   - <em>AWS Architecture Blog</em>: مقالات در مورد استفاده از ELB در مقیاس بزرگ.<a href="https://aws.amazon.com/blogs/architecture/category/networking-content-delivery/elastic-load-balancing/"></a>
+   - <em>AWS re:Invent Sessions</em>: ویدئوهای NET318 در مورد ELB.<a href="https://aws.amazon.com/blogs/networking-and-content-delivery/scaling-strategies-for-elastic-load-balancing/"></a>
+<ul><li>مستندات رسمی:</li></ul>
+   - <a href="https://docs.aws.amazon.com/elasticloadbalancing/">AWS ELB Documentation</a><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"></a>
+   - <a href="https://docs.aws.amazon.com/route53/">Amazon Route 53 Documentation</a><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"></a>
+   - <a href="https://docs.aws.amazon.com/autoscaling/">AWS Auto Scaling Documentation</a><a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-ec2-auto-scaling-load-balancer.html"></a>
+<ul><li>دوره‌های آنلاین:</li></ul>
+   - <em>Grokking the System Design Interview</em> در DesignGuru.io
+   - <em>AWS Certified Solutions Architect</em> در Udemy یا AWS Skill Builder
+
+<p>---</p>
+
+<p>این سند استفاده آمازون از AWS ELB را به‌صورت جامع توضیح داده و برای مهندسان علاقه‌مند به طراحی سیستم‌های مقیاس‌پذیر مناسب است. در صورت نیاز به جزئیات بیشتر یا مثال‌های دیگر، لطفاً اطلاع دهید!</p>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

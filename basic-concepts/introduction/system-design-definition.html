@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعریف طراحی سیستم و اهمیت آن در مهندسی نرم‌افزار</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                <h3>مقدمه‌ای بر طراحی سیستم</h3>
+                <ul>
+                    <li><a href="system-design-definition.html" class="active">تعریف طراحی سیستم</a></li>
+                    <li><a href="small-scale-vs-large-scale.html">مقیاس کوچک در مقابل بزرگ</a></li>
+                    <li><a href="core-principles.html">اصول اولیه معماری</a></li>
+                    <li><a href="real-world-architectures.html">معماری‌های دنیای واقعی</a></li>
+                </ul>
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="../../index.html">خانه</a>
+                    <span>/</span>
+                    <a href="../../index.html#basic-concepts">مفاهیم پایه</a>
+                    <span>/</span>
+                    <a href="#introduction">مقدمه</a>
+                    <span>/</span>
+                    <span>تعریف طراحی سیستم</span>
+                </div>
+
+                <h1>تعریف طراحی سیستم و اهمیت آن در مهندسی نرم‌افزار</h1>
+
+                <div class="alert alert-info">
+                    <strong>هدف:</strong> این سند به بررسی مفهوم طراحی سیستم، اهداف آن، اهمیتش برای مهندسان نرم‌افزار، تفاوت آن با معماری نرم‌افزار، مثال‌های واقعی از کاربرد آن در شرکت‌های بزرگ، چالش‌های رایج و منابع پیشنهادی برای مطالعه عمیق‌تر می‌پردازد.
+                </div>
+
+                <div class="table-of-contents">
+                    <h3>فهرست مطالب</h3>
+                </div>
+
+                <section id="definition">
+                    <h2>تعریف طراحی سیستم</h2>
+                    <p><strong>طراحی سیستم (System Design)</strong> فرآیند تعریف معماری، اجزا، ماژول‌ها، رابط‌ها و داده‌ها برای یک سیستم نرم‌افزاری است که به منظور برآورده کردن الزامات مشخص طراحی می‌شود. این فرآیند شامل تصمیم‌گیری‌های سطح بالا در مورد ساختار و رفتار سیستم، با تمرکز بر مقیاس‌پذیری، قابلیت اطمینان، کارایی و نگهداری‌پذیری است.</p>
+                    
+                    <p>طراحی سیستم به دو بخش اصلی تقسیم می‌شود:</p>
+                    
+                    <div class="card">
+                        <h4>1. طراحی سطح بالا (High-Level Design)</h4>
+                        <p>تمرکز بر معماری کلی سیستم، مانند انتخاب پایگاه داده، روش‌های مقیاس‌پذیری، و تعادل بار.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>2. طراحی سطح پایین (Low-Level Design)</h4>
+                        <p>تمرکز بر جزئیات پیاده‌سازی، مانند طراحی کلاس‌ها، رابط‌های API، و الگوریتم‌های خاص.</p>
+                    </div>
+                    
+                    <blockquote>
+                        <p>طراحی سیستم پلی است بین الزامات کاربر (چه کارکردی و چه غیرکارکردی) و پیاده‌سازی فنی، که تضمین می‌کند سیستم به‌صورت مؤثر و کارآمد عمل کند.</p>
+                    </blockquote>
+                </section>
+
+                <section id="objectives">
+                    <h2>اهداف اصلی طراحی سیستم در مهندسی نرم‌افزار</h2>
+                    <p>طراحی سیستم چندین هدف کلیدی را دنبال می‌کند که همگی برای ساخت سیستم‌های قوی و مقیاس‌پذیر ضروری هستند:</p>
+                    
+                    <div class="card">
+                        <h4>1. مقیاس‌پذیری (Scalability)</h4>
+                        <p>طراحی سیستمی که بتواند با افزایش تعداد کاربران یا حجم داده‌ها بدون افت کارایی رشد کند.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>2. قابلیت اطمینان (Reliability)</h4>
+                        <p>تضمین اینکه سیستم در برابر خرابی‌ها مقاوم باشد و خدمات را بدون وقفه ارائه دهد.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>3. کارایی (Performance)</h4>
+                        <p>بهینه‌سازی سیستم برای کاهش تأخیر و افزایش توان عملیاتی.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>4. نگهداری‌پذیری (Maintainability)</h4>
+                        <p>طراحی سیستمی که به‌راحتی قابل به‌روزرسانی، اصلاح و گسترش باشد.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>5. مدیریت هزینه‌ها</h4>
+                        <p>ایجاد توازن بین کارایی و هزینه‌های زیرساختی، مانند سرورها و ذخیره‌سازی.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>6. امنیت</h4>
+                        <p>اطمینان از محافظت داده‌ها و سیستم در برابر دسترسی‌های غیرمجاز یا حملات سایبری.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>7. انعطاف‌پذیری</h4>
+                        <p>طراحی سیستمی که بتواند با نیازهای در حال تغییر کسب‌وکار سازگار شود.</p>
+                    </div>
+                </section>
+
+                <section id="importance">
+                    <h2>اهمیت طراحی سیستم برای مهندسان نرم‌افزار</h2>
+                    <p>طراحی سیستم برای مهندسان نرم‌افزار از اهمیت ویژه‌ای برخوردار است، زیرا:</p>
+                    
+                    <ul>
+                        <li><strong>حل مسائل پیچیده در مقیاس بزرگ:</strong> مهندسان نرم‌افزار باید بتوانند سیستم‌هایی را طراحی کنند که میلیون‌ها کاربر را پشتیبانی کنند. برای مثال، طراحی سیستم جستجوی گوگل نیازمند درک عمیق از مقیاس‌پذیری و توزیع داده‌هاست.</li>
+                        <li><strong>ایجاد سیستم‌های پایدار و قابل اعتماد:</strong> طراحی سیستم به مهندسان کمک می‌کند تا خرابی‌های احتمالی را پیش‌بینی کرده و با استفاده از افزونگی (redundancy) و تحمل خطا (fault tolerance) از آن‌ها جلوگیری کنند.</li>
+                        <li><strong>آمادگی برای مصاحبه‌های شغلی:</strong> در مصاحبه‌های شرکت‌های بزرگ مانند گوگل، آمازون و فیسبوک، طراحی سیستم بخش کلیدی ارزیابی مهارت‌های فنی است.</li>
+                        <li><strong>توسعه مهارت‌های حل مسئله:</strong> طراحی سیستم مهندسان را وادار می‌کند تا به‌صورت کل‌نگر به مشکلات نگاه کنند و تصمیم‌گیری‌های مبتنی بر داده انجام دهند.</li>
+                        <li><strong>تطبیق با فناوری‌های جدید:</strong> با پیشرفت فناوری‌هایی مانند رایانش ابری و سرویس‌های کوچک (microservices)، مهندسان باید سیستم‌هایی طراحی کنند که از این فناوری‌ها به‌صورت مؤثر استفاده کنند.</li>
+                    </ul>
+                </section>
+
+                <section id="comparison">
+                    <h2>تفاوت بین طراحی سیستم و معماری نرم‌افزار</h2>
+                    <p>گرچه اصطلاحات "طراحی سیستم" و "معماری نرم‌افزار" گاهی به‌جای یکدیگر استفاده می‌شوند، اما تفاوت‌های ظریفی دارند:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ویژگی</th>
+                                <th>طراحی سیستم</th>
+                                <th>معماری نرم‌افزار</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>تمرکز</strong></td>
+                                <td>تمرکز بر کل سیستم، شامل اجزای نرم‌افزاری، سخت‌افزاری، شبکه و زیرساخت‌ها</td>
+                                <td>تمرکز بر ساختار نرم‌افزار و نحوه تعامل اجزای داخلی آن</td>
+                            </tr>
+                            <tr>
+                                <td><strong>سطح انتزاع</strong></td>
+                                <td>سطح بالاتر، شامل الزامات زیرساختی</td>
+                                <td>سطح پایین‌تر، شامل الگوهای طراحی و ساختار کد</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ذینفعان</strong></td>
+                                <td>مهندسان سیستم، معماران، و مدیران فنی</td>
+                                <td>توسعه‌دهندگان، معماران نرم‌افزار</td>
+                            </tr>
+                            <tr>
+                                <td><strong>تصمیم‌گیری‌ها</strong></td>
+                                <td>انتخاب پایگاه داده، تعادل بار، مقیاس‌پذیری</td>
+                                <td>الگوهای طراحی، ساختار کلاس‌ها، API</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="real-world-examples">
+                    <h2>مثال‌های دنیای واقعی</h2>
+                    
+                    <div class="card">
+                        <h3>طراحی سیستم گوگل</h3>
+                        <p>گوگل از معماری توزیع‌شده پیچیده‌ای استفاده می‌کند که شامل فناوری‌هایی مانند MapReduce، BigTable و GFS است. این سیستم قادر است میلیاردها جستجو را در روز پردازش کند.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>معماری فیسبوک</h3>
+                        <p>فیسبوک از معماری سرویس‌های کوچک (microservices) استفاده می‌کند که امکان مقیاس‌پذیری مستقل هر بخش را فراهم می‌کند. سیستم کش توزیع‌شده آن‌ها (Memcached) یکی از بزرگترین استقرارهای کش در جهان است.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>سیستم آمازون AWS</h3>
+                        <p>آمازون AWS نمونه‌ای از طراحی سیستم مقیاس‌پذیر است که خدمات ابری متنوعی را ارائه می‌دهد. معماری آن بر اساس اصول افزونگی و تحمل خطا طراحی شده است.</p>
+                    </div>
+                </section>
+
+                <section id="challenges">
+                    <h2>چالش‌های رایج در طراحی سیستم</h2>
+                    
+                    <div class="alert alert-warning">
+                        <h4>چالش‌های اصلی:</h4>
+                        <ul>
+                            <li><strong>مقیاس‌پذیری:</strong> چگونه سیستم را برای پشتیبانی از میلیون‌ها کاربر طراحی کنیم؟</li>
+                            <li><strong>قابلیت اطمینان:</strong> چگونه از خرابی‌های سیستم جلوگیری کنیم؟</li>
+                            <li><strong>سازگاری داده‌ها:</strong> چگونه سازگاری داده‌ها را در سیستم‌های توزیع‌شده حفظ کنیم؟</li>
+                            <li><strong>امنیت:</strong> چگونه سیستم را در برابر تهدیدات امنیتی محافظت کنیم؟</li>
+                            <li><strong>مدیریت هزینه:</strong> چگونه بین کارایی و هزینه تعادل برقرار کنیم؟</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="resources">
+                    <h2>منابع پیشنهادی برای مطالعه عمیق‌تر</h2>
+                    
+                    <div class="card">
+                        <h3>کتاب‌ها</h3>
+                        <ul>
+                            <li><strong>Designing Data-Intensive Applications</strong> - Martin Kleppmann</li>
+                            <li><strong>Building Scalable Web Sites</strong> - Cal Henderson</li>
+                            <li><strong>High Performance Web Sites</strong> - Steve Souders</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>منابع آنلاین</h3>
+                        <ul>
+                            <li><a href="https://github.com/donnemartin/system-design-primer">The System Design Primer</a></li>
+                            <li><a href="https://highscalability.com/">High Scalability</a></li>
+                            <li><a href="https://aws.amazon.com/architecture/">AWS Architecture Center</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>وبلاگ‌های مهندسی</h3>
+                        <ul>
+                            <li>Netflix Tech Blog</li>
+                            <li>Uber Engineering</li>
+                            <li>Facebook Engineering</li>
+                            <li>Google Research</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="alert alert-success">
+                    <strong>خلاصه:</strong> طراحی سیستم یکی از مهم‌ترین مهارت‌های مهندسان نرم‌افزار است که نه تنها برای ساخت سیستم‌های مقیاس‌پذیر ضروری است، بلکه برای موفقیت در مصاحبه‌های شغلی نیز کلیدی محسوب می‌شود.
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: #f9fafb; border-radius: 8px; text-align: center;">
+                    <h4>مرحله بعد:</h4>
+                    <a href="small-scale-vs-large-scale.html" class="btn">تفاوت بین مقیاس کوچک و بزرگ</a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نمونه واقعی: استفاده از Redis در توییتر برای کش کردن تایملاین‌ها</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="نمونه واقعی: استفاده از Redis در توییتر برای کش کردن تایملاین‌ها">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>نمونه واقعی: استفاده از Redis در توییتر برای کش کردن تایملاین‌ها</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Main components of scalable systems</span>
+<span>/</span>
+<span>Caching</span>
+<span>/</span>
+<span>Twitter_Redis_Timeline_Caching.html</span>
+                </div>
+
+                <h1>نمونه واقعی: استفاده از Redis در توییتر برای کش کردن تایملاین‌ها</h1>
+
+<p>این سند به بررسی استفاده از <strong>Redis</strong> در توییتر برای کش کردن تایملاین‌ها به‌عنوان یک نمونه واقعی از طراحی سیستم‌های مقیاس‌پذیر می‌پردازد. هدف این است که با ارائه توضیحات دقیق در مورد معماری، ساختارهای داده‌ای، مزایا، چالش‌ها و درس‌های آموخته‌شده، یک راهنمای جامع و آموزشی برای یادگیری طراحی سیستم فراهم شود. این محتوا به زبان فارسی و با فرمت مارک‌داون ارائه شده است تا برای مستندسازی آموزشی و یادگیری اصول طراحی سیستم مناسب باشد.</p>
+
+<p>---</p>
+
+<h2>مقدمه: مقیاس توییتر و نیاز به کش کردن تایملاین‌ها</h2>
+
+<p>توییتر (اکنون به نام X شناخته می‌شود) یکی از بزرگ‌ترین پلتفرم‌های شبکه‌های اجتماعی است که روزانه با میلیاردها درخواست مواجه می‌شود. طبق آمار سال ۲۰۱۹، توییتر حدود ۱۴۵ میلیون کاربر فعال روزانه و ۵۰۰ میلیون توییت در روز داشته است که معادل حدود ۵۰۰۰ توییت در ثانیه یا ۳۰۰,۰۰۰ درخواست خواندن (QPS) برای تایملاین‌ها است. این حجم عظیم از ترافیک نیازمند سیستمی است که بتواند تایملاین‌های کاربران (شامل توییت‌های ارسالی توسط خود کاربر و افرادی که دنبال می‌کند) را به‌صورت بلادرنگ و با تأخیر کم ارائه دهد.<a href="https://blog.mi.hdm-stuttgart.de/index.php/2021/03/10/how-to-scale-real-time-tweet-delivery-architecture-at-twitter/"></a></p>
+
+<strong>چرا کش کردن تایملاین‌ها ضروری است؟</strong>
+<ul><li><strong>مقیاس‌پذیری:</strong> انجام پرس‌وجوهای پیچیده روی پایگاه داده برای هر درخواست تایملاین (مانند JOIN بین جداول کاربران، توییت‌ها و دنبال‌کنندگان) برای میلیون‌ها کاربر غیرممکن است.</li></ul>
+<ul><li><strong>تأخیر کم:</strong> کاربران انتظار دارند تایملاین‌ها در کمتر از ۵ ثانیه بارگذاری شوند، حتی در زمان‌های اوج ترافیک (مانند رویدادهای مهم یا توییت‌های سلبریتی‌ها).</li></ul>
+<ul><li><strong>کاهش بار سرور:</strong> ذخیره‌سازی تایملاین‌های از پیش محاسبه‌شده فشار روی پایگاه‌های داده را کاهش می‌دهد.</li></ul>
+
+<p>توییتر از <strong>Redis</strong>، یک پایگاه داده در حافظه (In-Memory)، برای کش کردن تایملاین‌ها استفاده می‌کند تا عملکرد را بهبود بخشد و تجربه کاربری را بهینه کند.</p>
+
+<p>---</p>
+
+<h2>Redis چیست و چرا برای داده‌های تایملاین مناسب است؟</h2>
+
+<strong>Redis</strong> یک پایگاه داده در حافظه، منبع‌باز و با کارایی بالا است که به‌عنوان یک سیستم کش، ذخیره‌ساز داده‌های ساختاریافته و پیام‌رسان استفاده می‌شود. ویژگی‌های کلیدی Redis که آن را برای تایملاین‌های توییتر مناسب می‌کنند عبارتند از:
+
+<ul><li><strong>سرعت بالا:</strong> ذخیره‌سازی داده‌ها در RAM دسترسی با تأخیر کم (اغلب در حد میکروثانیه) را فراهم می‌کند.</li></ul>
+<ul><li><strong>ساختارهای داده‌ای متنوع:</strong> پشتیبانی از لیست‌ها، مجموعه‌های مرتب‌شده (Sorted Sets)، هش‌ها و غیره برای مدیریت داده‌های پیچیده.</li></ul>
+<ul><li><strong>مقیاس‌پذیری:</strong> قابلیت استفاده از Redis Cluster برای شاردینگ و توزیع داده‌ها بین گره‌ها.</li></ul>
+<ul><li><strong>سادگی و انعطاف‌پذیری:</strong> امکان انجام عملیات در حافظه بدون نیاز به پرس‌وجوهای پیچیده پایگاه داده.</li></ul>
+
+<strong>چرا برای تایملاین‌ها مناسب است؟</strong>
+<ul><li>تایملاین‌ها (مانند Home Timeline و User Timeline) شامل لیست‌های مرتب‌شده‌ای از شناسه‌های توییت (Tweet IDs) هستند که نیاز به دسترسی سریع و مرتب‌سازی زمانی دارند.</li></ul>
+<ul><li>Redis با استفاده از ساختارهای داده‌ای مانند لیست‌ها و مجموعه‌های مرتب‌شده، این نیاز را به‌خوبی برآورده می‌کند.</li></ul>
+<ul><li>توییتر از نسخه سفارشی‌شده‌ای از Redis به نام <strong>Haplo</strong> استفاده می‌کند که شامل ساختارهای داده‌ای اختصاصی مانند <strong>Hybrid List</strong> (ترکیبی از Ziplist و Linked List) و BTree است.<a href="https://www.algonote.com/entry/twitter-timeline-cache"></a></li></ul>
+
+<p>---</p>
+
+<h2>چگونه توییتر از Redis برای کش کردن تایملاین‌ها استفاده می‌کند؟</h2>
+
+<p>توییتر از Redis برای ذخیره‌سازی و مدیریت تایملاین‌ها به روش‌های زیر استفاده می‌کند:</p>
+
+<h3>۱. ذخیره‌سازی تایملاین‌های از پیش محاسبه‌شده</h3>
+<ul><li><strong>تایملاین خانگی (Home Timeline):</strong> لیستی از توییت‌های ارسالی توسط کاربر و افرادی که دنبال می‌کند، به‌ترتیب زمانی معکوس. این تایملاین به‌صورت پیش‌محاسبه‌شده در Redis ذخیره می‌شود تا از پرس‌وجوهای پیچیده در زمان خواندن جلوگیری شود.</li></ul>
+<ul><li><strong>تایملاین کاربر (User Timeline):</strong> شامل توییت‌های ارسالی توسط یک کاربر خاص. این تایملاین نیز در Redis ذخیره می‌شود.</li></ul>
+<ul><li><strong>روش Fanout-on-Write:</strong> وقتی کاربری توییتی ارسال می‌کند، سرویس Fanout توییتر (با استفاده از daemon) لیست دنبال‌کنندگان کاربر را از سرویس گراف اجتماعی (Flock) دریافت کرده و شناسه توییت را به تایملاین خانگی هر دنبال‌کننده در Redis اضافه می‌کند. این روش باعث می‌شود خواندن تایملاین سریع باشد، اما نوشتن (به‌ویژه برای کاربران با دنبال‌کنندگان زیاد) سنگین است.<a href="https://blogs.vmware.com/tanzu/case-study-staple-yourself-to-a-tweet-to-understand-30-billion-redis-updates-per-day/"></a></li></ul>
+<ul><li><strong>ذخیره‌سازی محدود:</strong> Redis فقط ۸۰۰ شناسه توییت اخیر را برای هر تایملاین ذخیره می‌کند، که بهینه‌سازی مصرف حافظه را ممکن می‌سازد.<a href="https://highscalability.com/the-architecture-twitter-uses-to-deal-with-150m-active-users/"></a></li></ul>
+
+<h3>۲. بهبود عملکرد و کاهش تأخیر</h3>
+<ul><li><strong>دسترسی در حافظه:</strong> با ذخیره‌سازی تایملاین‌ها در RAM، توییتر می‌تواند به ۳۰۰,۰۰۰ درخواست در ثانیه (QPS) برای تایملاین‌ها پاسخ دهد.<a href="https://blog.mi.hdm-stuttgart.de/index.php/2021/03/10/how-to-scale-real-time-tweet-delivery-architecture-at-twitter/"></a></li></ul>
+<ul><li><strong>ساختارهای داده‌ای بهینه:</strong> استفاده از <strong>Hybrid List</strong> (ترکیبی از Ziplist برای توییت‌های کوچک و Linked List برای دسترسی سریع) عملیات افزودن و خواندن را سریع‌تر می‌کند.<a href="https://www.algonote.com/entry/twitter-timeline-cache"></a></li></ul>
+<ul><li><strong>پردازش بلادرنگ:</strong> Redis امکان افزودن توییت‌های جدید به تایملاین‌ها را در کمتر از ۵ ثانیه فراهم می‌کند، حتی در زمان‌های اوج ترافیک (مانند توییت‌های سلبریتی‌ها).<a href="https://blog.mi.hdm-stuttgart.de/index.php/2021/03/10/how-to-scale-real-time-tweet-delivery-architecture-at-twitter/"></a></li></ul>
+
+<h3>۳. کاهش فشار روی سرویس‌های backend و پایگاه‌های داده</h3>
+<ul><li><strong>کاهش پرس‌وجوهای پایگاه داده:</strong> بدون کشینگ، هر درخواست تایملاین نیاز به JOINهای پیچیده بین جداول کاربران، توییت‌ها و دنبال‌کنندگان در پایگاه داده (مانند MySQL یا Cassandra) دارد، که مقیاس‌پذیر نیست.<a href="https://elatov.github.io/2021/01/distributed-systems-design-twitter/"></a></li></ul>
+<ul><li><strong>ذخیره‌سازی فعالان:</strong> Redis فقط تایملاین‌های کاربران فعال (کسانی که در ۳۰ روز گذشته وارد سیستم شده‌اند) را در حافظه نگه می‌دارد. برای کاربران غیرفعال، تایملاین‌ها از دیسک (MySQL با Gizzard) بازسازی می‌شوند.<a href="https://highscalability.com/the-architecture-twitter-uses-to-deal-with-150m-active-users/"></a></li></ul>
+<ul><li><strong>تکرار داده‌ها:</strong> تایملاین‌ها در Redis به‌صورت سه‌تایی در دیتاسنترهای مختلف تکرار می‌شوند تا از دسترس‌پذیری بالا و تحمل خطا اطمینان حاصل شود.<a href="https://blog.mi.hdm-stuttgart.de/index.php/2021/03/10/how-to-scale-real-time-tweet-delivery-architecture-at-twitter/"></a></li></ul>
+
+<p>---</p>
+
+<h2>ساختارهای داده‌ای Redis که برای تایملاین‌ها مفید هستند</h2>
+
+<p>توییتر از ساختارهای داده‌ای زیر در Redis برای مدیریت تایملاین‌ها استفاده می‌کند:</p>
+
+<ul><li><strong>لیست‌ها (Lists):</strong></li></ul>
+   - برای ذخیره‌سازی تایملاین‌ها به‌صورت لیست‌های مرتب‌شده از شناسه‌های توییت (Tweet IDs).
+   - دستورات مانند <code>LPUSH</code> برای افزودن توییت جدید به ابتدای لیست و <code>LRANGE</code> برای بازیابی محدوده‌ای از توییت‌ها استفاده می‌شوند.<a href="https://scalegrid.io/blog/caching-tweets-using-node-js-redis-and-socket-io-2/"></a>
+   - <strong>Hybrid List:</strong> ترکیبی از Ziplist (برای توییت‌های کوچک و بهینه‌سازی حافظه) و Linked List (برای دسترسی سریع) که توسط توییتر در Haplo پیاده‌سازی شده است.<a href="https://www.algonote.com/entry/twitter-timeline-cache"></a>
+
+<ul><li><strong>مجموعه‌های مرتب‌شده (Sorted Sets):</strong></li></ul>
+   - برای ذخیره‌سازی تایملاین‌ها با امتیاز زمانی (Timestamp) برای مرتب‌سازی معکوس زمانی.
+   - دستور <code>ZREVRANGE</code> برای بازیابی توییت‌های اخیر و <code>ZADD</code> برای افزودن توییت جدید استفاده می‌شود.<a href="https://redis.com/ebook/part-2-core-concepts/chapter-8-building-a-simple-social-network/8-2-home-timeline/"></a>
+   - مناسب برای اعمال قوانین تجاری (مانند حذف پاسخ‌های @ از کاربرانی که دنبال نمی‌شوند).
+
+<ul><li><strong>هش‌ها (Hashes):</strong></li></ul>
+   - برای ذخیره‌سازی جزئیات توییت‌ها (مانند متن، کاربر، زمان) در کنار شناسه‌ها.
+   - در توییتر، جزئیات توییت از سیستم‌های دیگر (مانند Gizmoduck برای اطلاعات کاربر و TweetyPie برای توییت‌ها) بازیابی می‌شود، اما Redis می‌تواند متادیتا را ذخیره کند.<a href="https://blogs.vmware.com/tanzu/case-study-staple-yourself-to-a-tweet-to-understand-30-billion-redis-updates-per-day/"></a>
+
+<p>---</p>
+
+<h2>چگونه کش کردن تایملاین‌ها تجربه کاربری را بهبود می‌بخشد؟</h2>
+
+<ul><li><strong>بارگذاری سریع:</strong> تایملاین‌های ذخیره‌شده در Redis امکان بارگذاری در کمتر از ۵ ثانیه را فراهم می‌کنند، حتی در زمان‌های اوج ترافیک.<a href="https://highscalability.com/the-architecture-twitter-uses-to-deal-with-150m-active-users/"></a></li></ul>
+<ul><li><strong>دسترسی بلادرنگ:</strong> کاربران می‌توانند توییت‌های جدید را تقریباً بلافاصله پس از ارسال ببینند، که برای پلتفرم‌های اجتماعی حیاتی است.</li></ul>
+<ul><li><strong>کاهش بار دستگاه کاربر:</strong> با پیش‌محاسبه تایملاین‌ها در Redis، دستگاه کاربر (موبایل یا وب) فقط نیاز به دریافت لیست آماده دارد، که پردازش محلی را کاهش می‌دهد.<a href="https://blog.mi.hdm-stuttgart.de/index.php/2021/03/10/how-to-scale-real-time-tweet-delivery-architecture-at-twitter/"></a></li></ul>
+<ul><li><strong>تجربه یکپارچه:</strong> قوانین تجاری (مانند حذف پاسخ‌های غیرمرتبط یا نمایش ریتوییت‌ها) در زمان نوشتن اعمال می‌شوند، که تجربه‌ای منسجم برای کاربر ایجاد می‌کند.<a href="https://blogs.vmware.com/tanzu/case-study-staple-yourself-to-a-tweet-to-understand-30-billion-redis-updates-per-day/"></a></li></ul>
+
+<p>---</p>
+
+<h2>چالش‌های توییتر در استفاده از Redis برای تایملاین‌ها</h2>
+
+<ul><li><strong>ابطال کش (Cache Invalidation):</strong></li></ul>
+   - وقتی توییتی حذف یا ویرایش می‌شود، تمام تایملاین‌های مرتبط (برای همه دنبال‌کنندگان) باید به‌روزرسانی شوند.
+   - برای کاربران با دنبال‌کنندگان زیاد (مانند سلبریتی‌ها)، این فرآیند می‌تواند میلیون‌ها کلید Redis را تحت تأثیر قرار دهد، که سنگین است.<a href="https://www.algonote.com/entry/twitter-timeline-cache"></a>
+
+<ul><li><strong>سازگاری داده‌ها (Consistency):</strong></li></ul>
+   - توییتر از مدل <strong>سازگاری نهایی (Eventual Consistency)</strong> استفاده می‌کند، به این معنی که ممکن است توییت‌ها با تأخیر جزئی نمایش داده شوند.<a href="https://medium.com/%40narengowda/system-design-for-twitter-e737284afc95"></a>
+   - اگر داده‌های کش خراب شوند یا بخشی از لیست گم شود، تشخیص آن دشوار است.<a href="https://www.linkedin.com/pulse/how-twitter-uses-redis-scale-105tb-ram-39mm-qps-10000-iravani"></a>
+
+<ul><li><strong>مدیریت کلیدهای داغ (Hotkeys):</strong></li></ul>
+   - تایملاین‌های کاربران پرطرفدار (مانند سلبریتی‌ها) به دلیل دسترسی‌های مکرر می‌توانند بار سنگینی روی سرورهای Redis ایجاد کنند.
+   - توییتر از <strong>Nighthawk</strong> (لایه API برای تبدیل درخواست‌های Thrift به دستورات Redis) برای شناسایی و کش کردن محلی کلیدهای داغ استفاده می‌کند.<a href="https://matthewtejo.substack.com/p/handling-hotkeys-in-timeline-storage"></a>
+
+<ul><li><strong>محدودیت حافظه:</strong></li></ul>
+   - تایملاین‌های بزرگ (مانند تایملاین‌های سلبریتی‌ها) نیاز به تخصیص حافظه مداوم دارند، که می‌تواند باعث حذف تایملاین‌های کوچک‌تر شود.<a href="https://www.algonote.com/entry/twitter-timeline-cache"></a>
+   - Redis از استراتژی <strong>LRU (Least Recently Used)</strong> برای حذف داده‌ها استفاده می‌کند، که ممکن است تایملاین‌های غیرفعال را حذف کند.<a href="https://elatov.github.io/2021/01/distributed-systems-design-twitter/"></a>
+
+<p>---</p>
+
+<h2>استراتژی‌های توییتر برای به‌روز نگه داشتن تایملاین‌ها</h2>
+
+<ul><li><strong>Fanout-on-Write برای کاربران فعال:</strong></li></ul>
+   - توییتر توییت‌های جدید را به‌طور مستقیم به تایملاین‌های کاربران فعال در Redis اضافه می‌کند. کاربران فعال کسانی هستند که در ۳۰ روز گذشته وارد سیستم شده‌اند.<a href="https://highscalability.com/the-architecture-twitter-uses-to-deal-with-150m-active-users/"></a>
+   - این روش خواندن را سریع می‌کند، اما نوشتن را سنگین می‌کند.
+
+<ul><li><strong>بازسازی تایملاین برای کاربران غیرفعال:</strong></li></ul>
+   - برای کاربران غیرفعال، تایملاین‌ها در Redis ذخیره نمی‌شوند. در عوض، با ورود کاربر، تایملاین از دیسک (MySQL با Gizzard) بازسازی شده و به Redis منتقل می‌شود. این فرآیند حدود ۳ ثانیه طول می‌کشد.<a href="https://blog.mi.hdm-stuttgart.de/index.php/2021/03/10/how-to-scale-real-time-tweet-delivery-architecture-at-twitter/"></a>
+
+<ul><li><strong>مدیریت کلیدهای داغ:</strong></li></ul>
+   - توییتر از Nighthawk برای شناسایی کلیدهای داغ (مانند تایملاین‌های سلبریتی‌ها) و کش کردن محلی آن‌ها در لایه API استفاده می‌کند تا فشار روی سرورهای Redis کاهش یابد.<a href="https://matthewtejo.substack.com/p/handling-hotkeys-in-timeline-storage"></a>
+
+<ul><li><strong>بهینه‌سازی برای سلبریتی‌ها:</strong></li></ul>
+   - برای کاربران با دنبال‌کنندگان زیاد، توییتر از رویکرد ترکیبی استفاده می‌کند: توییت‌های سلبریتی‌ها ممکن است در زمان خواندن (Read-Time Merge) به تایملاین‌ها اضافه شوند تا از نوشتن سنگین در میلیون‌ها تایملاین جلوگیری شود.<a href="https://www.stackbit.com/blog/build-twitter-timeline-today-1"></a>
+
+<ul><li><strong>استفاده از Kafka برای پردازش رویدادها:</strong></li></ul>
+   - توییتر از Apache Kafka برای ارسال رویدادهای توییت به سرویس پردازش توییت استفاده می‌کند، که تایملاین‌ها را به‌صورت غیرهمزمان به‌روزرسانی می‌کند.<a href="https://medium.com/%40lazygeek78/design-of-x-twitter-7233483b5d31"></a>
+
+<ul><li><strong>تکرار و شاردینگ:</strong></li></ul>
+   - تایملاین‌ها در سه نسخه در دیتاسنترهای مختلف تکرار می‌شوند تا تحمل خطا افزایش یابد.
+   - از شاردینگ مبتنی بر <strong>Consistent Hashing</strong> برای توزیع داده‌ها بین گره‌های Redis استفاده می‌شود.<a href="https://elatov.github.io/2021/01/distributed-systems-design-twitter/"></a>
+
+<p>---</p>
+
+<h2>درس‌های آموخته‌شده: چرا Redis ابزار قدرتمندی برای تحویل محتوای بلادرنگ است؟</h2>
+
+<ul><li><strong>سرعت بی‌نظیر:</strong></li></ul>
+   - ذخیره‌سازی در حافظه و استفاده از ساختارهای داده‌ای بهینه (مانند Hybrid List) امکان پاسخ‌دهی در میکروثانیه را فراهم می‌کند.
+<ul><li><strong>انعطاف‌پذیری ساختارهای داده‌ای:</strong></li></ul>
+   - پشتیبانی از لیست‌ها، مجموعه‌های مرتب‌شده و هش‌ها Redis را برای مدیریت تایملاین‌های پیچیده مناسب می‌کند.
+<ul><li><strong>مقیاس‌پذیری افقی:</strong></li></ul>
+   - Redis Cluster و شاردینگ امکان مدیریت میلیاردها درخواست روزانه را فراهم می‌کنند.
+<ul><li><strong>مدیریت کلیدهای داغ:</strong></li></ul>
+   - قابلیت‌های سفارشی‌سازی (مانند Haplo و Nighthawk) به توییتر کمک کرده تا با چالش‌های مقیاس بزرگ کنار بیاید.
+<ul><li><strong>کاهش بار پایگاه داده:</strong></li></ul>
+   - با پیش‌محاسبه تایملاین‌ها، Redis فشار روی MySQL و Cassandra را به‌طور قابل‌توجهی کاهش می‌دهد.
+
+<strong>مثال واقعی:</strong> در سال ۲۰۱۴، توییتر گزارش داد که Redis با ۱۰۵ ترابایت RAM و بیش از ۱۰,۰۰۰ نمونه، ۳۹ میلیون QPS را مدیریت می‌کند، که تایملاین‌ها بخش عمده‌ای از این بار را تشکیل می‌دهند.<a href="https://www.linkedin.com/pulse/how-twitter-uses-redis-scale-105tb-ram-39mm-qps-10000-iravani"></a>
+
+<p>---</p>
+
+<h2>خلاصه بینش‌های معماری</h2>
+
+<ul><li><strong>معماری Fanout-on-Write:</strong> توییتر با پیش‌محاسبه تایملاین‌ها در Redis، خواندن را سریع و نوشتن را سنگین می‌کند، که برای سیستم‌های خواندن-سنگین (Read-Heavy) مانند توییتر مناسب است.</li></ul>
+<ul><li><strong>ساختارهای داده‌ای بهینه:</strong> استفاده از Hybrid List و Sorted Sets به توییتر امکان می‌دهد تایملاین‌ها را به‌صورت کارآمد ذخیره و بازیابی کند.</li></ul>
+<ul><li><strong>مدیریت کاربران فعال و غیرفعال:</strong> ذخیره‌سازی تایملاین‌های کاربران فعال در RAM و بازسازی تایملاین‌های کاربران غیرفعال از دیسک، تعادل بین عملکرد و مصرف حافظه را برقرار می‌کند.</li></ul>
+<ul><li><strong>تحمل خطا و مقیاس‌پذیری:</strong> تکرار داده‌ها و شاردینگ مبتنی بر Consistent Hashing از خرابی‌ها جلوگیری کرده و مقیاس‌پذیری را تضمین می‌کند.</li></ul>
+<ul><li><strong>چالش‌های مقیاس:</strong> مدیریت کلیدهای داغ و ابطال کش برای کاربران پرطرفدار نیاز به راهکارهای پیشرفته‌ای مانند Nighthawk دارد.</li></ul>
+
+<p>---</p>
+
+<h2>دیاگرام جریان داده‌ها</h2>
+
+<pre><code>
+[کاربر]
+   |
+   v
+[API توییتر]
+   | (درخواست تایملاین)
+   v
+[Redis Cluster (Haplo)]
+   | (Cache Hit: تایملاین از پیش محاسبه‌شده)
+   | (Cache Miss: بازسازی تایملاین)
+   v
+[سرویس گراف اجتماعی (Flock)] <--> [پایگاه داده دیسک: MySQL/Cassandra]
+   | (دریافت لیست دنبال‌کنندگان)
+   v
+[سرویس پردازش توییت] <--> [Kafka: رویدادهای توییت]
+   | (به‌روزرسانی تایملاین‌ها)
+   v
+[Redis Cluster: ذخیره‌سازی تایملاین به‌روز]
+   |
+   v
+[کاربر: نمایش تایملاین]
+</code></pre>
+
+<strong>توضیح دیاگرام:</strong>
+<ul><li>کاربر درخواست تایملاین می‌دهد.</li></ul>
+<ul><li>API توییتر ابتدا Redis (Haplo) را بررسی می‌کند.</li></ul>
+<ul><li>در صورت Cache Hit، تایملاین از Redis بازمی‌گردد.</li></ul>
+<ul><li>در صورت Cache Miss (کاربر غیرفعال)، سرویس گراف اجتماعی (Flock) لیست دنبال‌کنندگان را از پایگاه داده دریافت کرده و تایملاین بازسازی می‌شود.</li></ul>
+<ul><li>توییت‌های جدید از طریق Kafka پردازش شده و تایملاین‌ها در Redis به‌روزرسانی می‌شوند.</li></ul>
+<ul><li>تایملاین به کاربر نمایش داده می‌شود.</li></ul>
+
+<p>---</p>
+
+<h2>منابع پیشنهادی برای مطالعه بیشتر</h2>
+
+<ul><li><em>Designing Data-Intensive Applications</em> نوشته مارتین کلپمن: کتابی جامع برای یادگیری کشینگ و طراحی سیستم‌های مقیاس‌پذیر.</li></ul>
+<ul><li><em>The System Design Primer</em> (منبع متن‌باز در GitHub): راهنمایی برای کشینگ و بهینه‌سازی عملکرد.</li></ul>
+<ul><li>وبلاگ‌ها و ارائه‌ها:</li></ul>
+   - <em>Scaling Redis at Twitter</em> توسط Yao Yue (2014): توضیحات عمیق در مورد استفاده از Redis در توییتر.<a href="https://highscalability.com/how-twitter-uses-redis-to-scale-105tb-ram-39mm-qps-10000-ins/"></a>
+   - <em>The Infrastructure Behind Twitter</em> (High Scalability, 2013): جزئیات معماری توییتر.<a href="https://highscalability.com/the-architecture-twitter-uses-to-deal-with-150m-active-users/"></a>
+   - <em>Redis Documentation: Home Timeline</em> (redis.com): مثال‌های کد برای تایملاین‌ها.<a href="https://redis.com/ebook/part-2-core-concepts/chapter-8-building-a-simple-social-network/8-2-home-timeline/"></a>
+<ul><li>مستندات رسمی:</li></ul>
+   - <a href="https://redis.io/documentation">Redis Documentation</a>
+   - <a href="https://blog.twitter.com/engineering">Twitter Engineering Blog</a>
+<ul><li>دوره‌های آنلاین:</li></ul>
+   - <em>Grokking the System Design Interview</em> در DesignGuru.io
+   - <em>System Design Course</em> در Educative.io
+
+<p>---</p>
+
+<p>این سند استفاده از Redis در توییتر برای کش کردن تایملاین‌ها را به‌صورت جامع توضیح داده و برای مستندسازی آموزشی و یادگیری طراحی سیستم مناسب است. در صورت نیاز به توضیحات عمیق‌تر یا مثال‌های بیشتر، لطفاً اطلاع دهید!</p>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نمونه واقعی: استفاده از Apache Kafka در LinkedIn برای پردازش داده‌ها</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="نمونه واقعی: استفاده از Apache Kafka در LinkedIn برای پردازش داده‌ها">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>نمونه واقعی: استفاده از Apache Kafka در LinkedIn برای پردازش داده‌ها</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Main components of scalable systems</span>
+<span>/</span>
+<span>Messaging and Queues</span>
+<span>/</span>
+<span>Kafka_at_LinkedIn.html</span>
+                </div>
+
+                <h1>نمونه واقعی: استفاده از Apache Kafka در LinkedIn برای پردازش داده‌ها</h1>
+
+<p>این سند به بررسی استفاده از <strong>Apache Kafka</strong> در شرکت LinkedIn به‌عنوان یک سیستم جریان داده و پیام‌رسانی مقیاس‌پذیر می‌پردازد. هدف این است که با ارائه جزئیات در مورد نیازهای LinkedIn، مشکلات پیش از Kafka، چگونگی توسعه Kafka، معماری و کاربردهای آن، مزایا، درس‌های آموخته‌شده و تأثیرات آن بر سیستم‌های مدرن مبتنی بر رویداد، یک راهنمای جامع و آموزشی برای یادگیری طراحی سیستم فراهم شود. این محتوا به زبان فارسی و با فرمت مارک‌داون ارائه شده است تا برای مستندسازی آموزشی و یادگیری اصول طراحی سیستم مناسب باشد.</p>
+
+<p>---</p>
+
+<h2>مقدمه: چرا LinkedIn به یک سیستم قدرتمند جریان داده و پیام‌رسانی نیاز داشت؟</h2>
+
+<p>LinkedIn، به‌عنوان یکی از بزرگ‌ترین پلتفرم‌های شبکه‌های اجتماعی حرفه‌ای با بیش از 675 میلیون کاربر در سال 2020، روزانه با حجم عظیمی از داده‌ها و تعاملات کاربران مواجه است. این تعاملات شامل فعالیت‌های کاربران (مانند بازدید از صفحات، جستجو، ارسال پیام)، معیارهای عملیاتی (مانند مصرف CPU و حافظه سرورها)، و لاگ‌های سیستم است. برای مدیریت این حجم عظیم داده و ارائه تجربه کاربری بلادرنگ و قابل‌اعتماد، LinkedIn به یک سیستم جریان داده و پیام‌رسانی نیاز داشت که بتواند:</p>
+
+<ul><li><strong>حجم بالای داده‌ها را مدیریت کند:</strong> پردازش میلیاردها پیام در روز با توان عملیاتی بالا.</li></ul>
+<ul><li><strong>تأخیر کم ارائه دهد:</strong> پاسخگویی بلادرنگ برای ویژگی‌هایی مانند اعلان‌ها و به‌روزرسانی فیدها.</li></ul>
+<ul><li><strong>مقیاس‌پذیر و مقاوم باشد:</strong> پشتیبانی از رشد سریع کاربران و پایداری در برابر خرابی‌ها.</li></ul>
+<ul><li><strong>سرویس‌ها را جدا کند:</strong> امکان ارتباط ناهمزمان بین سرویس‌های مختلف بدون وابستگی مستقیم.</li></ul>
+
+<strong>Apache Kafka</strong>، که در ابتدا توسط LinkedIn توسعه یافت، به‌عنوان راه‌حل این نیازها طراحی شد و به یکی از ستون‌های اصلی زیرساخت داده این شرکت تبدیل شد.<a href="https://softwareengineeringdaily.com/2020/02/20/linkedin-kafka/"></a><a href="https://www.linkedin.com/pulse/kafkas-origin-story-linkedin-tanvir-ahmed"></a>
+
+<p>---</p>
+
+<h2>پیش‌زمینه: مشکلات LinkedIn در مقیاس‌پذیری و خطوط لوله داده قبل از Kafka</h2>
+
+<p>قبل از توسعه Kafka در سال 2010، LinkedIn با چالش‌های متعددی در مدیریت داده‌های خود مواجه بود:</p>
+
+<ul><li><strong>حجم عظیم داده‌ها:</strong> با رشد سریع تعداد کاربران، داده‌های فعالیت کاربران (مانند کلیک‌ها، بازدیدها، و جستجوها) و معیارهای عملیاتی به‌صورت تصاعدی افزایش یافت.</li></ul>
+<ul><li><strong>محدودیت‌های سیستم‌های پیام‌رسانی سنتی:</strong> سیستم‌هایی مانند ActiveMQ و RabbitMQ برای مدیریت حجم بالای داده‌ها و ارائه تأخیر کم ناکافی بودند. این سیستم‌ها معمولاً با افزایش تعداد مصرف‌کنندگان کند می‌شدند و مقیاس‌پذیری محدودی داشتند.<a href="https://www.linkedin.com/pulse/linkedin-apache-kafka-muhammad-waqas-dilawar"></a><a href="https://www.linkedin.com/pulse/kafkas-origin-story-linkedin-tanvir-ahmed"></a></li></ul>
+<ul><li><strong>پیچیدگی خطوط لوله داده:</strong> LinkedIn از ده‌ها سیستم داده و مخزن داده (مانند پایگاه‌های داده و Hadoop) استفاده می‌کرد. اتصال این سیستم‌ها نیاز به خطوط لوله سفارشی بین هر جفت سیستم داشت، که منجر به پیچیدگی و هزینه‌های نگهداری بالا می‌شد.</li></ul>
+<ul><li><strong>نیاز به پردازش بلادرنگ و دسته‌ای:</strong> LinkedIn به سیستمی نیاز داشت که هم برای پردازش بلادرنگ (مانند اعلان‌ها) و هم برای تحلیل‌های دسته‌ای (مانند گزارش‌های Hadoop) مناسب باشد.</li></ul>
+<ul><li><strong>عدم انعطاف‌پذیری:</strong> سیستم‌های موجود نمی‌توانستند به‌خوبی مصرف‌کنندگان و تولیدکنندگان را از یکدیگر جدا کنند، که باعث کاهش عملکرد و افزایش وابستگی‌ها می‌شد.</li></ul>
+
+<p>این چالش‌ها LinkedIn را وادار کرد تا یک سیستم پیام‌رسانی جدید طراحی کند که مقیاس‌پذیر، با تأخیر کم، و مقاوم باشد.</p>
+
+<p>---</p>
+
+<h2>منشأ Kafka در LinkedIn: چگونگی و چرایی توسعه</h2>
+
+<strong>Apache Kafka</strong> در حدود سال 2010 توسط تیمی در LinkedIn شامل Jay Kreps، Jun Rao و Neha Narkhede توسعه یافت. هدف اصلی، حل مشکل <strong>جذب داده‌های با تأخیر کم</strong> در حجم بالا برای پشتیبانی از معماری لامبدا (ترکیب پردازش بلادرنگ و دسته‌ای) بود.<a href="https://www.linkedin.com/pulse/kafkas-origin-story-linkedin-tanvir-ahmed"></a>
+
+<h3>چرا Kafka توسعه یافت؟</h3>
+<ul><li><strong>نیاز به مقیاس‌پذیری افقی:</strong> سیستم‌های پیام‌رسانی سنتی نمی‌توانستند با رشد داده‌های LinkedIn مقیاس‌پذیر شوند.</li></ul>
+<ul><li><strong>پشتیبانی از پردازش بلادرنگ:</strong> برخلاف سیستم‌های دسته‌ای، LinkedIn به سیستمی نیاز داشت که بتواند داده‌ها را با تأخیر کم (در حد میلی‌ثانیه) پردازش کند.</li></ul>
+<ul><li><strong>جداسازی تولیدکنندگان و مصرف‌کنندگان:</strong> برای کاهش وابستگی‌ها و افزایش انعطاف‌پذیری، نیاز به یک لایه واسطه بود که داده‌ها را به‌صورت ناهمزمان منتقل کند.</li></ul>
+<ul><li><strong>پشتیبانی از ذخیره‌سازی داده‌ها:</strong> برخلاف پیام‌رسان‌های سنتی که پیام‌ها را پس از مصرف حذف می‌کنند، LinkedIn به سیستمی نیاز داشت که داده‌ها را برای بازپخش و تحلیل‌های بعدی ذخیره کند.</li></ul>
+
+<h3>چگونگی توسعه</h3>
+Kafka به‌عنوان یک <strong>سیستم پیام‌رسانی مبتنی بر لاگ توزیع‌شده</strong> طراحی شد که از مدل <strong>انتشار/اشتراک (Publish/Subscribe)</strong> استفاده می‌کند. ویژگی‌های کلیدی آن شامل:
+<ul><li><strong>موضوعات (Topics):</strong> داده‌ها در دسته‌های منطقی به نام موضوعات ذخیره می‌شوند.</li></ul>
+<ul><li><strong>پارتیشن‌ها:</strong> هر موضوع به پارتیشن‌های متعدد تقسیم می‌شود تا پردازش موازی و مقیاس‌پذیری فراهم شود.</li></ul>
+<ul><li><strong>لاگ‌های پایدار:</strong> پیام‌ها به‌صورت لاگ روی دیسک ذخیره می‌شوند، که امکان بازپخش و پایداری را فراهم می‌کند.</li></ul>
+<ul><li><strong>کارگزاران (Brokers):</strong> سرورهای Kafka که داده‌ها را ذخیره و مدیریت می‌کنند.</li></ul>
+
+<p>Kafka در سال 2011 به Apache Software Foundation اهدا شد و به یک پروژه متن‌باز تبدیل شد، که اکنون توسط شرکت‌های بزرگی مانند Netflix و Uber استفاده می‌شود.<a href="https://en.wikipedia.org/wiki/Apache_Kafka"></a><a href="https://www.rtinsights.com/the-technical-evolution-of-apache-kafka-from-linkedins-need-to-a-global-standard/"></a></p>
+
+<p>---</p>
+
+<h2>معماری و کاربردهای کلیدی Kafka در LinkedIn</h2>
+
+<p>LinkedIn از Kafka به‌عنوان ستون فقرات زیرساخت داده خود استفاده می‌کند و بیش از <strong>7 تریلیون پیام در روز</strong> را با بیش از <strong>100 خوشه Kafka</strong>، <strong>4000 کارگزار</strong>، <strong>100,000 موضوع</strong> و <strong>7 میلیون پارتیشن</strong> پردازش می‌کند. در ادامه، جزئیات معماری و کاربردهای Kafka در LinkedIn بررسی می‌شود.<a href="https://blog.bytebytego.com/p/how-linkedin-customizes-its-7-trillion"></a><a href="https://www.linkedin.com/blog/engineering/open-source/apache-kafka-trillion-messages"></a></p>
+
+<h3>جریان‌های رویداد (Event Streams)</h3>
+Kafka برای مدیریت انواع مختلف جریان‌های رویداد در LinkedIn استفاده می‌شود:
+<ul><li><strong>فعالیت‌های کاربران:</strong> شامل کلیک‌ها، بازدیدهای صفحه، جستجوها، لایک‌ها، اشتراک‌گذاری‌ها و نظرات. این داده‌ها برای به‌روزرسانی فیدهای خبری، توصیه‌ها و تبلیغات هدفمند استفاده می‌شوند.</li></ul>
+<ul><li><strong>پیام‌رسانی:</strong> پیام‌های ارسالی بین کاربران (مانند InMail) از طریق Kafka منتقل می‌شوند.</li></ul>
+<ul><li><strong>معیارهای عملیاتی:</strong> شامل معیارهای سیستم مانند مصرف CPU، حافظه، و تأخیر سرویس‌ها برای مانیتورینگ بلادرنگ.</li></ul>
+<ul><li><strong>لاگ‌ها:</strong> لاگ‌های برنامه‌ها برای تجمیع و تحلیل به Kafka ارسال می‌شوند.</li></ul>
+
+<h3>ادغام با سایر سیستم‌ها</h3>
+Kafka به‌عنوان یک <strong>خط لوله داده یکپارچه</strong> عمل می‌کند و با سیستم‌های مختلف ادغام می‌شود:
+<ul><li><strong>Apache Hadoop:</strong> برای پردازش دسته‌ای داده‌ها، Kafka داده‌ها را به HDFS منتقل می‌کند. ابزار <strong>Gobblin</strong>، توسعه‌یافته توسط LinkedIn، داده‌ها را از Kafka به Hadoop منتقل می‌کند.<a href="https://softwareengineeringdaily.com/2020/02/20/linkedin-kafka/"></a></li></ul>
+<ul><li><strong>Apache Samza:</strong> برای پردازش جریان‌های بلادرنگ، LinkedIn از Samza (که خود توسط LinkedIn توسعه یافته و به Apache اهدا شده) استفاده می‌کند. Samza وظایف سنگین مانند تحلیل بلادرنگ را از Hadoop به جریان‌های Kafka منتقل می‌کند.<a href="https://softwareengineeringdaily.com/2020/02/20/linkedin-kafka/"></a></li></ul>
+<ul><li><strong>Brooklin:</strong> یک سرویس جریان توزیع‌شده که داده‌ها را از منابع مختلف (مانند پایگاه‌های داده یا ابرهای عمومی) به Kafka منتقل کرده و جریان‌هایی برای سایر برنامه‌ها تولید می‌کند.<a href="https://softwareengineeringdaily.com/2020/02/20/linkedin-kafka/"></a></li></ul>
+<ul><li><strong>دیتابیس‌ها و انبارهای داده:</strong> Kafka برای تکثیر پایگاه داده (Database Replication) و انتقال داده‌ها به سیستم‌های تحلیلی استفاده می‌شود.</li></ul>
+
+<h3>مقیاس‌پذیری و توان عملیاتی بالا</h3>
+<ul><li><strong>مقیاس‌پذیری افقی:</strong> LinkedIn از خوشه‌های Kafka با هزاران کارگزار استفاده می‌کند که امکان پردازش بیش از 7 تریلیون پیام در روز را فراهم می‌کند.</li></ul>
+<ul><li><strong>پارتیشن‌بندی:</strong> هر موضوع به پارتیشن‌های متعدد تقسیم می‌شود که پردازش موازی توسط مصرف‌کنندگان را ممکن می‌سازد.</li></ul>
+<ul><li><strong>مدیریت خوشه‌ها:</strong> ابزار <strong>Cruise Control</strong>، توسعه‌یافته توسط LinkedIn، برای مدیریت خودکار خوشه‌های Kafka و تعادل بار استفاده می‌شود.<a href="https://engineering.linkedin.com/teams/data/data-infrastructure/streams/kafka"></a></li></ul>
+<ul><li><strong>تأخیر کم:</strong> Kafka تأخیرهایی در حد 2 میلی‌ثانیه ارائه می‌دهد، که برای برنامه‌های بلادرنگ حیاتی است.<a href="https://kafka.apache.org/"></a></li></ul>
+
+<h3>قابلیت اطمینان و تحمل‌پذیری خطا</h3>
+<ul><li><strong>پایداری داده‌ها:</strong> پیام‌ها در لاگ‌های append-only روی دیسک ذخیره می‌شوند، که از حذف تصادفی جلوگیری می‌کند.</li></ul>
+<ul><li><strong>تکثیر (Replication):</strong> LinkedIn از حداقل فاکتور تکثیر برای کاهش خطر از دست رفتن داده‌ها در صورت خرابی کارگزار استفاده می‌کند.<a href="https://www.linkedin.com/blog/engineering/open-source/apache-kafka-trillion-messages"></a></li></ul>
+<ul><li><strong>MirrorMaker:</strong> برای تکثیر داده‌ها بین مراکز داده و حفظ سازگاری در چندین منطقه جغرافیایی استفاده می‌شود.<a href="http://insideainews.com/2016/04/28/a-brief-history-of-kafka-linkedins-messaging-platform/"></a></li></ul>
+<ul><li><strong>تحمل‌پذیری خطا:</strong> پارتیشن‌بندی و تکثیر داده‌ها امکان ادامه کار سیستم در صورت خرابی کارگزارها را فراهم می‌کند.</li></ul>
+
+<p>---</p>
+
+<h2>مزایای به‌دست‌آمده توسط LinkedIn با استفاده از Kafka</h2>
+
+<p>LinkedIn با پیاده‌سازی Kafka به مزایای زیر دست یافت:
+<ul><li><strong>مقیاس‌پذیری بی‌نظیر:</strong> توانایی پردازش بیش از 7 تریلیون پیام در روز، که با رشد کاربران افزایش یافت.<a href="https://www.linkedin.com/blog/engineering/open-source/apache-kafka-trillion-messages"></a></li></ul>
+<ul><li><strong>پاسخگویی بلادرنگ:</strong> ارائه تجربه کاربری بهبودیافته با به‌روزرسانی‌های فوری فیدها و اعلان‌ها.</li></ul>
+<ul><li><strong>جداسازی سرویس‌ها:</strong> تولیدکنندگان و مصرف‌کنندگان از طریق Kafka جدا شدند، که توسعه و نگهداری سرویس‌ها را ساده کرد.</li></ul>
+<ul><li><strong>یکپارچگی داده‌ها:</strong> Kafka به‌عنوان یک خط لوله مرکزی، نیاز به خطوط لوله سفارشی بین سیستم‌ها را حذف کرد.</li></ul>
+<ul><li><strong>پشتیبانی از معماری لامبدا:</strong> ترکیب پردازش بلادرنگ (با Samza) و دسته‌ای (با Hadoop) برای تحلیل‌های جامع.</li></ul>
+<ul><li><strong>تأثیر در جامعه متن‌باز:</strong> با اهدای Kafka به Apache، LinkedIn به توسعه سیستم‌های جریان داده در سطح جهانی کمک کرد.</li></ul></p>
+
+<p>---</p>
+
+<h2>درس‌های آموخته‌شده و تأثیر بر سیستم‌های مدرن مبتنی بر رویداد</h2>
+
+<h3>درس‌های آموخته‌شده</h3>
+<ul><li><strong>نیاز به مقیاس‌پذیری از ابتدا:</strong> LinkedIn دریافت که سیستم‌های پیام‌رسانی سنتی نمی‌توانند با رشد سریع داده‌ها همگام شوند، بنابراین Kafka را با تمرکز بر مقیاس‌پذیری افقی طراحی کرد.</li></ul>
+<ul><li><strong>اهمیت پایداری داده‌ها:</strong> ذخیره‌سازی لاگ‌های پایدار امکان بازپخش داده‌ها و بازیابی در برابر خرابی‌ها را فراهم کرد.</li></ul>
+<ul><li><strong>مدیریت پیچیدگی خوشه‌ها:</strong> ابزارهایی مانند Cruise Control برای مدیریت خودکار خوشه‌های بزرگ ضروری هستند.</li></ul>
+<ul><li><strong>ادغام با اکوسیستم داده:</strong> Kafka به‌عنوان یک لایه واسطه، ادغام با سیستم‌های مختلف (مانند Hadoop و Samza) را ساده کرد.</li></ul>
+<ul><li><strong>مشارکت در جامعه متن‌باز:</strong> اهدای Kafka به Apache و انتشار شاخه‌های LinkedIn (مانند شاخه‌های -li) به توسعه‌دهندگان جهانی کمک کرد.<a href="https://www.linkedin.com/blog/engineering/open-source/apache-kafka-trillion-messages"></a></li></ul>
+
+<h3>تأثیر بر سیستم‌های مدرن</h3>
+<ul><li><strong>استانداردسازی جریان داده:</strong> Kafka به استانداردی برای پردازش جریان داده در شرکت‌هایی مانند Netflix، Uber و Amazon تبدیل شد.</li></ul>
+<ul><li><strong>معماری‌های کاپا و لامبدا:</strong> Kafka امکان پیاده‌سازی معماری‌های ترکیبی را فراهم کرد که پردازش بلادرنگ و دسته‌ای را ترکیب می‌کنند.<a href="https://www.linkedin.com/pulse/kafkas-origin-story-linkedin-tanvir-ahmed"></a></li></ul>
+<ul><li><strong>اکوسیستم قدرتمند:</strong> ابزارهایی مانند Kafka Streams، Kafka Connect و Samza از Kafka الهام گرفته و توسعه یافتند.</li></ul>
+<ul><li><strong>پشتیبانی از میکروسرویس‌ها:</strong> Kafka به‌عنوان یک ستون فقرات برای ارتباط ناهمزمان در معماری‌های میکروسرویس استفاده می‌شود.</li></ul>
+
+<p>---</p>
+
+<h2>خلاصه و نکات کلیدی برای مهندسان طراحی سیستم</h2>
+
+<h3>خلاصه</h3>
+<ul><li><strong>نیاز LinkedIn:</strong> مدیریت حجم عظیم داده‌های کاربران و معیارهای عملیاتی با تأخیر کم و مقیاس‌پذیری بالا.</li></ul>
+<ul><li><strong>توسعه Kafka:</strong> Kafka در سال 2010 برای حل مشکلات سیستم‌های پیام‌رسانی سنتی طراحی شد و در سال 2011 متن‌باز شد.</li></ul>
+<ul><li><strong>کاربردها:</strong> استفاده برای جریان‌های رویداد (فعالیت کاربران، پیام‌رسانی، معیارها)، ادغام با Hadoop و Samza، و پردازش بیش از 7 تریلیون پیام در روز.</li></ul>
+<ul><li><strong>مزایا:</strong> مقیاس‌پذیری، پاسخگویی بلادرنگ، جداسازی سرویس‌ها و یکپارچگی داده‌ها.</li></ul>
+<ul><li><strong>تأثیر:</strong> Kafka به استاندارد جهانی برای جریان داده تبدیل شد و معماری‌های مدرن مبتنی بر رویداد را شکل داد.</li></ul>
+
+<h3>نکات کلیدی برای مهندسان</h3>
+<ul><li><strong>طراحی برای مقیاس‌پذیری:</strong> هنگام طراحی سیستم‌های پیام‌رسانی، مقیاس‌پذیری افقی را از ابتدا در نظر بگیرید.</li></ul>
+<ul><li><strong>استفاده از لاگ‌های پایدار:</strong> ذخیره‌سازی داده‌ها برای بازپخش و بازیابی خطاها حیاتی است.</li></ul>
+<ul><li><strong>مدیریت خوشه‌ها:</strong> از ابزارهای خودکار مانند Cruise Control برای مدیریت خوشه‌های بزرگ استفاده کنید.</li></ul>
+<ul><li><strong>ادغام با اکوسیستم:</strong> سیستم‌های جریان داده باید با ابزارهای تحلیلی (مانند Hadoop) و پردازش بلادرنگ (مانند Samza) ادغام شوند.</li></ul>
+<ul><li><strong>مشارکت در متن‌باز:</strong> انتشار بهبودها به جامعه متن‌باز می‌تواند تأثیرات جهانی داشته باشد.</li></ul>
+
+<p>---</p>
+
+<h2>منابع پیشنهادی برای مطالعه بیشتر</h2>
+<ul><li><em>Designing Data-Intensive Applications</em> نوشته مارتین کلپمن: کتابی جامع برای یادگیری سیستم‌های جریان داده.</li></ul>
+<ul><li><em>Kafka: The Definitive Guide</em> نوشته Neha Narkhede و همکاران: راهنمای کامل برای Kafka.</li></ul>
+<ul><li>وبلاگ‌های مهندسی LinkedIn:</li></ul>
+   - <a href="https://engineering.linkedin.com">Running Kafka at Scale</a><a href="https://engineering.linkedin.com/kafka/running-kafka-scale"></a>
+   - <a href="https://www.linkedin.com">How LinkedIn Customizes Apache Kafka</a><a href="https://www.linkedin.com/blog/engineering/open-source/apache-kafka-trillion-messages"></a>
+<ul><li>مستندات رسمی:</li></ul>
+   - <a href="https://kafka.apache.org/documentation/">Apache Kafka Documentation</a>
+   - <a href="https://samza.apache.org/">Apache Samza Documentation</a>
+<ul><li>دوره‌های آنلاین:</li></ul>
+   - <em>Grokking the System Design Interview</em> در DesignGuru.io
+   - <em>System Design Course</em> در Educative.io
+
+<p>---</p>
+
+<p>این سند به‌طور جامع استفاده از Kafka در LinkedIn را توضیح داده و برای مهندسان علاقه‌مند به طراحی سیستم‌های مقیاس‌پذیر مناسب است. در صورت نیاز به جزئیات بیشتر یا مثال‌های دیگر، لطفاً اطلاع دهید!</p>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

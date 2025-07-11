@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سرفصل‌های طراحی سیستم برای مهندسی نرم‌افزار</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="سرفصل‌های طراحی سیستم برای مهندسی نرم‌افزار">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">خانه</a></li>
+                    <li><a href="index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>سرفصل‌های طراحی سیستم برای مهندسی نرم‌افزار</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>System_Design_Course_Outline.html</span>
+                </div>
+
+                <h1>سرفصل‌های طراحی سیستم برای مهندسی نرم‌افزار</h1>
+
+<p>این سند به‌عنوان یک راهنمای جامع برای یادگیری طراحی سیستم از صفر طراحی شده است. ساختار زیر با الهام از منابع معتبر مانند <em>The System Design Primer</em> و <em>Designing Data-Intensive Applications</em> ایجاد شده و برای آموزش مفاهیم معماری نرم‌افزار به‌صورت کامل و ساختاریافته مناسب است. این سرفصل‌ها هم برای آمادگی مصاحبه‌های شغلی و هم برای کسب دانش عملی در معماری سیستم‌های دنیای واقعی مناسب هستند.</p>
+
+<p>---</p>
+
+<h2>بخش اول: مفاهیم پایه‌ای طراحی سیستم</h2>
+<h3>فصل ۱: مقدمه‌ای بر طراحی سیستم</h3>
+<ul><li>تعریف طراحی سیستم و اهمیت آن در مهندسی نرم‌افزار</li></ul>
+<ul><li>تفاوت بین طراحی سیستم در مقیاس کوچک و بزرگ</li></ul>
+<ul><li>اصول اولیه معماری نرم‌افزار (مانند مقیاس‌پذیری، قابلیت اطمینان، و کارایی)</li></ul>
+<ul><li>مروری بر معماری‌های دنیای واقعی (مانند فیسبوک، توییتر، و آمازون)</li></ul>
+
+<h3>فصل ۲: اجزای اصلی معماری نرم‌افزار</h3>
+<ul><li>معرفی لایه‌های معماری: لایه ارائه (Presentation Layer)، منطق تجاری (Business Logic)، و دسترسی به داده‌ها (Data Access Layer)</li></ul>
+<ul><li>مفهوم جداسازی وظایف (Separation of Concerns)</li></ul>
+<ul><li>معماری‌های کلاینت-سرور، بدون حالت (Stateless)، و حالت‌دار (Stateful)</li></ul>
+<ul><li>مثال‌های واقعی: معماری‌های یوتیوب و نتفلیکس</li></ul>
+
+<h3>فصل ۳: مفاهیم کلیدی در طراحی سیستم</h3>
+<ul><li>مقیاس‌پذیری (Scalability): افقی و عمودی</li></ul>
+<ul><li>قابلیت اطمینان (Reliability) و تحمل خطا (Fault Tolerance)</li></ul>
+<ul><li>دسترسی‌پذیری (Availability) و توافق‌نامه سطح خدمات (SLA)</li></ul>
+<ul><li>کارایی (Performance) و تأخیر (Latency) در مقابل توان عملیاتی (Throughput)</li></ul>
+<ul><li>مدیریت داده‌ها: سازگاری (Consistency) در مقابل دسترسی‌پذیری (Availability) (قضیه CAP)</li></ul>
+
+<p>---</p>
+
+<h2>بخش دوم: اجزای اصلی سیستم‌های مقیاس‌پذیر</h2>
+<h3>فصل ۴: پایگاه‌های داده و ذخیره‌سازی</h3>
+<ul><li>پایگاه‌های داده رابطه‌ای (Relational Databases) در مقابل غیررابطه‌ای (NoSQL)</li></ul>
+<ul><li>انتخاب پایگاه داده مناسب: MySQL، PostgreSQL، MongoDB، Cassandra</li></ul>
+<ul><li>شاردینگ (Sharding) و پارتیشن‌بندی (Partitioning)</li></ul>
+<ul><li>ایندکس‌گذاری (Indexing) و بهینه‌سازی پرس‌وجوها</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام</li></ul>
+
+<h3>فصل ۵: کشینگ (Caching)</h3>
+<ul><li>مفهوم کشینگ و اهمیت آن در بهبود کارایی</li></ul>
+<ul><li>انواع کش: کش سمت کلاینت، کش سمت سرور، و کش توزیع‌شده (مانند Redis، Memcached)</li></ul>
+<ul><li>استراتژی‌های تخلیه کش (Cache Eviction): LRU، LFU</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از Redis در توییتر برای کش کردن تایم‌لاین‌ها</li></ul>
+
+<h3>فصل ۶: معماری سرویس‌های کوچک (Microservices)</h3>
+<ul><li>تعریف سرویس‌های کوچک و تفاوت با معماری یکپارچه (Monolithic)</li></ul>
+<ul><li>مزایا و معایب سرویس‌های کوچک</li></ul>
+<ul><li>ارتباط بین سرویس‌ها: REST، gRPC، و پیام‌رسانی (Message Queues)</li></ul>
+<ul><li>مثال‌های واقعی: معماری سرویس‌های کوچک در نتفلیکس و اوبر</li></ul>
+
+<h3>فصل ۷: پیام‌رسانی و صف‌ها</h3>
+<ul><li>مفهوم صف‌های پیام (Message Queues): RabbitMQ، Kafka، و SQS</li></ul>
+<ul><li>معماری‌های مبتنی بر رویداد (Event-Driven Architectures)</li></ul>
+<ul><li>پردازش داده‌های بلادرنگ در مقابل دسته‌ای (Batch Processing)</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از Kafka در لینکدین برای پردازش داده‌ها</li></ul>
+
+<p>---</p>
+
+<h2>بخش سوم: طراحی سیستم‌های مقیاس‌پذیر و قابل اعتماد</h2>
+<h3>فصل ۸: تعادل بار (Load Balancing)</h3>
+<ul><li>مفهوم تعادل بار و اهمیت آن در مقیاس‌پذیری</li></ul>
+<ul><li>انواع تعادل‌کننده‌های بار: سخت‌افزاری و نرم‌افزاری (مانند NGINX، HAProxy)</li></ul>
+<ul><li>الگوریتم‌های تعادل بار: Round Robin، Least Connections</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از AWS Elastic Load Balancer در آمازون</li></ul>
+
+<h3>فصل ۹: مقیاس‌پذیری افقی و عمودی</h3>
+<ul><li>تفاوت بین مقیاس‌پذیری افقی و عمودی</li></ul>
+<ul><li>چالش‌های مقیاس‌پذیری افقی: هماهنگی و مدیریت حالت</li></ul>
+<ul><li>ابزارهای مدیریت مقیاس‌پذیری: Kubernetes، Docker</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از Kubernetes در اسپاتیفای</li></ul>
+
+<h3>فصل ۱۰: مدیریت خرابی‌ها و تحمل خطا</h3>
+<ul><li>طراحی برای خرابی: افزونگی (Redundancy) و تکرار (Replication)</li></ul>
+<ul><li>مفهوم Failover و Fallback</li></ul>
+<ul><li>معماری‌های بدون تک‌نقطه خرابی (Single Point of Failure)</li></ul>
+<ul><li>مثال‌های واقعی: سیستم‌های تحمل خطای گوگل</li></ul>
+
+<p>---</p>
+
+<h2>بخش چهارم: موضوعات پیشرفته در طراحی سیستم</h2>
+<h3>فصل ۱۱: سیستم‌های توزیع‌شده</h3>
+<ul><li>چالش‌های سیستم‌های توزیع‌شده: هماهنگی، سازگاری، و پارتیشن‌بندی</li></ul>
+<ul><li>قضیه CAP و PACELC</li></ul>
+<ul><li>پروتکل‌های اجماع: Paxos، Raft</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از ZooKeeper در آپاچی هدوپ</li></ul>
+
+<h3>فصل ۱۲: پردازش داده‌های بزرگ</h3>
+<ul><li>مفاهیم پردازش داده‌های بزرگ: MapReduce، Spark</li></ul>
+<ul><li>جریان‌سازی داده‌ها (Data Streaming) در مقابل پردازش دسته‌ای</li></ul>
+<ul><li>ابزارهای پردازش داده: Apache Flink، Apache Storm</li></ul>
+<ul><li>مثال‌های واقعی: پردازش داده‌های توییتر با Spark</li></ul>
+
+<h3>فصل ۱۳: امنیت در طراحی سیستم</h3>
+<ul><li>اصول امنیتی: احراز هویت (Authentication) و مجوزدهی (Authorization)</li></ul>
+<ul><li>رمزنگاری و امنیت داده‌ها</li></ul>
+<ul><li>محافظت در برابر حملات DDoS</li></ul>
+<ul><li>مثال‌های واقعی: سیستم‌های امنیتی فیسبوک</li></ul>
+
+<h3>فصل ۱۴: نظارت و مانیتورینگ</h3>
+<ul><li>اهمیت نظارت بر سیستم‌ها: معیارها (Metrics)، لاگ‌ها (Logs)، و ردیابی (Tracing)</li></ul>
+<ul><li>ابزارهای مانیتورینگ: Prometheus، Grafana، ELK Stack</li></ul>
+<ul><li>مدیریت هشدارها و پاسخ به حوادث</li></ul>
+<ul><li>مثال‌های واقعی: استفاده از Prometheus در اوبر</li></ul>
+
+<p>---</p>
+
+<h2>بخش پنجم: آمادگی برای مصاحبه‌های طراحی سیستم</h2>
+<h3>فصل ۱۵: رویکرد حل مسئله در مصاحبه‌های طراحی سیستم</h3>
+<ul><li>چارچوب حل مسئله: شناسایی الزامات، تعریف APIها، و طراحی معماری</li></ul>
+<ul><li>مدیریت الزامات غیرکارکردی (Non-Functional Requirements)</li></ul>
+<ul><li>ترسیم معماری و توضیح تصمیمات</li></ul>
+<ul><li>مثال‌های واقعی: طراحی یک سیستم مشابه URL Shortener یا Twitter</li></ul>
+
+<h3>فصل ۱۶: نمونه سؤالات مصاحبه طراحی سیستم</h3>
+<ul><li>طراحی یک سیستم کوتاه‌کننده URL</li></ul>
+<ul><li>طراحی یک سیستم پیام‌رسان مانند WhatsApp</li></ul>
+<ul><li>طراحی یک سیستم توصیه‌گر مانند یوتیوب</li></ul>
+<ul><li>طراحی یک سیستم جستجو مانند گوگل</li></ul>
+
+<h3>فصل ۱۷: نکات و ترفندهای مصاحبه</h3>
+<ul><li>نحوه ارائه پاسخ‌های ساختاریافته</li></ul>
+<ul><li>مدیریت سؤالات مبهم و باز</li></ul>
+<ul><li>بحث در مورد تریدآف‌ها (Trade-offs) و تصمیم‌گیری</li></ul>
+<ul><li>تمرین با سناریوهای واقعی: آمازون، گوگل، و فیسبوک</li></ul>
+
+<p>---</p>
+
+<h2>بخش ششم: پروژه‌های عملی و مطالعات موردی</h2>
+<h3>فصل ۱۸: پروژه‌های عملی طراحی سیستم</h3>
+<ul><li>پروژه ۱: طراحی سیستم تایم‌لاین توییتر</li></ul>
+<ul><li>پروژه ۲: طراحی سیستم ذخیره‌سازی فایل مانند Dropbox</li></ul>
+<ul><li>پروژه ۳: طراحی سیستم پخش ویدئو مانند یوتیوب</li></ul>
+<ul><li>پروژه ۴: طراحی سیستم تجارت الکترونیک مانند آمازون</li></ul>
+
+<h3>فصل ۱۹: مطالعات موردی دنیای واقعی</h3>
+<ul><li>مطالعه موردی ۱: معماری فیسبوک برای مقیاس‌پذیری</li></ul>
+<ul><li>مطالعه موردی ۲: سیستم پیام‌رسانی WhatsApp</li></ul>
+<ul><li>مطالعه موردی ۳: سیستم جستجوی گوگل</li></ul>
+<ul><li>مطالعه موردی ۴: سیستم توصیه‌گر نتفلیکس</li></ul>
+
+<p>---</p>
+
+<h2>منابع پیشنهادی</h2>
+<ul><li><em>The System Design Primer</em> (منبع متن‌باز در GitHub)</li></ul>
+<ul><li><em>Designing Data-Intensive Applications</em> نوشته مارتین کلپمن</li></ul>
+<ul><li>دوره‌های آنلاین: Coursera، Udemy، و Educative.io</li></ul>
+<ul><li>وبلاگ‌های مهندسی شرکت‌های بزرگ: Netflix Tech Blog، Uber Engineering Blog</li></ul>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

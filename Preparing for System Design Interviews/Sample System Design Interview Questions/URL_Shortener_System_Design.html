@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طراحی سیستم کوتاه‌کننده URL برای مصاحبه‌های طراحی سیستم</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="طراحی سیستم کوتاه‌کننده URL برای مصاحبه‌های طراحی سیستم">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>طراحی سیستم کوتاه‌کننده URL برای مصاحبه‌های طراحی سیستم</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Preparing for System Design Interviews</span>
+<span>/</span>
+<span>Sample System Design Interview Questions</span>
+<span>/</span>
+<span>URL_Shortener_System_Design.html</span>
+                </div>
+
+                <h1>طراحی سیستم کوتاه‌کننده URL برای مصاحبه‌های طراحی سیستم</h1>
+
+<h2>مقدمه</h2>
+طراحی یک سیستم کوتاه‌کننده URL یکی از سوالات رایج در مصاحبه‌های طراحی سیستم است که توانایی کاندیدا در مدیریت نیازمندی‌های کارکردی و غیرکارکردی، طراحی معماری مقیاس‌پذیر، و حل چالش‌های فنی را ارزیابی می‌کند. این سیستم باید بتواند URLهای طولانی را به لینک‌های کوتاه تبدیل کند، ریدایرکت سریع ارائه دهد، و در برابر بار بالا و تهدیدات امنیتی مقاوم باشد. این سند به بررسی نیازمندی‌ها، معماری، اجزای سیستم، روش‌های تولید URL کوتاه، مدل‌سازی داده‌ها، مقیاس‌پذیری، امنیت، و نکات مصاحبه برای مهندسان نرم‌افزار فارسی‌زبان می‌پردازد.
+
+<p>---</p>
+
+<h2>نیازمندی‌های سیستم</h2>
+
+<h3>نیازمندی‌های کارکردی (Functional Requirements)</h3>
+<ul><li><strong>کوتاه کردن URL:</strong> کاربران می‌توانند یک URL طولانی را وارد کرده و یک URL کوتاه دریافت کنند.</li></ul>
+   - مثال: <code>https://example.com/very/long/path</code> → <code>https://short.ly/abc123</code>
+<ul><li><strong>ریدایرکت:</strong> با وارد کردن URL کوتاه، کاربر به URL اصلی هدایت می‌شود.</li></ul>
+<ul><li><strong>لینک‌های سفارشی:</strong> امکان ایجاد URLهای کوتاه سفارشی (مانند <code>short.ly/mycustomlink</code>).</li></ul>
+<ul><li><strong>آنالیتیکس:</strong> ارائه آمار کلیک‌ها (مانند تعداد کلیک‌ها، زمان کلیک، یا مکان).</li></ul>
+<ul><li><strong>انقضا:</strong> امکان تنظیم تاریخ انقضای URLهای کوتاه.</li></ul>
+
+<h3>نیازمندی‌های غیرکارکردی (Non-Functional Requirements)</h3>
+<ul><li><strong>مقیاس‌پذیری:</strong> پشتیبانی از میلیاردها URL و میلیون‌ها درخواست در ثانیه.</li></ul>
+<ul><li><strong>قابلیت اطمینان:</strong> آپ‌تایم 99.99% برای جلوگیری از قطعی سرویس.</li></ul>
+<ul><li><strong>عملکرد:</strong> زمان پاسخ‌گویی کمتر از 200 میلی‌ثانیه برای ریدایرکت.</li></ul>
+<ul><li><strong>امنیت:</strong> جلوگیری از سوءاستفاده (مانند لینک‌های مخرب یا اسپم).</li></ul>
+<ul><li><strong>قابلیت نگهداری:</strong> طراحی ماژولار برای سهولت توسعه و عیب‌یابی.</li></ul>
+
+<p>---</p>
+
+<h2>معماری سطح بالا</h2>
+
+<h3>اجزای سیستم</h3>
+<ul><li><strong>کلاینت:</strong> رابط کاربری (وب یا اپلیکیشن) و APIها برای تعامل با کاربران.</li></ul>
+<ul><li><strong>Load Balancer:</strong> توزیع ترافیک بین سرورهای اپلیکیشن برای مقیاس‌پذیری.</li></ul>
+<ul><li><strong>سرورهای اپلیکیشن:</strong> مدیریت منطق کسب‌وکار (تولید URL کوتاه، ریدایرکت، آنالیتیکس).</li></ul>
+<ul><li><strong>کش (Caching Layer):</strong> ذخیره‌سازی جفت‌های URL کوتاه و اصلی برای دسترسی سریع.</li></ul>
+<ul><li><strong>پایگاه داده:</strong> ذخیره‌سازی دائمی URLها، اطلاعات کاربران، و داده‌های آنالیتیکس.</li></ul>
+<ul><li><strong>سیستم آنالیتیکس:</strong> جمع‌آوری و پردازش داده‌های کلیک.</li></ul>
+<ul><li><strong>لایه امنیتی:</strong> فیلتر کردن لینک‌های مخرب و محدود کردن نرخ درخواست‌ها.</li></ul>
+
+<h3>دیاگرام معماری</h3>
+<pre><code>
+[کلاینت: وب/موبایل] <--> [Load Balancer]
+                             |
+                      [سرورهای اپلیکیشن]
+                             |
+                    ----------------------
+                    <td>                    </td>
+               [کش: Redis]         [پایگاه داده: DynamoDB]
+                    <td>                    </td>
+                [آنالیتیکس]         [فیلتر امنیتی]
+</code></pre>
+
+<p>---</p>
+
+<h2>تولید URL کوتاه و مدیریت برخورد (Collision)</h2>
+
+<h3>روش‌های تولید URL کوتاه</h3>
+<ul><li><strong>هشینگ (Hashing):</strong></li></ul>
+   - استفاده از الگوریتم‌های هش مانند MD5 یا SHA-1 برای تبدیل URL طولانی به یک رشته کوتاه (مانند 6-8 کاراکتر).
+   - <strong>مشکل:</strong> احتمال برخورد (دو URL مختلف به یک هش یکسان تبدیل شوند).
+   - <strong>راه‌حل:</strong> بررسی وجود کلید در پایگاه داده و تولید مجدد در صورت برخورد.
+<ul><li><strong>شمارنده افزایشی با Base62:</strong></li></ul>
+   - استفاده از یک شناسه عددی افزایشی (مانند 1001) و تبدیل آن به Base62 (a-z, A-Z, 0-9).
+   - <strong>فرمول:</strong> <code>short_url = encode_base62(incremental_id)</code>
+   - <strong>مزایا:</strong> تضمین یکتایی، بدون نیاز به بررسی برخورد.
+   - <strong>مثال:</strong> 1001 → <code>abc123</code>
+<ul><li><strong>ترکیب تصادفی:</strong> تولید رشته‌های تصادفی 6-8 کاراکتری و بررسی یکتایی در پایگاه داده.</li></ul>
+
+<h3>انتخاب روش</h3>
+<ul><li><strong>روش پیشنهادی:</strong> Base62 با شمارنده افزایشی.</li></ul>
+  - دلیل: سادگی، یکتایی تضمین‌شده، و مقیاس‌پذیری با استفاده از یک سرویس توزیع‌شده مانند ZooKeeper برای مدیریت شمارنده.
+
+<h3>طول URL کوتاه</h3>
+<ul><li>با 6 کاراکتر در Base62 (62^6 ≈ 56.8 میلیارد ترکیب)، می‌توان میلیاردها لینک را پشتیبانی کرد.</li></ul>
+<ul><li>برای مقیاس‌پذیری بیشتر، می‌توان طول را به 7 یا 8 کاراکتر افزایش داد.</li></ul>
+
+<p>---</p>
+
+<h2>مدل‌سازی داده‌ها و طراحی پایگاه داده</h2>
+
+<h3>ساختار داده‌ها</h3>
+<ul><li><strong>جدول URLها:</strong></li></ul>
+   - <strong>کلیدها:</strong> 
+     - <code>short_url</code> (کلید اصلی، رشته Base62)
+     - <code>original_url</code> (URL اصلی)
+     - <code>user_id</code> (شناسه کاربر، اختیاری)
+     - <code>created_at</code> (زمان ایجاد)
+     - <code>expires_at</code> (زمان انقضا، اختیاری)
+     - <code>click_count</code> (تعداد کلیک‌ها)
+   - <strong>مثال:</strong>
+     <pre><code>json
+     {
+       "short_url": "abc123",
+       "original_url": "https://example.com/long-url",
+       "user_id": "user123",
+       "created_at": "2025-07-12T12:00:00Z",
+       "expires_at": "2026-07-12T12:00:00Z",
+       "click_count": 150
+     }
+     </code></pre>
+<ul><li><strong>جدول آنالیتیکس:</strong></li></ul>
+   - <strong>کلیدها:</strong>
+     - <code>short_url</code> (کلید خارجی)
+     - <code>timestamp</code> (زمان کلیک)
+     - <code>ip_address</code> (آدرس IP کاربر)
+     - <code>user_agent</code> (اطلاعات دستگاه)
+   - <strong>مثال:</strong>
+     <pre><code>json
+     {
+       "short_url": "abc123",
+       "timestamp": "2025-07-12T12:01:00Z",
+       "ip_address": "192.168.1.1",
+       "user_agent": "Mozilla/5.0..."
+     }
+     </code></pre>
+
+<h3>انتخاب پایگاه داده</h3>
+<ul><li><strong>NoSQL (مانند DynamoDB یا MongoDB):</strong></li></ul>
+  - مناسب برای مقیاس‌پذیری افقی و دسترسی سریع.
+  - پشتیبانی از داده‌های غیرساختاریافته برای آنالیتیکس.
+<ul><li><strong>کش (Redis یا Memcached):</strong></li></ul>
+  - ذخیره جفت‌های <code>short_url</code> و <code>original_url</code> برای ریدایرکت سریع.
+<ul><li><strong>SQL (اختیاری):</strong></li></ul>
+  - برای داده‌های رابطه‌ای مانند اطلاعات کاربران یا گزارش‌های پیچیده.
+
+<p>---</p>
+
+<h2>طراحی API و جریان تعامل</h2>
+
+<h3>APIهای اصلی</h3>
+<ul><li><strong>ایجاد URL کوتاه:</strong></li></ul>
+   - <strong>درخواست:</strong> <code>POST /api/shorten</code>
+   - <strong>بدنه درخواست:</strong>
+     <pre><code>json
+     {
+       "original_url": "https://example.com/long-url",
+       "custom_alias": "mylink", // اختیاری
+       "expires_at": "2026-07-12T12:00:00Z" // اختیاری
+     }
+     </code></pre>
+   - <strong>پاسخ:</strong>
+     <pre><code>json
+     {
+       "short_url": "https://short.ly/abc123",
+       "original_url": "https://example.com/long-url",
+       "expires_at": "2026-07-12T12:00:00Z"
+     }
+     </code></pre>
+<ul><li><strong>ریدایرکت URL:</strong></li></ul>
+   - <strong>درخواست:</strong> <code>GET /:short_url</code>
+   - <strong>پاسخ:</strong> ریدایرکت 301 به URL اصلی.
+<ul><li><strong>دریافت آنالیتیکس:</strong></li></ul>
+   - <strong>درخواست:</strong> <code>GET /api/analytics/:short_url</code>
+   - <strong>پاسخ:</strong>
+     <pre><code>json
+     {
+       "short_url": "abc123",
+       "click_count": 150,
+       "last_clicked": "2025-07-12T12:01:00Z"
+     }
+     </code></pre>
+
+<h3>جریان تعامل</h3>
+<ul><li><strong>ایجاد URL کوتاه:</strong></li></ul>
+   - کاربر URL طولانی را ارسال می‌کند.
+   - سرور یک کلید کوتاه با Base62 تولید می‌کند.
+   - جفت URL در Redis و پایگاه داده ذخیره می‌شود.
+   - URL کوتاه به کاربر بازگردانده می‌شود.
+<ul><li><strong>ریدایرکت:</strong></li></ul>
+   - کاربر URL کوتاه را وارد می‌کند.
+   - سرور ابتدا Redis را بررسی می‌کند؛ اگر یافت نشد، به پایگاه داده مراجعه می‌کند.
+   - کاربر به URL اصلی هدایت شده و کلیک در آنالیتیکس ثبت می‌شود.
+<ul><li><strong>آنالیتیکس:</strong></li></ul>
+   - سرور داده‌های کلیک را از پایگاه داده یا سیستم آنالیتیکس جداگانه (مانند Kafka) بازیابی می‌کند.
+
+<p>---</p>
+
+<h2>مدیریت مقیاس‌پذیری، قابلیت اطمینان و تحمل خطا</h2>
+
+<h3>مقیاس‌پذیری</h3>
+<ul><li><strong>چالش:</strong> مدیریت میلیون‌ها درخواست در ثانیه و میلیاردها URL.</li></ul>
+<ul><li><strong>راه‌حل‌ها:</strong></li></ul>
+  - <strong>Load Balancer:</strong> توزیع ترافیک با AWS ALB یا Nginx.
+  - <strong>کش:</strong> استفاده از Redis برای کاهش بار پایگاه داده (95% درخواست‌های ریدایرکت از کش پاسخ داده می‌شود).
+  - <strong>پایگاه داده مقیاس‌پذیر:</strong> DynamoDB با پارتیشن‌بندی خودکار.
+  - <strong>مقیاس‌بندی افقی:</strong> افزودن سرورهای اپلیکیشن با Kubernetes.
+
+<h3>قابلیت اطمینان</h3>
+<ul><li><strong>چالش:</strong> جلوگیری از قطعی سرویس و از دست رفتن داده‌ها.</li></ul>
+<ul><li><strong>راه‌حل‌ها:</strong></li></ul>
+  - <strong>افزونگی (Redundancy):</strong> استفاده از چندین منطقه (Multi-Region) در AWS.
+  - <strong>پشتیبان‌گیری:</strong> ذخیره‌سازی داده‌ها در Replicaهای متعدد.
+  - <strong>Failover:</strong> جابجایی خودکار به سرورهای سالم با ابزارهایی مانند AWS Route 53.
+
+<h3>تحمل خطا</h3>
+<ul><li><strong>چالش:</strong> مدیریت خرابی سرورها یا پایگاه داده.</li></ul>
+<ul><li><strong>راه‌حل‌ها:</strong></li></ul>
+  - <strong>Circuit Breaker:</strong> جلوگیری از خرابی‌های زنجیره‌ای با ابزارهایی مانند Hystrix.
+  - <strong>Retry Logic:</strong> پیاده‌سازی تلاش مجدد برای درخواست‌های ناموفق.
+  - <strong>مانیتورینگ:</strong> استفاده از Prometheus و Grafana برای تشخیص سریع خرابی‌ها.
+
+<p>---</p>
+
+<h2>شناسایی و رفع گلوگاه‌های بالقوه</h2>
+
+<ul><li><strong>گلوگاه پایگاه داده:</strong></li></ul>
+   - <strong>مشکل:</strong> خواندن/نوشتن مکرر به پایگاه داده باعث تأخیر می‌شود.
+   - <strong>راه‌حل:</strong> استفاده از Redis برای کش کردن URLها و کاهش بار پایگاه داده.
+<ul><li><strong>نرخ تولید URL:</strong></li></ul>
+   - <strong>مشکل:</strong> تولید کلیدهای یکتا در مقیاس بالا چالش‌برانگیز است.
+   - <strong>راه‌حل:</strong> استفاده از ZooKeeper یا یک سرویس توزیع‌شده برای مدیریت شمارنده افزایشی.
+<ul><li><strong>ترافیک ریدایرکت:</strong></li></ul>
+   - <strong>مشکل:</strong> حجم بالای درخواست‌های ریدایرکت می‌تواند سرورها را تحت فشار قرار دهد.
+   - <strong>راه‌حل:</strong> استفاده از CDN (مانند Cloudflare) برای ریدایرکت سریع و کاهش بار سرور.
+
+<p>---</p>
+
+<h2>ملاحظات امنیتی</h2>
+
+<ul><li><strong>جلوگیری از لینک‌های مخرب:</strong></li></ul>
+   - <strong>راه‌حل:</strong> بررسی URLها در برابر لیست سیاه (مانند Google Safe Browsing).
+<ul><li><strong>محدودیت نرخ (Rate Limiting):</strong></li></ul>
+   - <strong>راه‌حل:</strong> محدود کردن تعداد درخواست‌های ایجاد URL برای هر کاربر با Nginx یا Redis.
+<ul><li><strong>احراز هویت:</strong></li></ul>
+   - <strong>راه‌حل:</strong> اجباری کردن ورود کاربر برای ایجاد لینک‌های سفارشی با OAuth یا JWT.
+<ul><li><strong>رمزنگاری:</strong></li></ul>
+   - <strong>راه‌حل:</strong> استفاده از HTTPS (TLS 1.3) برای تمام ارتباطات و رمزنگاری داده‌های حساس در پایگاه داده.
+
+<p>---</p>
+
+<h2>گسترش سیستم برای آنالیتیکس و لینک‌های سفارشی</h2>
+
+<h3>آنالیتیکس</h3>
+<ul><li><strong>نیازمندی:</strong> ثبت تعداد کلیک‌ها، زمان، مکان و دستگاه کاربران.</li></ul>
+<ul><li><strong>طراحی:</strong></li></ul>
+  - ذخیره داده‌های کلیک در یک پایگاه داده جداگانه (مانند Elasticsearch یا Kafka).
+  - استفاده از یک سیستم پردازش جریان (مانند Apache Kafka) برای تحلیل بلادرنگ.
+  - ارائه API برای گزارش‌گیری (مانند تعداد کلیک‌ها در یک بازه زمانی).
+<ul><li><strong>مثال:</strong></li></ul>
+  - گزارش تعداد کلیک‌های یک URL کوتاه در 24 ساعت گذشته.
+
+<h3>لینک‌های سفارشی</h3>
+<ul><li><strong>نیازمندی:</strong> امکان ایجاد URLهای کوتاه دلخواه توسط کاربران.</li></ul>
+<ul><li><strong>طراحی:</strong></li></ul>
+  - بررسی یکتایی لینک سفارشی در پایگاه داده.
+  - محدود کردن دسترسی به لینک‌های سفارشی با احراز هویت.
+  - <strong>مثال:</strong> کاربر می‌تواند <code>short.ly/mycustomlink</code> را ایجاد کند.
+
+<p>---</p>
+
+<h2>نکات برای ارائه طراحی در مصاحبه</h2>
+
+<ul><li><strong>شروع با نیازمندی‌ها:</strong></li></ul>
+   - ابتدا نیازمندی‌های کارکردی و غیرکارکردی را با مصاحبه‌کننده تأیید کنید.
+   - مثال: آیا لینک‌های سفارشی یا آنالیتیکس موردنیاز است؟
+<ul><li><strong>ارائه دیاگرام معماری:</strong></li></ul>
+   - یک دیاگرام ساده (مانند C4) رسم کنید و اجزا (مانند Load Balancer، Redis، DynamoDB) را توضیح دهید.
+<ul><li><strong>توضیح تریدآف‌ها:</strong></li></ul>
+   - مزایا و معایب هر تصمیم (مانند هشینگ در مقابل Base62) را بحث کنید.
+<ul><li><strong>تمرکز بر NFRها:</strong></li></ul>
+   - نشان دهید که چگونه مقیاس‌پذیری، عملکرد و امنیت را مدیریت می‌کنید.
+   - مثال: استفاده از Redis برای کاهش تأخیر ریدایرکت.
+<ul><li><strong>جزئیات فنی:</strong></li></ul>
+   - الگوریتم تولید URL، مدل داده، و انتخاب فناوری‌ها را با جزئیات توضیح دهید.
+<ul><li><strong>ارتباط شفاف:</strong></li></ul>
+   - مراحل طراحی را به‌صورت ساختاریافته (نیازمندی‌ها → معماری → چالش‌ها) ارائه دهید.
+   - از اصطلاحات فنی دقیق استفاده کنید و سوالات مصاحبه‌کننده را پاسخ دهید.
+
+<p>---</p>
+
+<h2>خلاصه</h2>
+طراحی یک سیستم کوتاه‌کننده URL نیازمند توجه به نیازمندی‌های کارکردی (مانند کوتاه کردن و ریدایرکت) و غیرکارکردی (مانند مقیاس‌پذیری و امنیت) است. معماری شامل Load Balancer، سرورهای اپلیکیشن، کش، و پایگاه داده مقیاس‌پذیر است. تولید URL کوتاه با Base62 و مدیریت گلوگاه‌ها با کش و CDN امکان‌پذیر است. امنیت با فیلتر URL، محدودیت نرخ و HTTPS تضمین می‌شود. در مصاحبه، تمرکز بر نیازمندی‌ها، ارائه دیاگرام واضح، بحث درباره تریدآف‌ها و توضیح جزئیات فنی کلیدی است. با این رویکرد، می‌توانید یک سیستم مقیاس‌پذیر، قابل‌اعتماد و امن طراحی کنید که برای مصاحبه‌های طراحی سیستم مناسب باشد.
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

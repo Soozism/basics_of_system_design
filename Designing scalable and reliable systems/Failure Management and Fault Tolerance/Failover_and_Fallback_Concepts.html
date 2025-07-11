@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مفهوم Failover و Fallback در طراحی سیستم</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="مفهوم Failover و Fallback در طراحی سیستم">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>مفهوم Failover و Fallback در طراحی سیستم</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Designing scalable and reliable systems</span>
+<span>/</span>
+<span>Failure Management and Fault Tolerance</span>
+<span>/</span>
+<span>Failover_and_Fallback_Concepts.html</span>
+                </div>
+
+                <h1>مفهوم Failover و Fallback در طراحی سیستم</h1>
+
+<p>این سند به بررسی مفاهیم <strong>Failover</strong> و <strong>Fallback</strong> در طراحی سیستم‌های توزیع‌شده و مقیاس‌پذیر می‌پردازد. هدف این است که با ارائه تعاریف، انواع، مکانیزم‌ها، مقایسه، سناریوهای واقعی و بهترین روش‌ها، یک راهنمای جامع و آموزشی برای یادگیری اصول طراحی سیستم فراهم شود. این محتوا به زبان فارسی و با فرمت مارک‌داون ارائه شده است تا برای مستندسازی آموزشی مناسب باشد.</p>
+
+<p>---</p>
+
+<h2>تعریف Failover</h2>
+
+<h3>Failover چیست و چرا مهم است؟</h3>
+<strong>Failover</strong> (انتقال به حالت اضطراری) فرآیندی است که در آن سیستم در صورت خرابی یک جزء (مانند سرور، پایگاه داده یا سرویس) به‌طور خودکار یا دستی به یک جزء جایگزین (مانند سرور پشتیبان) سوئیچ می‌کند تا خدمات بدون وقفه ادامه یابند. هدف Failover، تضمین <strong>دسترس‌پذیری بالا (High Availability)</strong> و <strong>تحمل‌پذیری خطا (Fault Tolerance)</strong> است.
+
+<strong>چرا مهم است؟</strong>
+<ul><li><strong>کاهش قطعی سرویس:</strong> در سیستم‌های حیاتی (مانند تجارت الکترونیک یا بانکداری)، حتی چند دقیقه قطعی می‌تواند خسارات مالی و اعتباری به همراه داشته باشد.</li></ul>
+<ul><li><strong>تجربه کاربری:</strong> Failover از اختلال در تجربه کاربران جلوگیری می‌کند.</li></ul>
+<ul><li><strong>قابلیت اطمینان:</strong> تضمین می‌کند که سیستم در برابر خرابی‌های سخت‌افزاری، نرم‌افزاری یا شبکه‌ای مقاوم است.</li></ul>
+<ul><li><strong>مثال:</strong> اگر سرور اصلی یک وب‌سایت تجارت الکترونیک خراب شود، Failover ترافیک را به سرور پشتیبان هدایت می‌کند.</li></ul>
+
+<h3>انواع Failover</h3>
+<ul><li><strong>Failover خودکار (Automatic Failover):</strong></li></ul>
+   - <strong>توضیح:</strong> سیستم به‌طور خودکار خرابی را تشخیص داده و به جزء جایگزین سوئیچ می‌کند بدون نیاز به دخالت انسانی.
+   - <strong>مزایا:</strong> سرعت بالا و کاهش زمان قطعی.
+   - <strong>معایب:</strong> نیاز به تنظیمات پیچیده و ابزارهای پیشرفته.
+   - <strong>مثال:</strong> در Kubernetes، اگر یک پاد (Pod) خراب شود، ReplicaSet به‌طور خودکار پاد جدیدی ایجاد می‌کند.
+<ul><li><strong>Failover دستی (Manual Failover):</strong></li></ul>
+   - <strong>توضیح:</strong> نیاز به دخالت انسانی برای شناسایی خرابی و انتقال به جزء جایگزین دارد.
+   - <strong>مزایا:</strong> کنترل بیشتر و مناسب برای سیستم‌های کمتر حیاتی.
+   - <strong>معایب:</strong> زمان‌بر و مستعد خطای انسانی.
+   - <strong>مثال:</strong> مدیر سیستم به‌صورت دستی ترافیک را از یک سرور معیوب به سرور پشتیبان هدایت می‌کند.
+
+<h3>مکانیزم‌های رایج Failover</h3>
+<ul><li><strong>متعادل‌سازهای بار (Load Balancers):</strong></li></ul>
+   - ابزارهایی مانند AWS ELB یا NGINX بررسی‌های سلامت (Health Checks) را انجام می‌دهند و ترافیک را به سرورهای سالم هدایت می‌کنند.
+   - <strong>مثال:</strong> AWS ELB در صورت خرابی یک نمونه EC2، ترافیک را به نمونه‌های دیگر هدایت می‌کند.
+<ul><li><strong>سرورهای پشتیبان (Backup Servers):</strong></li></ul>
+   - سرورهای آماده به کار (Standby) که در حالت غیرفعال هستند تا در صورت خرابی فعال شوند.
+   - <strong>مثال:</strong> سرورهای Hot Standby در پایگاه داده‌های PostgreSQL.
+<ul><li><strong>خدمات خوشه‌ای (Clustered Services):</strong></li></ul>
+   - استفاده از خوشه‌هایی که چندین گره دارند و در صورت خرابی یکی، گره‌های دیگر وظایف را بر عهده می‌گیرند.
+   - <strong>مثال:</strong> خوشه‌های Apache Kafka برای مدیریت پیام‌ها در صورت خرابی یک گره.
+
+<h3>مثال‌ها</h3>
+<ul><li><strong>Failover پایگاه داده:</strong> در Amazon RDS، اگر گره اصلی (Master) خراب شود، Failover خودکار به گره پشتیبان (Read Replica) در منطقه دسترسی دیگر انجام می‌شود.</li></ul>
+<ul><li><strong>Failover سرویس در Kubernetes:</strong> اگر یک پاد در یک سرویس میکروسرویس خراب شود، Kubernetes به‌طور خودکار پاد جدیدی ایجاد کرده و ترافیک را به آن هدایت می‌کند.</li></ul>
+<ul><li><strong>Failover شبکه:</strong> استفاده از چندین ارائه‌دهنده CDN (مانند Cloudflare و Akamai) برای هدایت ترافیک در صورت خرابی یک مسیر شبکه‌ای.</li></ul>
+
+<p>---</p>
+
+<h2>تعریف Fallback</h2>
+
+<h3>Fallback چیست و چگونه با Failover متفاوت است؟</h3>
+<strong>Fallback</strong> (بازگشت به حالت جایگزین) به معنای ارائه یک راه‌حل جایگزین یا حالت کاهش‌یافته (Degraded Mode) برای حفظ عملکرد سیستم در هنگام خرابی است، بدون اینکه لزوماً به یک جزء کاملاً جایگزین سوئیچ شود. برخلاف Failover که به یک سیستم یا سرور دیگر منتقل می‌شود، Fallback معمولاً شامل استفاده از داده‌های کش‌شده، پاسخ‌های پیش‌فرض یا حالت‌های ساده‌تر است.
+
+<strong>تفاوت با Failover:</strong>
+<ul><li><strong>Failover:</strong> انتقال کامل به یک سیستم یا سرور جایگزین (مانند سرور پشتیبان).</li></ul>
+<ul><li><strong>Fallback:</strong> ارائه پاسخ محدود یا جایگزین بدون تغییر سیستم اصلی.</li></ul>
+<ul><li><strong>مثال:</strong> اگر API اصلی از کار بیفتد، Failover به یک سرور دیگر سوئیچ می‌کند، در حالی که Fallback ممکن است داده‌های کش‌شده را بازگرداند.</li></ul>
+
+<h3>موارد استفاده Fallback</h3>
+<ul><li><strong>استفاده از داده‌های کش‌شده:</strong></li></ul>
+   - اگر سرویس اصلی در دسترس نباشد، سیستم از داده‌های ذخیره‌شده در کش (مانند Redis) استفاده می‌کند.
+   - <strong>مثال:</strong> یک وب‌سایت خبری داده‌های کش‌شده مقالات را نمایش می‌دهد اگر سرور اصلی پاسخ ندهد.
+<ul><li><strong>حالت کاهش‌یافته (Degraded Mode):</strong></li></ul>
+   - ارائه عملکرد محدود به جای قطعی کامل سرویس.
+   - <strong>مثال:</strong> در یک اپلیکیشن پخش ویدئو، اگر سرور توصیه ویدئو خراب شود، سیستم ویدئوهای پرطرفدار را نمایش می‌دهد.
+<ul><li><strong>پاسخ‌های پیش‌فرض:</strong></li></ul>
+   - ارائه پاسخ‌های ثابت یا پیش‌فرض در صورت خرابی.
+   - <strong>مثال:</strong> در یک اپلیکیشن پرداخت، اگر سرویس تأیید پرداخت خراب شود، سیستم پیام "لطفاً بعداً تلاش کنید" را نمایش می‌دهد.
+
+<h3>مزایا در بهبود تجربه کاربری</h3>
+<ul><li><strong>جلوگیری از قطعی کامل:</strong> کاربران به جای خطا، یک پاسخ جایگزین دریافت می‌کنند.</li></ul>
+<ul><li><strong>تجربه کاربری بهتر:</strong> حالت‌های کاهش‌یافته یا داده‌های کش‌شده تجربه‌ای روان‌تر ارائه می‌دهند.</li></ul>
+<ul><li><strong>کاهش فشار بر سیستم:</strong> Fallback می‌تواند بار روی سیستم را کاهش دهد تا زمان بازیابی.</li></ul>
+<ul><li><strong>مثال:</strong> نتفلیکس در صورت خرابی سرویس توصیه، لیست ویدئوهای پرطرفدار را نمایش می‌دهد تا کاربران همچنان بتوانند محتوا تماشا کنند.</li></ul>
+
+<p>---</p>
+
+<h2>مقایسه بین Failover و Fallback</h2>
+
+<p><td> <strong>معیار</strong>                </td> <strong>Failover</strong>                              <td> <strong>Fallback</strong>                              </td>
+<td>--------------------------</td>------------------------------------------<td>------------------------------------------</td>
+<td> <strong>تعریف</strong>               </td> انتقال به یک سیستم یا سرور جایگزین      <td> ارائه پاسخ جایگزین یا حالت کاهش‌یافته   </td>
+<td> <strong>هدف</strong>                 </td> حفظ دسترس‌پذیری کامل                   <td> حفظ عملکرد محدود و جلوگیری از خطا        </td>
+<td> <strong>پیچیدگی</strong>            </td> پیچیده‌تر، نیاز به اجزای اضافی         <td> ساده‌تر، استفاده از داده‌های موجود       </td>
+<td> <strong>مکانیزم‌ها</strong>          </td> متعادل‌سازهای بار، سرورهای پشتیبان     <td> کش، پاسخ‌های پیش‌فرض، حالت کاهش‌یافته  </td>
+<td> <strong>زمان پاسخ</strong>           </td> سریع، اما ممکن است تأخیر داشته باشد     <td> بسیار سریع، بدون نیاز به سوئیچ         </td>
+<td> <strong>مثال</strong>                </td> انتقال به سرور پشتیبان در AWS          <td> نمایش داده‌های کش‌شده از Redis          </td></p>
+
+<strong>تفاوت کلیدی:</strong> Failover بر انتقال کامل به یک سیستم جایگزین تمرکز دارد، در حالی که Fallback بر ارائه پاسخ‌های محدود یا جایگزین برای حفظ تجربه کاربری تمرکز می‌کند.
+
+<p>---</p>
+
+<h2>سناریوهای واقعی</h2>
+
+<ul><li><strong>سناریوی Failover (آمازون - تجارت الکترونیک):</strong></li></ul>
+   - <strong>وضعیت:</strong> سرور اصلی پایگاه داده (Amazon RDS) در یک منطقه دسترسی (us-east-1) خراب می‌شود.
+   - <strong>Failover:</strong> AWS RDS به‌طور خودکار به گره پشتیبان در منطقه دسترسی دیگر (us-east-2) سوئیچ می‌کند. ترافیک کاربران بدون وقفه به گره جدید هدایت می‌شود.
+   - <strong>نتیجه:</strong> کاربران بدون متوجه شدن خرابی، به خرید ادامه می‌دهند.
+
+<ul><li><strong>سناریوی Fallback (نتفلیکس - پخش ویدئو):</strong></li></ul>
+   - <strong>وضعیت:</strong> سرویس توصیه ویدئو نتفلیکس به دلیل بار زیاد از کار می‌افتد.
+   - <strong>Fallback:</strong> سیستم به حالت کاهش‌یافته سوئیچ کرده و لیست ویدئوهای پرطرفدار را از Redis نمایش می‌دهد.
+   - <strong>نتیجه:</strong> کاربران همچنان می‌توانند ویدئو تماشا کنند، هرچند توصیه‌های شخصی‌سازی‌شده در دسترس نیست.
+
+<ul><li><strong>ترکیب Failover و Fallback (گوگل - موتور جستجو):</strong></li></ul>
+   - <strong>وضعیت:</strong> یکی از سرورهای Google Search در یک مرکز داده خراب می‌شود.
+   - <strong>Failover:</strong> ترافیک به سرورهای دیگر در مرکز داده‌های دیگر هدایت می‌شود.
+   - <strong>Fallback:</strong> اگر پاسخ‌ها به‌موقع دریافت نشوند، نتایج کش‌شده از جستجوهای قبلی نمایش داده می‌شوند.
+   - <strong>نتیجه:</strong> کاربران نتایج جستجو را بدون تأخیر دریافت می‌کنند.
+
+<p>---</p>
+
+<h2>بهترین روش‌ها برای طراحی سیستم‌های مقاوم با Failover و Fallback</h2>
+
+<ul><li><strong>پیاده‌سازی Failover خودکار:</strong></li></ul>
+   - از ابزارهایی مانند AWS ELB، Kubernetes یا Apache ZooKeeper برای تشخیص خودکار خرابی‌ها و انتقال به اجزای جایگزین استفاده کنید.
+   - بررسی‌های سلامت (Health Checks) را با بازه‌های کوتاه (مانند ۵ ثانیه) تنظیم کنید.
+   - <strong>مثال:</strong> تنظیم Health Checks در AWS ELB برای حذف نمونه‌های EC2 معیوب.
+
+<ul><li><strong>طراحی Fallback‌های هوشمند:</strong></li></ul>
+   - داده‌های مهم را در کش (مانند Redis یا Memcached) ذخیره کنید تا در صورت خرابی استفاده شوند.
+   - حالت‌های کاهش‌یافته را برای حفظ تجربه کاربری طراحی کنید (مانند نمایش محتوای عمومی به جای محتوای شخصی‌سازی‌شده).
+   - <strong>مثال:</strong> استفاده از Redis برای ذخیره داده‌های کش‌شده در یک وب‌سایت خبری.
+
+<ul><li><strong>مانیتورینگ جامع:</strong></li></ul>
+   - از ابزارهایی مانند Prometheus، Grafana یا CloudWatch برای رصد خرابی‌ها و معیارهای کلیدی (مانند تأخیر و نرخ خطا) استفاده کنید.
+   - هشدارهای خودکار برای اطلاع‌رسانی به تیم‌های عملیاتی تنظیم کنید.
+   - <strong>مثال:</strong> تنظیم هشدار در CloudWatch برای اطلاع از خرابی سرورها.
+
+<ul><li><strong>تست خرابی‌ها:</strong></li></ul>
+   - از تکنیک‌های Chaos Engineering (مانند Netflix Chaos Monkey) برای شبیه‌سازی خرابی‌ها و تست Failover و Fallback استفاده کنید.
+   - <strong>مثال:</strong> غیرفعال کردن تصادفی سرورها در یک محیط تست برای بررسی رفتار سیستم.
+
+<ul><li><strong>بهینه‌سازی هزینه‌ها:</strong></li></ul>
+   - از منابع پشتیبان به‌صورت پویا (مانند Auto Scaling در AWS) استفاده کنید تا هزینه‌ها کاهش یابد.
+   - برای Fallback، داده‌های کش‌شده را بهینه کنید تا مصرف حافظه کاهش یابد.
+   - <strong>مثال:</strong> استفاده از نمونه‌های Spot در AWS برای سرورهای پشتیبان.
+
+<ul><li><strong>امنیت:</strong></li></ul>
+   - ارتباطات بین گره‌های Failover را با TLS رمزنگاری کنید.
+   - دسترسی‌ها را با RBAC (Role-Based Access Control) محدود کنید.
+   - <strong>مثال:</strong> استفاده از AWS KMS برای رمزنگاری داده‌های کش‌شده.
+
+<ul><li><strong>ترکیب Failover و Fallback:</strong></li></ul>
+   - از Failover برای سیستم‌های حیاتی و Fallback برای بهبود تجربه کاربری در شرایط غیرحیاتی استفاده کنید.
+   - <strong>مثال:</strong> در یک اپلیکیشن پرداخت، Failover به سرور پشتیبان برای پردازش تراکنش‌ها و Fallback به پیام خطا برای کاربران در صورت خرابی کامل.
+
+<p>---</p>
+
+<h2>خلاصه و نکات کلیدی</h2>
+
+<h3>خلاصه</h3>
+<ul><li><strong>Failover:</strong> انتقال به سیستم یا سرور جایگزین برای حفظ دسترس‌پذیری کامل در صورت خرابی.</li></ul>
+<ul><li><strong>Fallback:</strong> ارائه پاسخ‌های جایگزین یا حالت کاهش‌یافته برای حفظ عملکرد محدود.</li></ul>
+<ul><li><strong>مقایسه:</strong> Failover بر سوئیچ به اجزای جایگزین تمرکز دارد، در حالی که Fallback بر پاسخ‌های محدود برای بهبود تجربه کاربری تمرکز می‌کند.</li></ul>
+<ul><li><strong>مثال‌های واقعی:</strong> آمازون از Failover در RDS و نتفلیکس از Fallback برای نمایش محتوای کش‌شده استفاده می‌کنند.</li></ul>
+<ul><li><strong>درس کلیدی:</strong> ترکیب Failover و Fallback برای طراحی سیستم‌های مقاوم و کاربرپسند ضروری است.</li></ul>
+
+<h3>نکات کلیدی برای مهندسان</h3>
+<ul><li><strong>اتوماسیون Failover:</strong> از ابزارهای خودکار مانند Kubernetes و AWS ELB برای کاهش زمان قطعی استفاده کنید.</li></ul>
+<ul><li><strong>Fallback هوشمند:</strong> داده‌های کش‌شده و حالت‌های کاهش‌یافته را برای بهبود تجربه کاربری پیاده‌سازی کنید.</li></ul>
+<ul><li><strong>مانیتورینگ و تست:</strong> خرابی‌ها را شبیه‌سازی کرده و معیارهای کلیدی را رصد کنید.</li></ul>
+<ul><li><strong>بهینه‌سازی منابع:</strong> از Auto Scaling و منابع پویا برای کاهش هزینه‌ها استفاده کنید.</li></ul>
+<ul><li><strong>امنیت:</strong> ارتباطات و داده‌های کش‌شده را رمزنگاری کنید.</li></ul>
+
+<p>---</p>
+
+<h2>منابع پیشنهادی برای مطالعه بیشتر</h2>
+<ul><li><em>Designing Data-Intensive Applications</em> نوشته Martin Kleppmann: کتابی جامع برای یادگیری سیستم‌های توزیع‌شده.</li></ul>
+<ul><li><em>Site Reliability Engineering</em> نوشته Google: راهنمایی برای طراحی سیستم‌های قابل‌اعتماد.</li></ul>
+<ul><li>وبلاگ‌های مهندسی:</li></ul>
+   - <em>AWS Architecture Blog</em>: مقالات در مورد Failover در AWS.
+   - <em>Netflix Tech Blog</em>: توضیحات در مورد Chaos Engineering و Fallback.
+<ul><li>مستندات رسمی:</li></ul>
+   - <a href="https://docs.aws.amazon.com/elasticloadbalancing/">AWS ELB Documentation</a>
+   - <a href="https://kubernetes.io/docs/">Kubernetes Documentation</a>
+   - <a href="https://redis.io/documentation">Redis Documentation</a>
+<ul><li>دوره‌های آنلاین:</li></ul>
+   - <em>Grokking the System Design Interview</em> در DesignGuru.io
+   - <em>Site Reliability Engineering</em> در Coursera
+
+<p>---</p>
+
+<p>این سند مفاهیم Failover و Fallback را به‌صورت جامع توضیح داده و برای مهندسان علاقه‌مند به طراحی سیستم‌های مقیاس‌پذیر و مقاوم مناسب است. در صورت نیاز به جزئیات بیشتر یا مثال‌های دیگر، لطفاً اطلاع دهید!</p>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>

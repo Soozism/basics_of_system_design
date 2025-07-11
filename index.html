@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آموزش طراحی سیستم - راهنمای جامع</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">خانه</a></li>
+                    <li><a href="#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="#main-components">اجزای اصلی</a></li>
+                    <li><a href="#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                <h3>فهرست مطالب</h3>
+                <ul>
+                    <li><a href="#introduction">مقدمه</a></li>
+                    <li><a href="#basic-concepts">مفاهیم پایه‌ای</a></li>
+                    <li><a href="#main-components">اجزای اصلی</a></li>
+                    <li><a href="#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="#interviews">آمادگی مصاحبه</a></li>
+                    <li><a href="#projects">پروژه‌های عملی</a></li>
+                    <li><a href="#resources">منابع</a></li>
+                </ul>
+                
+                <div style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 6px; border: 1px solid #0ea5e9;">
+                    <h4 style="color: #0ea5e9; margin-bottom: 0.5rem;">دسترسی سریع</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">برای مشاهده فهرست کامل صفحات:</p>
+                    <a href="sitemap.html" class="btn btn-secondary" style="width: 100%; text-align: center; display: block;">مشاهده همه صفحات</a>
+                </div>
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+                    <span>/</span>
+                    <span>سرفصل‌های آموزش</span>
+                </div>
+
+                <h1>سرفصل‌های طراحی سیستم برای مهندسی نرم‌افزار</h1>
+
+                <div class="alert alert-info">
+                    <strong>توجه:</strong> این سند به‌عنوان یک راهنمای جامع برای یادگیری طراحی سیستم از صفر طراحی شده است. ساختار زیر با الهام از منابع معتبر مانند The System Design Primer و Designing Data-Intensive Applications ایجاد شده و برای آموزش مفاهیم معماری نرم‌افزار به‌صورت کامل و ساختاریافته مناسب است.
+                </div>
+
+                <section id="introduction">
+                    <h2>معرفی</h2>
+                    <p>این سرفصل‌ها هم برای آمادگی مصاحبه‌های شغلی و هم برای کسب دانش عملی در معماری سیستم‌های دنیای واقعی مناسب هستند.</p>
+                </section>
+
+                <section id="basic-concepts">
+                    <h2>بخش اول: مفاهیم پایه‌ای طراحی سیستم</h2>
+                    
+                    <div class="card">
+                        <h3>فصل ۱: مقدمه‌ای بر طراحی سیستم</h3>
+                        <ul>
+                            <li><a href="basic-concepts/introduction/system-design-definition.html">تعریف طراحی سیستم و اهمیت آن در مهندسی نرم‌افزار</a></li>
+                            <li><a href="basic-concepts/introduction/small-scale-vs-large-scale.html">تفاوت بین طراحی سیستم در مقیاس کوچک و بزرگ</a></li>
+                            <li><a href="basic-concepts/introduction/core-principles.html">اصول اولیه معماری نرم‌افزار (مانند مقیاس‌پذیری، قابلیت اطمینان، و کارایی)</a></li>
+                            <li><a href="basic-concepts/introduction/real-world-architectures.html">مروری بر معماری‌های دنیای واقعی (مانند فیسبوک، توییتر، و آمازون)</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۲: اجزای اصلی معماری نرم‌افزار</h3>
+                        <ul>
+                            <li><a href="basic-concepts/architecture/architecture-layers.html">معرفی لایه‌های معماری: لایه ارائه، منطق تجاری، و دسترسی به داده‌ها</a></li>
+                            <li><a href="basic-concepts/architecture/separation-of-concerns.html">مفهوم جداسازی وظایف (Separation of Concerns)</a></li>
+                            <li><a href="basic-concepts/architecture/client-server-systems.html">معماری‌های کلاینت-سرور، بدون حالت و حالت‌دار</a></li>
+                            <li><a href="basic-concepts/architecture/youtube-netflix-architecture.html">مثال‌های واقعی: معماری‌های یوتیوب و نتفلیکس</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۳: مفاهیم کلیدی در طراحی سیستم</h3>
+                        <ul>
+                            <li><a href="basic-concepts/key-concepts/scalability.html">مقیاس‌پذیری (Scalability): افقی و عمودی</a></li>
+                            <li><a href="basic-concepts/key-concepts/reliability.html">قابلیت اطمینان (Reliability) و تحمل خطا (Fault Tolerance)</a></li>
+                            <li><a href="basic-concepts/key-concepts/availability.html">دسترسی‌پذیری (Availability) و توافق‌نامه سطح خدمات (SLA)</a></li>
+                            <li><a href="basic-concepts/key-concepts/performance.html">کارایی (Performance) و تأخیر (Latency) در مقابل توان عملیاتی (Throughput)</a></li>
+                            <li><a href="basic-concepts/key-concepts/cap-theorem.html">مدیریت داده‌ها: سازگاری در مقابل دسترسی‌پذیری (قضیه CAP)</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="main-components">
+                    <h2>بخش دوم: اجزای اصلی سیستم‌های مقیاس‌پذیر</h2>
+                    
+                    <div class="card">
+                        <h3>فصل ۴: پایگاه‌های داده و ذخیره‌سازی</h3>
+                        <ul>
+                            <li><a href="main-components/databases/relational-vs-nosql.html">پایگاه‌های داده رابطه‌ای در مقابل غیررابطه‌ای (NoSQL)</a></li>
+                            <li><a href="main-components/databases/choosing-database.html">انتخاب پایگاه داده مناسب: MySQL، PostgreSQL، MongoDB، Cassandra</a></li>
+                            <li><a href="main-components/databases/sharding-partitioning.html">شاردینگ (Sharding) و پارتیشن‌بندی (Partitioning)</a></li>
+                            <li><a href="main-components/databases/indexing-optimization.html">ایندکس‌گذاری (Indexing) و بهینه‌سازی پرس‌وجوها</a></li>
+                            <li><a href="main-components/databases/case-studies.html">مثال‌های واقعی: استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۵: کشینگ (Caching)</h3>
+                        <ul>
+                            <li><a href="main-components/caching/caching-performance.html">مفهوم کشینگ و اهمیت آن در بهبود کارایی</a></li>
+                            <li><a href="main-components/caching/types-of-caching.html">انواع کش: کش سمت کلاینت، کش سمت سرور، و کش توزیع‌شده</a></li>
+                            <li><a href="main-components/caching/cache-eviction.html">استراتژی‌های تخلیه کش (Cache Eviction): LRU، LFU</a></li>
+                            <li><a href="main-components/caching/twitter-redis.html">مثال‌های واقعی: استفاده از Redis در توییتر برای کش کردن تایم‌لاین‌ها</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۶: معماری سرویس‌های کوچک (Microservices)</h3>
+                        <ul>
+                            <li><a href="main-components/microservices/microservices-vs-monolithic.html">تعریف سرویس‌های کوچک و تفاوت با معماری یکپارچه</a></li>
+                            <li><a href="main-components/microservices/advantages-disadvantages.html">مزایا و معایب سرویس‌های کوچک</a></li>
+                            <li><a href="main-components/microservices/communication.html">ارتباط بین سرویس‌ها: REST، gRPC، و پیام‌رسانی</a></li>
+                            <li><a href="main-components/microservices/netflix-uber-examples.html">مثال‌های واقعی: معماری سرویس‌های کوچک در نتفلیکس و اوبر</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۷: پیام‌رسانی و صف‌ها</h3>
+                        <ul>
+                            <li><a href="main-components/messaging/message-queues.html">مفهوم صف‌های پیام: RabbitMQ، Kafka، و SQS</a></li>
+                            <li><a href="main-components/messaging/event-driven.html">معماری‌های مبتنی بر رویداد (Event-Driven Architectures)</a></li>
+                            <li><a href="main-components/messaging/realtime-vs-batch.html">پردازش داده‌های بلادرنگ در مقابل دسته‌ای</a></li>
+                            <li><a href="main-components/messaging/kafka-linkedin.html">مثال‌های واقعی: استفاده از Kafka در لینکدین برای پردازش داده‌ها</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="scalable-systems">
+                    <h2>بخش سوم: طراحی سیستم‌های مقیاس‌پذیر و قابل اعتماد</h2>
+                    
+                    <div class="card">
+                        <h3>فصل ۸: تعادل بار (Load Balancing)</h3>
+                        <ul>
+                            <li><a href="scalable-systems/load-balancing/concepts.html">مفهوم تعادل بار و اهمیت آن در مقیاس‌پذیری</a></li>
+                            <li><a href="scalable-systems/load-balancing/types.html">انواع تعادل‌کننده‌های بار: سخت‌افزاری و نرم‌افزاری</a></li>
+                            <li><a href="scalable-systems/load-balancing/algorithms.html">الگوریتم‌های تعادل بار: Round Robin، Least Connections</a></li>
+                            <li><a href="scalable-systems/load-balancing/aws-example.html">مثال‌های واقعی: استفاده از AWS Elastic Load Balancer</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۹: مقیاس‌پذیری افقی و عمودی</h3>
+                        <ul>
+                            <li><a href="scalable-systems/scalability/horizontal-vs-vertical.html">تفاوت بین مقیاس‌پذیری افقی و عمودی</a></li>
+                            <li><a href="scalable-systems/scalability/challenges.html">چالش‌های مقیاس‌پذیری افقی: هماهنگی و مدیریت حالت</a></li>
+                            <li><a href="scalable-systems/scalability/tools.html">ابزارهای مدیریت مقیاس‌پذیری: Kubernetes، Docker</a></li>
+                            <li><a href="scalable-systems/scalability/spotify-kubernetes.html">مثال‌های واقعی: استفاده از Kubernetes در اسپاتیفای</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۱۰: مدیریت خرابی‌ها و تحمل خطا</h3>
+                        <ul>
+                            <li><a href="scalable-systems/fault-tolerance/design-for-failure.html">طراحی برای خرابی: افزونگی و تکرار</a></li>
+                            <li><a href="scalable-systems/fault-tolerance/failover-fallback.html">مفهوم Failover و Fallback</a></li>
+                            <li><a href="scalable-systems/fault-tolerance/no-spof.html">معماری‌های بدون تک‌نقطه خرابی</a></li>
+                            <li><a href="scalable-systems/fault-tolerance/google-systems.html">مثال‌های واقعی: سیستم‌های تحمل خطای گوگل</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="advanced-topics">
+                    <h2>بخش چهارم: موضوعات پیشرفته در طراحی سیستم</h2>
+                    
+                    <div class="card">
+                        <h3>فصل ۱۱: سیستم‌های توزیع‌شده</h3>
+                        <ul>
+                            <li><a href="advanced-topics/distributed-systems/challenges.html">چالش‌های سیستم‌های توزیع‌شده</a></li>
+                            <li><a href="advanced-topics/distributed-systems/cap-pacelc.html">قضیه CAP و PACELC</a></li>
+                            <li><a href="advanced-topics/distributed-systems/consensus-protocols.html">پروتکل‌های اجماع: Paxos، Raft</a></li>
+                            <li><a href="advanced-topics/distributed-systems/zookeeper.html">مثال‌های واقعی: استفاده از ZooKeeper در آپاچی هدوپ</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۱۲: پردازش داده‌های بزرگ</h3>
+                        <ul>
+                            <li><a href="advanced-topics/big-data/mapreduce-spark.html">مفاهیم پردازش داده‌های بزرگ: MapReduce، Spark</a></li>
+                            <li><a href="advanced-topics/big-data/streaming-vs-batch.html">جریان‌سازی داده‌ها در مقابل پردازش دسته‌ای</a></li>
+                            <li><a href="advanced-topics/big-data/flink-storm.html">ابزارهای پردازش داده: Apache Flink، Apache Storm</a></li>
+                            <li><a href="advanced-topics/big-data/twitter-spark.html">مثال‌های واقعی: پردازش داده‌های توییتر با Spark</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۱۳: امنیت در طراحی سیستم</h3>
+                        <ul>
+                            <li><a href="advanced-topics/security/authentication-authorization.html">اصول امنیتی: احراز هویت و مجوزدهی</a></li>
+                            <li><a href="advanced-topics/security/encryption.html">رمزنگاری و امنیت داده‌ها</a></li>
+                            <li><a href="advanced-topics/security/ddos-protection.html">محافظت در برابر حملات DDoS</a></li>
+                            <li><a href="advanced-topics/security/facebook-security.html">مثال‌های واقعی: سیستم‌های امنیتی فیسبوک</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۱۴: نظارت و مانیتورینگ</h3>
+                        <ul>
+                            <li><a href="advanced-topics/monitoring/system-monitoring.html">اهمیت نظارت بر سیستم‌ها: معیارها، لاگ‌ها، و ردیابی</a></li>
+                            <li><a href="advanced-topics/monitoring/tools.html">ابزارهای مانیتورینگ: Prometheus، Grafana، ELK Stack</a></li>
+                            <li><a href="advanced-topics/monitoring/alerts.html">مدیریت هشدارها و پاسخ به حوادث</a></li>
+                            <li><a href="advanced-topics/monitoring/uber-prometheus.html">مثال‌های واقعی: استفاده از Prometheus در اوبر</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="interviews">
+                    <h2>بخش پنجم: آمادگی برای مصاحبه‌های طراحی سیستم</h2>
+                    
+                    <div class="card">
+                        <h3>فصل ۱۵: رویکرد حل مسئله در مصاحبه‌های طراحی سیستم</h3>
+                        <ul>
+                            <li><a href="interviews/problem-solving/framework.html">چارچوب حل مسئله: شناسایی الزامات، تعریف APIها، و طراحی معماری</a></li>
+                            <li><a href="interviews/problem-solving/non-functional-requirements.html">مدیریت الزامات غیرکارکردی</a></li>
+                            <li><a href="interviews/problem-solving/architecture-diagrams.html">ترسیم معماری و توضیح تصمیمات</a></li>
+                            <li><a href="interviews/problem-solving/url-shortener.html">مثال‌های واقعی: طراحی یک سیستم مشابه URL Shortener یا Twitter</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۱۶: نمونه سؤالات مصاحبه طراحی سیستم</h3>
+                        <ul>
+                            <li><a href="interviews/sample-questions/url-shortener.html">طراحی یک سیستم کوتاه‌کننده URL</a></li>
+                            <li><a href="interviews/sample-questions/whatsapp.html">طراحی یک سیستم پیام‌رسان مانند WhatsApp</a></li>
+                            <li><a href="interviews/sample-questions/youtube-recommendation.html">طراحی یک سیستم توصیه‌گر مانند یوتیوب</a></li>
+                            <li><a href="interviews/sample-questions/search-engine.html">طراحی یک سیستم جستجو مانند گوگل</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="projects">
+                    <h2>بخش ششم: پروژه‌های عملی و مطالعات موردی</h2>
+                    
+                    <div class="card">
+                        <h3>فصل ۱۸: پروژه‌های عملی طراحی سیستم</h3>
+                        <ul>
+                            <li>پروژه ۱: طراحی سیستم تایم‌لاین توییتر</li>
+                            <li>پروژه ۲: طراحی سیستم ذخیره‌سازی فایل مانند Dropbox</li>
+                            <li>پروژه ۳: طراحی سیستم پخش ویدئو مانند یوتیوب</li>
+                            <li>پروژه ۴: طراحی سیستم تجارت الکترونیک مانند آمازون</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>فصل ۱۹: مطالعات موردی دنیای واقعی</h3>
+                        <ul>
+                            <li>مطالعه موردی ۱: معماری فیسبوک برای مقیاس‌پذیری</li>
+                            <li>مطالعه موردی ۲: سیستم پیام‌رسانی WhatsApp</li>
+                            <li>مطالعه موردی ۳: سیستم جستجوی گوگل</li>
+                            <li>مطالعه موردی ۴: سیستم توصیه‌گر نتفلیکس</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="resources">
+                    <h2>منابع پیشنهادی</h2>
+                    
+                    <div class="card">
+                        <h3>کتاب‌های توصیه‌شده</h3>
+                        <ul>
+                            <li><strong>The System Design Primer</strong> (منبع متن‌باز در GitHub)</li>
+                            <li><strong>Designing Data-Intensive Applications</strong> نوشته مارتین کلپمن</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>دوره‌های آنلاین</h3>
+                        <ul>
+                            <li>Coursera System Design Courses</li>
+                            <li>Udemy System Design Courses</li>
+                            <li>Educative.io System Design Path</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>وبلاگ‌های مهندسی</h3>
+                        <ul>
+                            <li>Netflix Tech Blog</li>
+                            <li>Uber Engineering Blog</li>
+                            <li>High Scalability</li>
+                            <li>AWS Architecture Center</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="alert alert-success">
+                    <strong>تبریک!</strong> شما آماده شروع یادگیری طراحی سیستم هستید. از منوی کناری برای دسترسی به هر فصل استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

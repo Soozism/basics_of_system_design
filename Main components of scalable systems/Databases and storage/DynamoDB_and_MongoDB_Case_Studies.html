@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نمونه‌های واقعی: استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <meta name="description" content="نمونه‌های واقعی: استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام">
+    <meta name="keywords" content="طراحی سیستم, مهندسی نرم‌افزار, معماری سیستم">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">طراحی سیستم</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">خانه</a></li>
+                    <li><a href="../../index.html#basic-concepts">مفاهیم پایه</a></li>
+                    <li><a href="../../index.html#main-components">اجزای اصلی</a></li>
+                    <li><a href="../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+                    <li><a href="../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+                    <li><a href="../../index.html#interviews">مصاحبه</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <aside class="sidebar">
+                
+    <h3>نمونه‌های واقعی: استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام</h3>
+    <ul>
+        <li><a href="../../../index.html">بازگشت به خانه</a></li>
+        <li><a href="../../../index.html#basic-concepts">مفاهیم پایه</a></li>
+        <li><a href="../../../index.html#main-components">اجزای اصلی</a></li>
+        <li><a href="../../../index.html#scalable-systems">سیستم‌های مقیاس‌پذیر</a></li>
+        <li><a href="../../../index.html#advanced-topics">موضوعات پیشرفته</a></li>
+        <li><a href="../../../index.html#interviews">آمادگی مصاحبه</a></li>
+    </ul>
+    
+            </aside>
+
+            <article class="content">
+                <div class="breadcrumb">
+                    <a href="index.html">خانه</a>
+<span>/</span>
+<span>Main components of scalable systems</span>
+<span>/</span>
+<span>Databases and storage</span>
+<span>/</span>
+<span>DynamoDB_and_MongoDB_Case_Studies.html</span>
+                </div>
+
+                <h1>نمونه‌های واقعی: استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام</h1>
+
+<p>این سند به بررسی دو نمونه واقعی از استفاده پایگاه‌های داده NoSQL در مقیاس بزرگ، یعنی <strong>DynamoDB</strong> در آمازون و <strong>MongoDB</strong> در اینستاگرام، می‌پردازد. هدف این است که با ارائه جزئیات فنی، دلایل انتخاب این پایگاه‌های داده، موارد استفاده، تصمیمات طراحی، و درس‌های معماری، یک راهنمای جامع و آموزشی برای یادگیری طراحی سیستم‌های مقیاس‌پذیر فراهم شود. این محتوا به زبان فارسی و با فرمت مارک‌داون ارائه شده است تا برای مستندسازی آموزشی و یادگیری اصول طراحی سیستم مناسب باشد.</p>
+
+<p>---</p>
+
+<h2>مقدمه: اهمیت مطالعه موردی‌های واقعی در طراحی سیستم</h2>
+
+<p>مطالعات موردی واقعی از شرکت‌های بزرگ مانند آمازون و اینستاگرام، نقش مهمی در درک چگونگی پیاده‌سازی فناوری‌های پایگاه داده در محیط‌های مقیاس بزرگ دارند. این مطالعات به ما کمک می‌کنند تا:</p>
+
+<ul><li><strong>تصمیمات طراحی را درک کنیم:</strong> انتخاب پایگاه داده مناسب و تریدآف‌های مرتبط با آن.</li></ul>
+<ul><li><strong>چالش‌های مقیاس‌پذیری را بشناسیم:</strong> نحوه مدیریت بارهای کاری سنگین و رشد سریع داده‌ها.</li></ul>
+<ul><li><strong>بهترین روش‌ها را یاد بگیریم:</strong> استفاده از تکنیک‌های بهینه برای عملکرد، دسترسی‌پذیری و هزینه.</li></ul>
+<ul><li><strong>درس‌های عملی بیاموزیم:</strong> از موفقیت‌ها و شکست‌های شرکت‌های پیشرو در فناوری.</li></ul>
+
+<p>این سند به بررسی استفاده آمازون از DynamoDB و اینستاگرام از MongoDB می‌پردازد تا نشان دهد چگونه این پایگاه‌های داده نیازهای برنامه‌های مقیاس بزرگ را برآورده می‌کنند.</p>
+
+<p>---</p>
+
+<h2>آمازون و DynamoDB</h2>
+
+<h3>چرا آمازون از DynamoDB استفاده می‌کند؟</h3>
+<strong>DynamoDB</strong> یک پایگاه داده NoSQL کاملاً مدیریت‌شده و بدون سرور است که توسط آمازون وب سرویس (AWS) توسعه یافته است. آمازون DynamoDB را برای پاسخ به نیازهای داخلی خود برای یک پایگاه داده مقیاس‌پذیر، با دسترسی‌پذیری بالا و عملکرد قابل پیش‌بینی طراحی کرد. دلایل اصلی انتخاب DynamoDB عبارتند از:
+<ul><li><strong>مقیاس‌پذیری افقی:</strong> DynamoDB به‌طور خودکار داده‌ها را بین پارتیشن‌ها تقسیم می‌کند و با افزایش بار کاری مقیاس می‌شود.</li></ul>
+<ul><li><strong>دسترسی‌پذیری بالا:</strong> با تکرار چندمنطقه‌ای (Multi-Region Replication) و SLA دسترسی‌پذیری 99.999%.</li></ul>
+<ul><li><strong>عملکرد ثابت:</strong> ارائه تأخیر تک‌رقمی میلی‌ثانیه‌ای حتی در مقیاس‌های عظیم.</li></ul>
+<ul><li><strong>مدیریت آسان:</strong> به‌عنوان یک سرویس بدون سرور، نیاز به مدیریت زیرساخت را حذف می‌کند.</li></ul>
+
+<h3>نحوه مدیریت مقیاس‌پذیری، دسترسی‌پذیری و عملکرد</h3>
+<ul><li><strong>مقیاس‌پذیری:</strong> DynamoDB از پارتیشن‌بندی خودکار استفاده می‌کند. داده‌ها بر اساس کلید پارتیشن (Partition Key) بین گره‌های ذخیره‌سازی توزیع می‌شوند، که امکان مقیاس‌پذیری افقی را فراهم می‌کند. با استفاده از حالت ظرفیت درخواستی (On-Demand Capacity Mode)، DynamoDB به‌طور خودکار ظرفیت را بر اساس بار تنظیم می‌کند.<a href="https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-dynamodb.html"></a></li></ul>
+<ul><li><strong>دسترسی‌پذیری:</strong> DynamoDB از جداول جهانی (Global Tables) برای تکرار داده‌ها در چندین منطقه AWS استفاده می‌کند، که دسترسی‌پذیری و تحمل خطا را تضمین می‌کند. هر پارتیشن دارای سه گره است که یکی از آن‌ها گره رهبر (Leader Node) است و عملیات نوشتن را هماهنگ می‌کند.<a href="https://en.wikipedia.org/wiki/Amazon_DynamoDB"></a></li></ul>
+<ul><li><strong>عملکرد:</strong> استفاده از دیسک‌های SSD و کش در حافظه (مانند DynamoDB Accelerator یا DAX) تأخیر را به میکروثانیه کاهش می‌دهد.<a href="https://medium.com/%40christopheradamson253/deep-dive-into-aws-dynamodb-a-nosql-database-for-high-performance-applications-4c80d1410533"></a></li></ul>
+
+<h3>موارد استفاده خاص در آمازون</h3>
+<ul><li><strong>سبد خرید (Shopping Cart):</strong></li></ul>
+   - DynamoDB برای ذخیره‌سازی داده‌های سبد خرید در آمازون استفاده می‌شود، که نیاز به تأخیر کم و مقیاس‌پذیری بالا در زمان‌های اوج ترافیک (مانند Black Friday) دارد.
+   - <strong>مثال:</strong> در رویداد Prime Day 2021، DynamoDB بیش از ۸۹.۲ میلیون درخواست در ثانیه را پردازش کرد و عملکرد تک‌رقمی میلی‌ثانیه‌ای را حفظ کرد.<a href="https://www.usenix.org/conference/atc22/presentation/elhemali"></a>
+<ul><li><strong>پیگیری سفارشات (Order Tracking):</strong></li></ul>
+   - DynamoDB داده‌های مربوط به وضعیت سفارشات را ذخیره می‌کند، که نیاز به دسترسی سریع و به‌روزرسانی‌های مداوم دارد.
+   - <strong>ویژگی‌ها:</strong> مدل داده‌ای کلید-مقدار (Key-Value) امکان دسترسی سریع به داده‌های سفارش بر اساس کلید پارتیشن (مانند OrderID) را فراهم می‌کند.
+<ul><li><strong>متادیتای محتوا:</strong> آمازون از DynamoDB برای ذخیره‌سازی متادیتای محتوا در سرویس‌هایی مانند Prime Video استفاده می‌کند، که نیاز به دسترسی سریع و مقیاس‌پذیری برای میلیون‌ها کاربر دارد.<a href="https://aws.amazon.com/blogs/database/amazon-dynamodb-use-cases-for-media-and-entertainment-customers/"></a></li></ul>
+
+<h3>تصمیمات طراحی و تریدآف‌ها</h3>
+<ul><li><strong>تصمیمات طراحی:</strong></li></ul>
+  - <strong>مدل داده‌ای بدون طرح‌واره (Schemaless):</strong> DynamoDB نیازی به تعریف طرح‌واره ندارد، که توسعه سریع و انعطاف‌پذیری را ممکن می‌کند.
+  - <strong>کلید پارتیشن و مرتب‌سازی:</strong> انتخاب کلید پارتیشن مناسب (مانند UserID) و کلید مرتب‌سازی (مانند OrderDate) برای بهینه‌سازی پرس‌وجوها حیاتی است.<a href="https://www.hellointerview.com/learn/system-design/deep-dives/dynamodb"></a>
+  - <strong>DAX (DynamoDB Accelerator):</strong> برای برنامه‌های خواندن سنگین، DAX کش در حافظه را فراهم می‌کند و تأخیر را کاهش می‌دهد.
+<ul><li><strong>تریدآف‌ها:</strong></li></ul>
+  - <strong>عدم پشتیبانی از Join:</strong> DynamoDB از عملیات Join پشتیبانی نمی‌کند، بنابراین داده‌ها باید Denormalize شوند، که ممکن است طراحی مدل داده را پیچیده کند.<a href="https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-dynamodb.html"></a>
+  - <strong>هزینه در مقیاس بزرگ:</strong> در حالت درخواستی، هزینه‌ها ممکن است برای بارهای کاری غیرقابل پیش‌بینی افزایش یابد. حالت ظرفیت رزروشده (Provisioned) برای بارهای کاری قابل پیش‌بینی مقرون‌به‌صرفه‌تر است.
+  - <strong>پیچیدگی در پرس‌وجوهای پیچیده:</strong> پرس‌وجوهای پیچیده نیاز به ایندکس‌های ثانویه (Secondary Indexes) یا ابزارهای مکمل مانند Amazon Redshift دارند.
+
+<p>---</p>
+
+<h2>اینستاگرام و MongoDB</h2>
+
+<h3>چرا اینستاگرام MongoDB را انتخاب کرد؟</h3>
+<strong>MongoDB</strong> یک پایگاه داده NoSQL مبتنی بر سند (Document-Based) است که اینستاگرام آن را برای مدیریت داده‌های بدون طرح‌واره و مقیاس‌پذیر انتخاب کرد. دلایل اصلی انتخاب MongoDB عبارتند از:
+<ul><li><strong>انعطاف‌پذیری طرح‌واره:</strong> امکان ذخیره‌سازی داده‌های متنوع (مانند پروفایل‌های کاربران و متادیتای تصاویر) بدون نیاز به طرح‌واره ثابت.</li></ul>
+<ul><li><strong>مقیاس‌پذیری افقی:</strong> پشتیبانی از شاردینگ برای توزیع داده‌ها بین سرورها.</li></ul>
+<ul><li><strong>عملکرد بالا:</strong> مناسب برای برنامه‌های بلادرنگ با ترافیک بالا.</li></ul>
+<ul><li><strong>جامعه و اکوسیستم قوی:</strong> MongoDB به‌عنوان یک پایگاه داده منبع‌باز (تا حدی) و با پشتیبانی از Atlas (سرویس مدیریت‌شده)، انعطاف‌پذیری بالایی ارائه می‌دهد.</li></ul>
+
+<h3>موارد استفاده در اینستاگرام</h3>
+<ul><li><strong>ذخیره‌سازی متادیتای تصاویر:</strong></li></ul>
+   - اینستاگرام از MongoDB برای ذخیره‌سازی متادیتای تصاویر (مانند توضیحات، برچسب‌ها، و اطلاعات مکان) استفاده می‌کند.
+   - <strong>ویژگی‌ها:</strong> مدل داده‌ای مبتنی بر سند امکان ذخیره‌سازی داده‌های نیمه‌ساختارمند (مانند JSON) را فراهم می‌کند، که برای متادیتای تصاویر مناسب است.
+<ul><li><strong>پروفایل‌های کاربران:</strong></li></ul>
+   - داده‌های پروفایل کاربران (مانند نام، بیوگرافی، و دنبال‌کنندگان) در MongoDB ذخیره می‌شوند.
+   - <strong>مزیت:</strong> انعطاف‌پذیری طرح‌واره به اینستاگرام اجازه می‌دهد تا ویژگی‌های جدیدی (مانند Stories) را بدون تغییر طرح‌واره اضافه کند.
+<ul><li><strong>مدیریت فیدهای اجتماعی:</strong></li></ul>
+   - MongoDB برای ذخیره‌سازی داده‌های مربوط به فیدهای کاربران (مانند پست‌های اخیر) استفاده می‌شود، که نیاز به دسترسی سریع و مقیاس‌پذیری دارد.
+
+<h3>مزایای انعطاف‌پذیری طرح‌واره و مقیاس‌پذیری</h3>
+<ul><li><strong>انعطاف‌پذیری طرح‌واره:</strong></li></ul>
+  - MongoDB به اینستاگرام امکان می‌دهد تا داده‌های متنوع و پویا را بدون نیاز به تعریف ستون‌های ثابت ذخیره کند.
+  - <strong>مثال:</strong> افزودن ویژگی‌هایی مانند Reels یا Stories بدون نیاز به تغییر ساختار پایگاه داده.
+<ul><li><strong>مقیاس‌پذیری:</strong></li></ul>
+  - MongoDB از شاردینگ افقی پشتیبانی می‌کند، که داده‌ها را بر اساس کلید شارد (مانند UserID) بین گره‌ها توزیع می‌کند.
+  - اینستاگرام از شاردینگ برای مدیریت میلیاردها پست و کاربر استفاده می‌کند، که امکان مقیاس‌پذیری خطی را فراهم می‌کند.<a href="https://www.logicata.com/blog/amazon-dynamodb-vs-mongodb/"></a>
+
+<h3>داستان‌های مهاجرت یا مقیاس‌پذیری</h3>
+<ul><li><strong>مهاجرت اولیه:</strong> اینستاگرام در ابتدا از پایگاه داده‌های رابطه‌ای استفاده می‌کرد، اما با رشد سریع کاربران، به MongoDB مهاجرت کرد تا انعطاف‌پذیری و مقیاس‌پذیری بیشتری داشته باشد.</li></ul>
+<ul><li><strong>چالش‌های مقیاس‌پذیری:</strong> با افزایش کاربران (به بیش از ۱ میلیارد کاربر فعال ماهانه)، اینستagram از MongoDB Atlas (سرویس مدیریت‌شده) و شاردینگ برای توزیع بار استفاده کرد.</li></ul>
+<ul><li><strong>مثال مقیاس‌پذیری:</strong> اینستاگرام از MongoDB برای مدیریت رشد سریع داده‌ها در زمان رویدادهای پرترافیک (مانند پست‌های سلبریتی‌ها) استفاده کرد، که نیاز به شاردینگ و تکرار (Replication) داشت.</li></ul>
+
+<p>---</p>
+
+<h2>درس‌های کلیدی معماری از هر دو شرکت</h2>
+
+<h3>درس‌های آمازون و DynamoDB</h3>
+<ul><li><strong>مقیاس‌پذیری خودکار:</strong> DynamoDB نشان می‌دهد که پارتیشن‌بندی و مقیاس‌پذیری خودکار می‌توانند بارهای کاری غیرقابل پیش‌بینی را مدیریت کنند.</li></ul>
+<ul><li><strong>طراحی برای دسترسی‌پذیری:</strong> استفاده از تکرار چندمنطقه‌ای و گره‌های رهبر برای اطمینان از دسترسی‌پذیری بالا.</li></ul>
+<ul><li><strong>سادگی عملیات:</strong> مدل بدون سرور DynamoDB پیچیدگی‌های مدیریت زیرساخت را کاهش می‌دهد.</li></ul>
+<ul><li><strong>انتخاب کلید پارتیشن:</strong> انتخاب کلید پارتیشن مناسب (مانند UserID یا OrderID) برای توزیع یکنواخت بار حیاتی است.</li></ul>
+
+<h3>درس‌های اینستاگرام و MongoDB</h3>
+<ul><li><strong>انعطاف‌پذیری طرح‌واره:</strong> مدل مبتنی بر سند امکان توسعه سریع ویژگی‌ها را فراهم می‌کند، که برای برنامه‌های اجتماعی پویا ایده‌آل است.</li></ul>
+<ul><li><strong>شاردینگ برای مقیاس‌پذیری:</strong> استفاده از شاردینگ برای مدیریت داده‌های عظیم و توزیع بار.</li></ul>
+<ul><li><strong>مدیریت‌شده در مقابل خودمدیریتی:</strong> استفاده از MongoDB Atlas پیچیدگی‌های مدیریت را کاهش داد و به اینستاگرام اجازه داد تا روی توسعه برنامه تمرکز کند.</li></ul>
+<ul><li><strong>انعطاف‌پذیری در برابر رشد:</strong> مهاجرت به MongoDB نشان داد که پایگاه‌های داده NoSQL برای برنامه‌های با رشد سریع مناسب‌تر از پایگاه‌های رابطه‌ای هستند.</li></ul>
+
+<p>---</p>
+
+<h2>چه چیزی درباره انتخاب پایگاه داده مناسب برای برنامه‌های مقیاس بزرگ می‌آموزیم؟</h2>
+
+<p>انتخاب پایگاه داده مناسب برای برنامه‌های مقیاس بزرگ به عوامل متعددی بستگی دارد:
+<ul><li><strong>نیازهای عملکردی:</strong></li></ul>
+   - DynamoDB برای تأخیر تک‌رقمی میلی‌ثانیه‌ای و مقیاس‌پذیری خودکار مناسب است (مانند سبد خرید آمازون).
+   - MongoDB برای داده‌های نیمه‌ساختارمند و پرس‌وجوهای پیچیده‌تر مناسب است (مانند متادیتای اینستاگرام).
+<ul><li><strong>انعطاف‌پذیری طرح‌واره:</strong></li></ul>
+   - MongoDB برای برنامه‌هایی که نیاز به تغییرات مکرر در مدل داده دارند (مانند اینستاگرام) مناسب‌تر است.
+   - DynamoDB برای مدل‌های داده‌ای ساده‌تر کلید-مقدار مناسب است.
+<ul><li><strong>مدیریت و هزینه:</strong></li></ul>
+   - DynamoDB به‌عنوان یک سرویس کاملاً مدیریت‌شده، بار عملیاتی را کاهش می‌دهد، اما ممکن است در مقیاس بزرگ گران‌تر باشد.
+   - MongoDB (به‌ویژه Atlas) انعطاف‌پذیری بیشتری در میزبانی (ابر، داخلی، یا ترکیبی) ارائه می‌دهد، اما ممکن است نیاز به مدیریت بیشتری داشته باشد.<a href="https://www.logicata.com/blog/amazon-dynamodb-vs-mongodb/"></a>
+<ul><li><strong>ادغام با اکوسیستم:</strong></li></ul>
+   - DynamoDB با سرویس‌های AWS (مانند Lambda، S3) ادغام قوی دارد، که برای برنامه‌های مبتنی بر AWS ایده‌آل است.
+   - MongoDB برای استراتژی‌های چندابری (Multi-Cloud) یا محیط‌های غیر AWS مناسب‌تر است.
+<ul><li><strong>پیچیدگی پرس‌وجوها:</strong></li></ul>
+   - DynamoDB برای پرس‌وجوهای ساده و مبتنی بر کلید مناسب است، اما برای Join یا پرس‌وجوهای پیچیده نیاز به ابزارهای مکمل دارد.
+   - MongoDB از پرس‌وجوهای پیچیده‌تر (مانند Aggregation) پشتیبانی می‌کند.</p>
+
+<p>---</p>
+
+<h2>جدول خلاصه مقایسه موارد استفاده</h2>
+
+<p><td> <strong>معیار</strong>                     </td> <strong>آمازون با DynamoDB</strong>                                                                 <td> <strong>اینستاگرام با MongoDB</strong>                                                             </td>
+<td>-------------------------------</td>---------------------------------------------------------------------------------------<td>---------------------------------------------------------------------------------------</td>
+<td> <strong>پایگاه داده</strong>              </td> DynamoDB (NoSQL، کلید-مقدار و سند)                                                   <td> MongoDB (NoSQL، مبتنی بر سند)                                                        </td>
+<td> <strong>موارد استفاده</strong>            </td> سبد خرید، پیگیری سفارشات، متادیتای محتوا (Prime Video)                               <td> متادیتای تصاویر، پروفایل‌های کاربران، فیدهای اجتماعی                               </td>
+<td> <strong>دلیل انتخاب</strong>              </td> مقیاس‌پذیری خودکار، تأخیر کم، دسترسی‌پذیری بالا، ادغام با AWS                      <td> انعطاف‌پذیری طرح‌واره، شاردینگ، پشتیبانی از پرس‌وجوهای پیچیده                    </td>
+<td> <strong>مقیاس‌پذیری</strong>             </td> پارتیشن‌بندی خودکار، جداول جهانی برای تکرار چندمنطقه‌ای                              <td> شاردینگ افقی، پشتیبانی از MongoDB Atlas برای مدیریت مقیاس‌پذیری                    </td>
+<td> <strong>دسترسی‌پذیری</strong>            </td> SLA 99.999%، تکرار چندمنطقه‌ای، گره‌های رهبر                                         <td> تکرار (Replication) و شاردینگ برای دسترسی‌پذیری بالا                                 </td>
+<td> <strong>عملکرد</strong>                   </td> تأخیر تک‌رقمی میلی‌ثانیه‌ای، DAX برای کش در حافظه                                   <td> عملکرد بالا برای پرس‌وجوهای مبتنی بر سند، بهینه برای داده‌های نیمه‌ساختارمند         </td>
+<td> <strong>تریدآف‌ها</strong>                </td> عدم پشتیبانی از Join، هزینه بالا در حالت درخواستی                                   <td> پیچیدگی مدیریت در مقیاس بزرگ (بدون Atlas)، نیاز به طراحی دقیق شاردینگ             </td>
+<td> <strong>مثال مقیاس‌پذیری</strong>        </td> ۸۹.۲ میلیون درخواست در ثانیه در Prime Day 2021                                       <td> مدیریت میلیاردها پست و کاربر با شاردینگ و Atlas                                    </td>
+<td> <strong>ادغام</strong>                    </td> ادغام قوی با AWS (Lambda، S3، CloudWatch)                                           <td> انعطاف‌پذیری در میزبانی (AWS، GCP، داخلی)، ادغام با Atlas                          </td></p>
+
+<p>---</p>
+
+<h2>منابع پیشنهادی برای مطالعه بیشتر</h2>
+
+<ul><li><strong>آمازون و DynamoDB:</strong></li></ul>
+   - <em>Amazon DynamoDB: A Scalable, Predictably Performant, and Fully Managed NoSQL Database Service</em>، USENIX، 2022.<a href="https://www.usenix.org/conference/atc22/presentation/elhemali"></a>
+   - <em>Amazon DynamoDB: Fast And Scalable NoSQL Database</em>، Werner Vogels، All Things Distributed، 2012.<a href="https://www.allthingsdistributed.com/2012/01/amazon-dynamodb.html"></a>
+   - <em>Prime Video Boosts Scale and Resilience Using Amazon DynamoDB</em>، AWS Database Blog، 2024.<a href="https://aws.amazon.com/blogs/database/amazon-dynamodb-use-cases-for-media-and-entertainment-customers/"></a>
+   - مستندات رسمی AWS: <a href="https://docs.aws.amazon.com/dynamodb/">Amazon DynamoDB Documentation</a>
+
+<ul><li><strong>اینستاگرام و MongoDB:</strong></li></ul>
+   - <em>MongoDB Atlas Live Migration Service</em>، MongoDB Documentation، برای جزئیات مهاجرت.<a href="https://www.logicata.com/blog/amazon-dynamodb-vs-mongodb/"></a>
+   - <em>AWS DynamoDB vs MongoDB: A NoSQL Comparison</em>، Logicata، 2020.<a href="https://www.logicata.com/blog/amazon-dynamodb-vs-mongodb/"></a>
+   - مستندات رسمی MongoDB: <a href="https://www.mongodb.com/docs/atlas/">MongoDB Atlas</a>
+
+<ul><li>منابع عمومی:</li></ul>
+   - <em>Designing Data-Intensive Applications</em> نوشته مارتین کلپمن: کتابی جامع برای یادگیری طراحی پایگاه داده‌های مقیاس‌پذیر.
+   - <em>The System Design Primer</em> (منبع متن‌باز در GitHub): راهنمایی برای طراحی سیستم‌های مقیاس‌پذیر.
+   - دوره‌های آنلاین: <em>Grokking the System Design Interview</em> در DesignGuru.io.
+
+<p>---</p>
+
+<p>این سند به‌طور جامع استفاده از DynamoDB در آمازون و MongoDB در اینستاگرام را بررسی کرده و درس‌های کلیدی برای طراحی سیستم‌های مقیاس‌پذیر ارائه می‌دهد. در صورت نیاز به جزئیات بیشتر یا مثال‌های اضافی، لطفاً اطلاع دهید!</p>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong>نکته:</strong> این مطلب بخشی از مجموعه آموزش طراحی سیستم است. برای مطالعه سایر مطالب، از منوی کناری استفاده کنید.
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 آموزش طراحی سیستم - تمام حقوق محفوظ است</p>
+            <p>آخرین به‌روزرسانی: 2025-07-12</p>
+        </div>
+    </footer>
+
+    <script src="../../js/script.js"></script>
+</body>
+</html>
