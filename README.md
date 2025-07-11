@@ -2,6 +2,8 @@
 
 A comprehensive HTML website for learning system design concepts, converted from Markdown files.
 
+🌐 **Live Website:** [https://soozism.github.io/basics_of_system_design/](https://soozism.github.io/basics_of_system_design/)
+
 ## Features
 
 - 📚 **67 Pages** of system design content
@@ -10,6 +12,7 @@ A comprehensive HTML website for learning system design concepts, converted from
 - 📱 **Mobile-Friendly** design
 - 🎯 **Persian/Farsi** language support
 - 🔗 **Cross-referenced** content with internal links
+- 🚀 **GitHub Pages** deployment from development branch
 
 ## Structure
 
@@ -133,6 +136,28 @@ To add new content:
 ## License
 
 This educational content is provided for learning purposes.
+
+## Deployment
+
+This website is automatically deployed to GitHub Pages using GitHub Actions.
+
+### Deployment Process
+- The site is deployed from the `development` branch
+- GitHub Actions workflow (`.github/workflows/deploy.yml`) handles automatic deployment
+- Any push to the `development` branch triggers a new deployment
+- The live site is available at: https://soozism.github.io/basics_of_system_design/
+
+### Local Development
+To run the site locally:
+```bash
+# Using Python's built-in server
+python serve.py
+
+# Or using the batch file (Windows)
+start_server.bat
+```
+
+The site will be available at `http://localhost:8000`
 
 ---
 
