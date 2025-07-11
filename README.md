@@ -11,7 +11,7 @@
 - [پیش‌نیازها](#-پیشنیازها)
 - [نحوه استفاده](#-نحوه-استفاده)
 - [محتوای آموزشی](#-محتوای-آموزشی)
-- [مثال‌های عملی](#-مثالهای-عملی)
+- [مثال‌های عملی](#️-مثالهای-عملی)
 - [منابع پیشنهادی](#-منابع-پیشنهادی)
 - [مشارکت](#-مشارکت)
 - [تماس](#-تماس)
@@ -256,10 +256,8 @@ basics_of_system_design/
 
 برای پیشنهادات، انتقادات یا سوالات:
 
-- 📧 **ایمیل**: [آدرس ایمیل]
-- 💬 **تلگرام**: [@username]
-- 🐙 **GitHub Issues**: [لینک Issues]
-- 💼 **LinkedIn**: [لینک LinkedIn]
+- 🐙 **GitHub Issues**: [ایجاد Issue جدید](https://github.com/Soozism/basics_of_system_design/issues)
+- 💬 **Discussions**: [بحث و گفتگو](https://github.com/Soozism/basics_of_system_design/discussions)
 
 ---
 
@@ -267,8 +265,8 @@ basics_of_system_design/
 
 ### 🌟 اگر این پروژه برای شما مفید بود، لطفاً ستاره بدهید! 🌟
 
-[![GitHub stars](https://img.shields.io/github/stars/username/repo.svg?style=social&label=Star)](https://github.com/username/repo)
-[![GitHub forks](https://img.shields.io/github/forks/username/repo.svg?style=social&label=Fork)](https://github.com/username/repo)
+[![GitHub stars](https://img.shields.io/github/stars/Soozism/basics_of_system_design.svg?style=social&label=Star)](https://github.com/Soozism/basics_of_system_design)
+[![GitHub forks](https://img.shields.io/github/forks/Soozism/basics_of_system_design.svg?style=social&label=Fork)](https://github.com/Soozism/basics_of_system_design)
 
 **با تشکر از همه کسانی که در بهبود این منبع مشارکت کرده‌اند! 🙏**
 
